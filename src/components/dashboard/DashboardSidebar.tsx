@@ -59,8 +59,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       id: 'users',
       label: 'Users',
       icon: Users,
-      hasDropdown: true,
-      subItems: ['All users', 'Customers', 'Box owners', 'Riders'],
+      hasDropdown: false,
     },
     {
       id: 'box_regt',

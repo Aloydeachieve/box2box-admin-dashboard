@@ -23,6 +23,7 @@ import {
   Clock3,
   X,
 } from 'lucide-react';
+import { UserProfileFilterModal } from './UserProfileFilterModal';
 
 interface UserProfileDetailViewProps {
   userId: string;
@@ -222,54 +223,71 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 </span>
               </div>
 
-              {/* Grid of User Metadata */}
+              {/* Grid of User Metadata with Icons and lighter label / thicker value matching Figma */}
               <div
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: '10px 16px',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+                  gap: '12px 18px',
                   fontSize: '12px',
-                  color: subtextColor,
-                  marginTop: '12px',
+                  marginTop: '14px',
                 }}
               >
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Email: </span>
-                  <span>akucynthia@gmail.com</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Mail size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Email: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>akucynthia@gmail.com</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Phone: </span>
-                  <span>+2347095635637</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Phone size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Phone: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>+2347095635637</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>User type: </span>
-                  <span style={{ color: textColor, fontWeight: 600 }}>Customer</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Users size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>User type: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Box owner</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Location: </span>
-                  <span>Nigeria</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MapPin size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Location: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Nigeria</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Joined: </span>
-                  <span>Aug 02, 2024 | 11:56 AM</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Calendar size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Joined: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Aug 02, 2024 | 11:56 AM</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Last booking: </span>
-                  <span>Aug 02, 2024 | 11:56 AM</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Clock size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Last ride: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Aug 02, 2024 | 11:56 AM</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Default address: </span>
-                  <span style={{ color: '#F5C842', textDecoration: 'underline', cursor: 'pointer' }}>
-                    A5 4567 MyBox locker 232TE6
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Box size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Box owned: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>5</span>
+                  <span style={{ color: '#F5C842', textDecoration: 'underline', cursor: 'pointer', marginLeft: '4px', fontSize: '11px' }}>
+                    (A5 4567 MyBox locker 232TE6)
                   </span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Delivery mode: </span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Zap size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Delivery mode: </span>
                   <span style={{ color: textColor, fontWeight: 600 }}>Instant</span>
                 </div>
-                <div>
-                  <span style={{ color: textColor, fontWeight: 500 }}>Referred by: </span>
-                  <span>Constance Ibekwe</span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Share2 size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Referred by: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Constance Ibekwe</span>
                 </div>
               </div>
             </div>
@@ -964,109 +982,16 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
         </div>
       </aside>
 
-      {/* 6. Filter Modal Dialog matching Figma Image 5 */}
-      {showFilterModal && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.7)',
-            backdropFilter: 'blur(3px)',
-            zIndex: 110,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px',
-          }}
-          onClick={() => setShowFilterModal(false)}
-        >
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '340px',
-              backgroundColor: isLightMode ? '#FFFFFF' : '#141416',
-              borderRadius: '16px',
-              border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
-              padding: '20px',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: textColor, margin: 0 }}>Filter table</h3>
-              <button
-                onClick={() => setShowFilterModal(false)}
-                style={{ background: 'none', border: 'none', color: subtextColor, cursor: 'pointer', padding: 0 }}
-              >
-                <X size={16} />
-              </button>
-            </div>
-
-            {/* Duration Options */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
-              {['Today', 'Last 7 days', 'Last 30 days', 'Last 90 days', 'Custom'].map((dur) => (
-                <div
-                  key={dur}
-                  onClick={() => setSelectedDuration(dur)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px 10px',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    backgroundColor: selectedDuration === dur ? (isLightMode ? '#FEFCE8' : 'rgba(245, 200, 66, 0.08)') : 'transparent',
-                  }}
-                >
-                  <span style={{ fontSize: '13px', color: textColor }}>{dur}</span>
-                  <div
-                    style={{
-                      width: '14px',
-                      height: '14px',
-                      borderRadius: '50%',
-                      border: selectedDuration === dur ? '4px solid #F5C842' : '1px solid #71717A',
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Discard & Save Buttons */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <button
-                onClick={() => setShowFilterModal(false)}
-                style={{
-                  height: '38px',
-                  borderRadius: '8px',
-                  backgroundColor: isLightMode ? '#E5E7EB' : '#2A2A2E',
-                  border: 'none',
-                  color: textColor,
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                Discard
-              </button>
-              <button
-                onClick={() => setShowFilterModal(false)}
-                style={{
-                  height: '38px',
-                  borderRadius: '8px',
-                  backgroundColor: '#F5C842',
-                  border: 'none',
-                  color: '#000000',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 6. Multi-Tab Filter Modal per activeSubTab matching Figma Images 1, 2, 3, 4, 5 */}
+      <UserProfileFilterModal
+        isOpen={showFilterModal}
+        onClose={() => setShowFilterModal(false)}
+        activeSubTab={activeSubTab}
+        isLightMode={isLightMode}
+        onApplyFilters={(filters) => {
+          console.log('Applied filters for', activeSubTab, filters);
+        }}
+      />
 
       <style jsx global>{`
         @media (max-width: 1024px) {

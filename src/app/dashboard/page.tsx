@@ -9,8 +9,8 @@ import { ChartsSection } from '@/components/dashboard/ChartsSection';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { DashboardTables } from '@/components/dashboard/DashboardTables';
 import { RightSidebar } from '@/components/dashboard/RightSidebar';
-import { UsersManagementView } from '@/components/dashboard/UsersManagementView';
-import { UserProfileDetailView } from '@/components/dashboard/UserProfileDetailView';
+import { UsersManagementView } from '@/components/dashboard/users/UsersManagementView';
+import { UserProfileDetailView } from '@/components/dashboard/users/UserProfileDetailView';
 import { BoxRegistrationView } from '@/components/dashboard/box/BoxRegistrationView';
 
 export default function DashboardPage() {

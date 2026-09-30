@@ -66,6 +66,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
           buttonLabel: isBulk ? 'Suspend users' : 'Suspend user',
           buttonBg: '#991B1B',
           buttonHoverBg: '#DC2626',
+          buttonTextColor: '#FFFFFF',
           icon: (
             <div
               style={{
@@ -97,6 +98,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
           buttonLabel: isBulk ? 'Delete users' : 'Delete user',
           buttonBg: '#991B1B',
           buttonHoverBg: '#DC2626',
+          buttonTextColor: '#FFFFFF',
           icon: (
             <div
               style={{
