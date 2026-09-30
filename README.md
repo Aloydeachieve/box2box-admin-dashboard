@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Box2Box Admin Dashboard — Enterprise Operations Frontend
 
-## Getting Started
+Production-ready Next.js frontend architecture for **Box2Box** smart door-to-door storage, high-density climate vault management, automated parcel locker networks, and courier EV fleet dispatch.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Architecture Overview
+
+```
+box2box-admin-dashboard/
+├── public/
+│   ├── warehouse-hub.jpg          # Automated facility graphic asset
+│   └── favicon.ico                # App icon
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx             # Root layout with Google Fonts (Outfit, Jakarta, JetBrains)
+│   │   ├── page.tsx               # Master Operations Dashboard (Tabs, Modals, State)
+│   │   └── globals.css            # Complete design system & custom properties
+│   ├── components/
+│   │   ├── Navbar.tsx             # Global header with hub switcher, telemetry, search, notifications
+│   │   ├── Sidebar.tsx            # Navigation sidebar with badges and facility telemetry
+│   │   ├── StatCards.tsx          # 5 executive KPI cards with SVG sparklines
+│   │   ├── WarehouseOverviewBanner.tsx # Facility hero banner with climate controls and AGV status
+│   │   ├── OrdersTable.tsx        # Searchable and filterable storage orders data table
+│   │   ├── VaultMatrix.tsx        # Interactive 2D/3D warehouse rack & locker compartment matrix
+│   │   ├── FleetTracker.tsx       # Courier EV telemetry, cargo load, and simulated GPS map
+│   │   ├── RevenueChart.tsx       # SVG storage revenue and volume trends chart
+│   │   ├── ActivityFeed.tsx       # Streaming operational audit event log
+│   │   ├── OrderDetailModal.tsx   # Detailed modal with tracking progress and manifest
+│   │   └── NewDispatchModal.tsx   # Interactive modal for creating and dispatching orders
+│   ├── types/
+│   │   └── index.ts               # Strict TypeScript domain interfaces
+│   └── lib/
+│       └── mockData.ts            # Realistic operations dataset for European hubs
+├── .env.example                   # Environment configuration template
+├── .env.local                     # Local development environment
+├── next.config.ts                 # Next.js production configuration
+├── tsconfig.json                  # TypeScript compiler settings
+└── package.json                   # Dependencies and npm scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key Modules & Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Autonomous Warehouse Facility Management**
+   - Live telemetry for Zone A (Climate Vault), Zone B (Standard Pallet Bay), and Zone C (Automated Smart Lockers).
+   - Real-time temperature (°C) and humidity (%) tracking with ISO 27001 security standards.
+   - Interactive rack bay inspector displaying current capacity ($m^3$) and stored customer manifests.
 
-## Learn More
+2. **Smart Door-to-Door & Locker Orders Pipeline**
+   - Multi-status filter tabs (`Pending Pickup`, `In Transit`, `Stored in Vault`, `Out for Delivery`, `Completed`).
+   - One-click copy for tracking numbers (`B2B-ES-8921`) and secure QR tokens.
+   - Deep inspection drawer with timeline progress, customer communication shortcuts, and barcode printing.
 
-To learn more about Next.js, take a look at the following resources:
+3. **Fleet Telemetry & Dispatch**
+   - Battery level monitoring for Electric Vans, Sprinters, and Cargo E-Bikes.
+   - Dynamic cargo capacity utilization ($m^3$) against vehicle thresholds.
+   - Vector-based route overview and courier tracking.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. **Storage Space & Financial Analytics**
+   - Custom SVG interactive area chart showing daily/weekly recurring revenue and storage volume.
+   - Monthly Recurring Revenue (MRR) tracking with period filters.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. **Operational Audit Feed**
+   - Real-time event notifications for AGV robotic movements, locker reservations, and courier drops.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Quickstart
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Prerequisites
+- Node.js `v20+` or `v22+`
+- npm `v10+`
+
+### Installation & Development
+```bash
+# Install dependencies
+npm install
+
+# Start development server with Turbopack
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Production Build & Linting
+```bash
+# Validate TypeScript and create optimized production bundle
+npm run build
+
+# Start production server
+npm run start
+
+# Run ESLint checks
+npm run lint
+```
