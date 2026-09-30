@@ -12,9 +12,10 @@ import {
 
 interface QuickActionsProps {
   isLightMode?: boolean;
+  onSelectAction?: (actionId: string) => void;
 }
 
-export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false }) => {
+export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false, onSelectAction }) => {
   // Exactly 6 actions: 3 rows x 2 columns as requested
   const actions = [
     // Row 1
@@ -86,6 +87,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false 
           return (
             <button
               key={act.id}
+              onClick={() => onSelectAction?.(act.id === 'boxes' ? 'box_regt' : act.id)}
               style={{
                 backgroundColor: isLightMode ? '#FFFFFF' : '#161619',
                 borderRadius: '12px',

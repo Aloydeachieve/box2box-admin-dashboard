@@ -10,9 +10,10 @@ import { Star, Battery, ChevronRight } from 'lucide-react';
 
 interface DashboardTablesProps {
   isLightMode?: boolean;
+  onNavigateToSection?: (sectionId: string) => void;
 }
 
-export const DashboardTables: React.FC<DashboardTablesProps> = ({ isLightMode = false }) => {
+export const DashboardTables: React.FC<DashboardTablesProps> = ({ isLightMode = false, onNavigateToSection }) => {
   const cardBg = isLightMode ? '#FFFFFF' : '#161619';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
   const headingColor = isLightMode ? '#111827' : '#FFFFFF';
@@ -51,6 +52,7 @@ export const DashboardTables: React.FC<DashboardTablesProps> = ({ isLightMode = 
             New users update
           </h2>
           <button
+            onClick={() => onNavigateToSection?.('users')}
             style={{
               background: 'none',
               border: 'none',
@@ -133,6 +135,7 @@ export const DashboardTables: React.FC<DashboardTablesProps> = ({ isLightMode = 
             Recent Box update
           </h2>
           <button
+            onClick={() => onNavigateToSection?.('box_regt')}
             style={{
               background: 'none',
               border: 'none',
@@ -247,6 +250,7 @@ export const DashboardTables: React.FC<DashboardTablesProps> = ({ isLightMode = 
             Recent inventory update
           </h2>
           <button
+            onClick={() => onNavigateToSection?.('inventory')}
             style={{
               background: 'none',
               border: 'none',

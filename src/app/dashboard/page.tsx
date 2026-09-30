@@ -11,6 +11,7 @@ import { DashboardTables } from '@/components/dashboard/DashboardTables';
 import { RightSidebar } from '@/components/dashboard/RightSidebar';
 import { UsersManagementView } from '@/components/dashboard/UsersManagementView';
 import { UserProfileDetailView } from '@/components/dashboard/UserProfileDetailView';
+import { BoxRegistrationView } from '@/components/dashboard/box/BoxRegistrationView';
 
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -20,6 +21,21 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLightMode, setIsLightMode] = useState(false);
   const [selectedProfileUserId, setSelectedProfileUserId] = useState<string | null>(null);
+
+  const getHeaderTitle = () => {
+    if (selectedProfileUserId) return 'Aku Cynthia';
+    if (activeTab === 'users') return 'Users';
+    if (activeTab === 'box_regt') return 'Box regt.';
+    if (activeTab === 'inventory') return 'Inventory';
+    if (activeTab === 'orders') return 'Orders';
+    if (activeTab === 'rewards') return 'Rewards';
+    if (activeTab === 'admin_regt') return 'Admin regt.';
+    if (activeTab === 'transactions') return 'Transactions';
+    if (activeTab === 'support') return 'Support';
+    if (activeTab === 'fraud_alert') return 'Fraud alert';
+    if (activeTab === 'account') return 'Account';
+    return 'Dashboard';
+  };
 
   return (
     <div
@@ -74,7 +90,7 @@ export default function DashboardPage() {
       >
         {/* Full-width Top Header: spans all the way across to the right screen edge */}
         <DashboardHeader
-          title={selectedProfileUserId ? 'Aku Cynthia' : activeTab === 'users' ? 'Users' : 'Dashboard'}
+          title={getHeaderTitle()}
           onToggleSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
           onToggleRightSidebar={() => setRightSidebarOpen(!rightSidebarOpen)}
           searchQuery={searchQuery}
@@ -115,6 +131,8 @@ export default function DashboardPage() {
                 isLightMode={isLightMode}
                 onSelectUser={(userId) => setSelectedProfileUserId(userId)}
               />
+            ) : activeTab === 'box_regt' ? (
+              <BoxRegistrationView isLightMode={isLightMode} />
             ) : (
               <>
                 {/* Top Section: Slidable Stats on Left + Heat Map Card on Right */}
@@ -137,16 +155,22 @@ export default function DashboardPage() {
                 <ChartsSection isLightMode={isLightMode} />
 
                 {/* Quick Actions Grid: Exactly 3 columns x 2 rows */}
-                <QuickActions isLightMode={isLightMode} />
+                <QuickActions
+                  isLightMode={isLightMode}
+                  onSelectAction={(actionId) => setActiveTab(actionId)}
+                />
 
                 {/* Tables Section: New Users, Recent Box, Recent Inventory */}
-                <DashboardTables isLightMode={isLightMode} />
+                <DashboardTables
+                  isLightMode={isLightMode}
+                  onNavigateToSection={(sectionId) => setActiveTab(sectionId)}
+                />
               </>
             )}
           </main>
 
           {/* 3. Right Sidebar: Sits under Header on the right side (Only on main Dashboard tab, matching Figma) */}
-          {activeTab !== 'users' && !selectedProfileUserId && (
+          {activeTab === 'dashboard' && !selectedProfileUserId && (
             <div className={rightSidebarOpen ? 'right-sidebar-mobile-visible' : 'right-sidebar-desktop-wrapper'}>
               <RightSidebar isLightMode={isLightMode} onClose={() => setRightSidebarOpen(false)} />
             </div>

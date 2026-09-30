@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - 2026-09-30
+- **Box Registration & Smart Locker Units Management Suite (`BoxRegistrationView.tsx`)**:
+  - **Overview Telemetry & Capacity Stat Cards**:
+    - `Total Registered Boxes`: 7,935 units (+12% today, 320 cities nationwide).
+    - `Active & Online`: 7,412 (93.4% operational uptime with live IoT pinging).
+    - `Maintenance & Offline`: Real-time tracking of units undergoing repair or connection loss.
+    - `Critical Battery (<20%)`: 18 units with instant technician swap dispatch indicators.
+  - **Dual Display Modes (Enterprise Table vs. Visual Locker Grid)**:
+    - **Enterprise Table**: Filterable, sortable dataset with Box ID, Serial Number, Owner & Host info, Capacity, Location, Battery percentage, IoT heartbeat, and usage progress bar.
+    - **Visual Locker Grid**: Card views featuring official Box2Box wooden cabinet units (`/image/box1.png`) and live door indicators (`A1`, `A2`, `B1`, `B2`).
+  - **Comprehensive Unit Inspection Drawer (`BoxDetailModal.tsx`)**:
+    - Real-time battery voltage (`12.6V`), solar circuit active charge states, 4G LTE signal telemetry, and internal microclimate sensors (`22.4°C`, `48% humidity`).
+    - Interactive cabinet compartment matrix displaying parcel manifests, customer contacts, tracking tokens, and solenoid lock states.
+    - **Remote Solenoid Release**: Immediate single-door or master emergency unlock commands dispatched directly to the locker unit.
+    - Live audit feed and controller reboot controls.
+  - **New Box Unit Provisioning Modal (`RegisterBoxModal.tsx`)**:
+    - Hardware registration form for configuring serial numbers, cabinet variants (2/4/6/8 doors), host assignment, GPS coordinates, and 6-digit emergency master bypass PINs.
+  - **Keyword-Protected Security Safeguards (`BoxConfirmModal.tsx`)**:
+    - Action confirmation modal requiring explicit typing of `disable`, `activate`, `maintenance`, or `unlock all` before critical state alterations take effect.
+  - **Cross-Module Dashboard Navigation**:
+    - Connected Quick Actions ("Box management" -> `box_regt`) and "Recent Box update" -> `box_regt` for fluid navigation across the admin suite.
+
 ### Added - 2026-09-29
 - **User Actions Confirmation Modals & Profile Details Suite**:
   - **Keyword-Protected Confirmation Modals (`UserConfirmModal.tsx`)**:
