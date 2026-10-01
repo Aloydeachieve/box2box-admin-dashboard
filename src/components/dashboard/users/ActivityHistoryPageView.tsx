@@ -294,7 +294,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
             June 03, 2025
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
             {filterList(activitiesDay1).map((item) => (
               <div
                 key={item.id}
@@ -303,21 +303,18 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
                   display: 'flex',
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
-                  padding: '12px 16px',
-                  backgroundColor: cardBg,
-                  borderRadius: '10px',
-                  border: `1px solid ${borderColor}`,
+                  padding: '14px 16px',
+                  backgroundColor: 'transparent',
+                  borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                   borderLeft: `3px solid ${item.borderAccent || '#F5C842'}`,
                   cursor: 'pointer',
-                  transition: 'background-color 0.15s, transform 0.1s',
+                  transition: 'background-color 0.15s',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1F1F24';
-                  e.currentTarget.style.transform = 'translateX(2px)';
+                  e.currentTarget.style.backgroundColor = isLightMode ? 'rgba(0, 0, 0, 0.02)' : 'rgba(255, 255, 255, 0.025)';
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = cardBg;
-                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
                 <div>
@@ -383,7 +380,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
             June 02, 2025
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
             {filterList(activitiesDay2).map((item) => (
               <div
                 key={item.id}
@@ -392,21 +389,18 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
                   display: 'flex',
                   alignItems: 'flex-start',
                   justifyContent: 'space-between',
-                  padding: '12px 16px',
-                  backgroundColor: cardBg,
-                  borderRadius: '10px',
-                  border: `1px solid ${borderColor}`,
+                  padding: '14px 16px',
+                  backgroundColor: 'transparent',
+                  borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                   borderLeft: `3px solid ${item.borderAccent || '#F5C842'}`,
                   cursor: 'pointer',
-                  transition: 'background-color 0.15s, transform 0.1s',
+                  transition: 'background-color 0.15s',
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1F1F24';
-                  e.currentTarget.style.transform = 'translateX(2px)';
+                  e.currentTarget.style.backgroundColor = isLightMode ? 'rgba(0, 0, 0, 0.02)' : 'rgba(255, 255, 255, 0.025)';
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = cardBg;
-                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
                 <div>

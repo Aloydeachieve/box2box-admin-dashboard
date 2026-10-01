@@ -822,11 +822,14 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
                     </>
                   )}
-                  {activeSubTab === 'rewards' && (
+                  {activeSubTab === 'boxes' && (
                     <>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Action</th>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Points</th>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Box ID</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Locker Name</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Cabinet</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Location</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Battery</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Cleanliness</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
                     </>
                   )}
@@ -834,90 +837,202 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                     <>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Transaction ID</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Type</th>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Description</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Payment Method</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Date</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Amount</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
                     </>
                   )}
-                  {activeSubTab !== 'bookings' && activeSubTab !== 'rewards' && activeSubTab !== 'wallet' && (
+                  {activeSubTab === 'rewards' && (
                     <>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Reference</th>
-                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Details</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Reward ID</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Activity</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Points</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
+                    </>
+                  )}
+                  {activeSubTab === 'referrals' && (
+                    <>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Referral ID</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Referred User</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Email</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Date Joined</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Bonus Earned</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
+                    </>
+                  )}
+                  {activeSubTab === 'reports' && (
+                    <>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Report ID</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Summary</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Locker Unit</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Priority</th>
                       <th style={{ padding: '12px 16px', fontSize: '11px', color: subtextColor, fontWeight: 500 }}>Status</th>
                     </>
                   )}
                 </tr>
               </thead>
               <tbody>
-                {[
+                {activeSubTab === 'bookings' && [
                   { id: '1', order: '#BK-123456', pickup: 'Wuse II, Abuja', dropoff: 'MyBox Locker 23', type: 'Delivery', date: 'Aug 02, 2024', amount: '₦2,450', status: 'Completed' },
                   { id: '2', order: '#BK-123457', pickup: 'Garki, Abuja', dropoff: 'MyBox Locker 14', type: 'Storage', date: 'Aug 01, 2024', amount: '₦1,800', status: 'Completed' },
                   { id: '3', order: '#BK-123458', pickup: 'Maitama, Abuja', dropoff: 'MyBox Locker 05', type: 'Delivery', date: 'Jul 29, 2024', amount: '₦3,100', status: 'In transit' },
+                  { id: '4', order: '#BK-123459', pickup: 'Wuse Zone 4', dropoff: 'MyBox Locker 12', type: 'Delivery', date: 'Jul 28, 2024', amount: '₦2,100', status: 'Completed' },
+                  { id: '5', order: '#BK-123460', pickup: 'Jabi Lake Mall', dropoff: 'MyBox Locker 31', type: 'Storage', date: 'Jul 25, 2024', amount: '₦1,500', status: 'Cancelled' },
                 ].map((row) => (
-                  <tr
-                    key={row.id}
-                    style={{
-                      borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)',
-                    }}
-                  >
-                    {activeSubTab === 'bookings' && (
-                      <>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.order}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.pickup}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.dropoff}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.type}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.amount}</td>
-                        <td style={{ padding: '12px 16px' }}>
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              color: row.status === 'Completed' ? '#10B981' : '#F59E0B',
-                              backgroundColor: row.status === 'Completed' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                              padding: '3px 8px',
-                              borderRadius: '6px',
-                            }}
-                          >
-                            {row.status}
-                          </span>
-                        </td>
-                      </>
-                    )}
-                    {activeSubTab === 'rewards' && (
-                      <>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>Completed Delivery</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: '#F5C842', fontWeight: 700 }}>+5 Pts</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>Aug 02, 2024</td>
-                        <td style={{ padding: '12px 16px' }}>
-                          <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>Awarded</span>
-                        </td>
-                      </>
-                    )}
-                    {activeSubTab === 'wallet' && (
-                      <>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>TXN-984210</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>Deposit</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>Paystack Web payment</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>Aug 02, 2024</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: '#10B981' }}>+₦50,000</td>
-                        <td style={{ padding: '12px 16px' }}>
-                          <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>Success</span>
-                        </td>
-                      </>
-                    )}
-                    {activeSubTab !== 'bookings' && activeSubTab !== 'rewards' && activeSubTab !== 'wallet' && (
-                      <>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>REF-{row.id}</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>Standard user event</td>
-                        <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>Aug 02, 2024</td>
-                        <td style={{ padding: '12px 16px' }}>
-                          <span style={{ fontSize: '11px', color: '#10B981', fontWeight: 600 }}>Active</span>
-                        </td>
-                      </>
-                    )}
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.order}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.pickup}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.dropoff}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.type}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.amount}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: row.status === 'Completed' ? '#10B981' : row.status === 'In transit' ? '#F59E0B' : '#EF4444',
+                          backgroundColor: row.status === 'Completed' ? 'rgba(16, 185, 129, 0.1)' : row.status === 'In transit' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {activeSubTab === 'boxes' && [
+                  { id: '1', boxId: 'MyBox-12547', locker: 'A5 MyBox Locker', cab: 'Bay 4', location: 'Wuse II, Abuja', battery: '94% (Good)', cleanliness: '90%', status: 'Active' },
+                  { id: '2', boxId: 'MyBox-12548', locker: 'B2 MyBox Locker', cab: 'Bay 2', location: 'Garki, Abuja', battery: '88% (Good)', cleanliness: '95%', status: 'Active' },
+                  { id: '3', boxId: 'MyBox-12549', locker: 'C1 MyBox Locker', cab: 'Bay 8', location: 'Maitama, Abuja', battery: '79% (Fair)', cleanliness: '85%', status: 'Active' },
+                  { id: '4', boxId: 'MyBox-12550', locker: 'D4 MyBox Locker', cab: 'Bay 1', location: 'Jabi, Abuja', battery: '92% (Good)', cleanliness: '92%', status: 'Active' },
+                ].map((row) => (
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.boxId}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.locker}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.cab}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.location}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: '#10B981', fontWeight: 600 }}>{row.battery}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.cleanliness}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{ fontSize: '11px', color: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '3px 8px', borderRadius: '6px', fontWeight: 600 }}>
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {activeSubTab === 'wallet' && [
+                  { id: '1', txn: 'TXN-984210', type: 'Deposit', method: 'Paystack Web payment', date: 'Aug 02, 2024', amount: '+₦50,000', status: 'Success' },
+                  { id: '2', txn: 'TXN-984209', type: 'Payment', method: 'Wallet (Delivery Booking)', date: 'Aug 01, 2024', amount: '-₦2,450', status: 'Success' },
+                  { id: '3', txn: 'TXN-984208', type: 'Deposit', method: 'Direct Bank Transfer', date: 'Jul 30, 2024', amount: '+₦100,000', status: 'Success' },
+                  { id: '4', txn: 'TXN-984207', type: 'Payment', method: 'Wallet (Demurrage Fee)', date: 'Jul 28, 2024', amount: '-₦500', status: 'Success' },
+                ].map((row) => (
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.txn}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.type}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.method}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: row.amount.startsWith('+') ? '#10B981' : textColor }}>{row.amount}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{ fontSize: '11px', color: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '3px 8px', borderRadius: '6px', fontWeight: 600 }}>
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {activeSubTab === 'rewards' && [
+                  { id: '1', code: 'REW-5541', act: 'Completed Delivery on time', pts: '+5 Pts', date: 'Aug 02, 2024', status: 'Awarded' },
+                  { id: '2', code: 'REW-5540', act: 'Cabinet Cleanliness Confirmation', pts: '+10 Pts', date: 'Aug 01, 2024', status: 'Awarded' },
+                  { id: '3', code: 'REW-5539', act: 'Monthly Active Customer Streak', pts: '+50 Pts', date: 'Jul 31, 2024', status: 'Awarded' },
+                  { id: '4', code: 'REW-5538', act: 'Redeemed Free Weekend Delivery', pts: '-30 Pts', date: 'Jul 25, 2024', status: 'Redeemed' },
+                ].map((row) => (
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.code}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.act}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: '#F5C842', fontWeight: 700 }}>{row.pts}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{ fontSize: '11px', color: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '3px 8px', borderRadius: '6px', fontWeight: 600 }}>
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {activeSubTab === 'referrals' && [
+                  { id: '1', refId: 'REF-0012', user: 'Emmanuel Okafor', email: 'emmanuel.o@gmail.com', date: 'Aug 01, 2024', bonus: '₦5,000', status: 'Active' },
+                  { id: '2', refId: 'REF-0011', user: 'Chioma Adeleke', email: 'chioma.a@yahoo.com', date: 'Jul 28, 2024', bonus: '₦5,000', status: 'Active' },
+                  { id: '3', refId: 'REF-0010', user: 'Babatunde Fash', email: 'babatunde@outlook.com', date: 'Jul 20, 2024', bonus: '₦5,000', status: 'Active' },
+                  { id: '4', refId: 'REF-0009', user: 'Fatima Bello', email: 'fatima.bello@gmail.com', date: 'Jul 15, 2024', bonus: '₦0 (Pending)', status: 'Pending' },
+                ].map((row) => (
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.refId}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.user}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.email}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: '#10B981' }}>{row.bonus}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          color: row.status === 'Active' ? '#10B981' : '#F59E0B',
+                          backgroundColor: row.status === 'Active' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {row.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+
+                {activeSubTab === 'reports' && [
+                  { id: '1', repId: 'REP-8801', cat: 'Cleanliness', sum: 'Cabinet was dusty and unclean', box: 'MyBox-12547 (A5)', date: 'Aug 02, 2024', priority: 'Medium', status: 'Resolved' },
+                  { id: '2', repId: 'REP-8802', cat: 'Theft report', sum: 'Item missing from cabinet', box: 'MyBox-12548 (B2)', date: 'Jul 29, 2024', priority: 'High', status: 'In progress' },
+                  { id: '3', repId: 'REP-8803', cat: 'Hardware', sum: 'Locker door slow to unlatch', box: 'MyBox-12547 (A5)', date: 'Jul 22, 2024', priority: 'Low', status: 'Resolved' },
+                  { id: '4', repId: 'REP-8804', cat: 'Package', sum: 'Package outer seal damaged', box: 'MyBox-12549 (C1)', date: 'Jul 18, 2024', priority: 'Medium', status: 'Resolved' },
+                ].map((row) => (
+                  <tr key={row.id} style={{ borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.03)' }}>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.repId}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', fontWeight: 600, color: textColor }}>{row.cat}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.sum}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: textColor }}>{row.box}</td>
+                    <td style={{ padding: '12px 16px', fontSize: '12px', color: subtextColor }}>{row.date}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          color: row.priority === 'High' ? '#EF4444' : row.priority === 'Medium' ? '#F59E0B' : '#10B981',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {row.priority}
+                      </span>
+                    </td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          color: row.status === 'Resolved' ? '#10B981' : '#F59E0B',
+                          backgroundColor: row.status === 'Resolved' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)',
+                          padding: '3px 8px',
+                          borderRadius: '6px',
+                          fontWeight: 600,
+                        }}
+                      >
+                        {row.status}
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>

@@ -14,6 +14,7 @@ import { UserProfileDetailView } from '@/components/dashboard/users/UserProfileD
 import { ActivityHistoryPageView } from '@/components/dashboard/users/ActivityHistoryPageView';
 import { BookingActivityDetailView } from '@/components/dashboard/users/BookingActivityDetailView';
 import { BoxManagementView } from '@/components/dashboard/box/BoxManagementView';
+import { BoxDetailsPageView } from '@/components/dashboard/box/BoxDetailsPageView';
 import { BoxRegistrationView } from '@/components/dashboard/box/BoxRegistrationView';
 
 export default function DashboardPage() {
@@ -26,8 +27,10 @@ export default function DashboardPage() {
   const [selectedProfileUserId, setSelectedProfileUserId] = useState<string | null>(null);
   const [viewingActivityHistory, setViewingActivityHistory] = useState(false);
   const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
+  const [selectedBoxDetailsId, setSelectedBoxDetailsId] = useState<string | null>(null);
 
   const getHeaderTitle = () => {
+    if (selectedBoxDetailsId) return 'Box details';
     if (selectedActivityId) return 'Booking details';
     if (viewingActivityHistory) return 'Activity history';
     if (selectedProfileUserId) return ''; // Empty so back arrow and Action button display cleanly matching Figma Image 1
@@ -45,11 +48,13 @@ export default function DashboardPage() {
     return 'Dashboard';
   };
 
-  const showBack = Boolean(selectedActivityId || viewingActivityHistory || selectedProfileUserId);
-  const showAction = Boolean(selectedProfileUserId && !viewingActivityHistory && !selectedActivityId);
+  const showBack = Boolean(selectedActivityId || viewingActivityHistory || selectedProfileUserId || selectedBoxDetailsId);
+  const showAction = Boolean((selectedProfileUserId && !viewingActivityHistory && !selectedActivityId) || selectedBoxDetailsId);
 
   const handleBack = () => {
-    if (selectedActivityId) {
+    if (selectedBoxDetailsId) {
+      setSelectedBoxDetailsId(null);
+    } else if (selectedActivityId) {
       setSelectedActivityId(null);
     } else if (viewingActivityHistory) {
       setViewingActivityHistory(false);
@@ -86,6 +91,7 @@ export default function DashboardPage() {
             setSelectedProfileUserId(null);
             setViewingActivityHistory(false);
             setSelectedActivityId(null);
+            setSelectedBoxDetailsId(null);
             setMobileSidebarOpen(false);
           }}
         />
@@ -153,7 +159,13 @@ export default function DashboardPage() {
               height: '100%',
             }}
           >
-            {selectedActivityId ? (
+            {selectedBoxDetailsId ? (
+              <BoxDetailsPageView
+                boxId={selectedBoxDetailsId}
+                onBack={() => setSelectedBoxDetailsId(null)}
+                isLightMode={isLightMode}
+              />
+            ) : selectedActivityId ? (
               <BookingActivityDetailView
                 activityId={selectedActivityId}
                 onBack={() => setSelectedActivityId(null)}
@@ -179,7 +191,10 @@ export default function DashboardPage() {
                 onSelectUser={(userId) => setSelectedProfileUserId(userId)}
               />
             ) : activeTab === 'box_mgt' ? (
-              <BoxManagementView isLightMode={isLightMode} />
+              <BoxManagementView
+                isLightMode={isLightMode}
+                onViewBox={(boxId) => setSelectedBoxDetailsId(boxId)}
+              />
             ) : activeTab === 'box_regt' ? (
               <BoxRegistrationView isLightMode={isLightMode} />
             ) : (
