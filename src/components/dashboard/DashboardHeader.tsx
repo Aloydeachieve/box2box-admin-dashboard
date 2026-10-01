@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {
   Search,
   ChevronDown,
+  ChevronLeft,
   Globe,
   Film,
   Map,
@@ -22,6 +23,10 @@ interface DashboardHeaderProps {
   isLightMode: boolean;
   onToggleTheme: () => void;
   title?: string;
+  onBack?: () => void;
+  showBack?: boolean;
+  showAction?: boolean;
+  onActionClick?: () => void;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -32,9 +37,14 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   isLightMode,
   onToggleTheme,
   title = 'Dashboard',
+  onBack,
+  showBack = false,
+  showAction = false,
+  onActionClick,
 }) => {
   const [selectedLocation, setSelectedLocation] = useState('Location');
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
   return (
     <>
@@ -57,8 +67,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             : '0 1px 0 rgba(245, 200, 66, 0.15)',
         }}
       >
-        {/* Left: Mobile Menu Toggle + Screen Title */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* Left: Mobile Menu Toggle + Back Arrow (if showBack) + Screen Title */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
@@ -77,6 +87,29 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
             </button>
           )}
 
+          {showBack && (
+            <button
+              onClick={onBack}
+              title="Back"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: isLightMode ? '#111827' : '#FFFFFF',
+                cursor: 'pointer',
+                padding: '6px',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'background-color 0.15s',
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222227')}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+            >
+              <ChevronLeft size={22} />
+            </button>
+          )}
+
           <h1
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
@@ -91,8 +124,75 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
           </h1>
         </div>
 
-        {/* Center / Right: Search, Location Modal Trigger, Quick Tool Icons from Screenshot 4 */}
+        {/* Center / Right: Action Button (Yellow pill), Search, Location Modal Trigger, Quick Tool Icons from Screenshot 4 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Action Button: appears in the header right before the search input in user profile detail view */}
+          {showAction && (
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => {
+                  setActionMenuOpen(!actionMenuOpen);
+                  onActionClick?.();
+                }}
+                style={{
+                  backgroundColor: '#F5C842',
+                  color: '#000000',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  border: 'none',
+                  borderRadius: '20px',
+                  padding: '8px 20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
+                  transition: 'transform 0.15s ease',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+                onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              >
+                <span>Action</span>
+                <ChevronDown size={14} />
+              </button>
+
+              {actionMenuOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: '6px',
+                    width: '160px',
+                    backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
+                    borderRadius: '10px',
+                    border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.15)',
+                    padding: '6px',
+                    zIndex: 50,
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
+                  }}
+                >
+                  {['Edit user info', 'Reset password', 'Send message', 'Export statement'].map((act) => (
+                    <div
+                      key={act}
+                      onClick={() => setActionMenuOpen(false)}
+                      style={{
+                        padding: '8px 10px',
+                        fontSize: '12px',
+                        color: isLightMode ? '#111827' : '#FFFFFF',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30')}
+                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                    >
+                      {act}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           {/* Search Bar matching Screenshot 4 */}
           <div
             style={{

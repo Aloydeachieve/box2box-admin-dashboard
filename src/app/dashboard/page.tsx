@@ -11,6 +11,9 @@ import { DashboardTables } from '@/components/dashboard/DashboardTables';
 import { RightSidebar } from '@/components/dashboard/RightSidebar';
 import { UsersManagementView } from '@/components/dashboard/users/UsersManagementView';
 import { UserProfileDetailView } from '@/components/dashboard/users/UserProfileDetailView';
+import { ActivityHistoryPageView } from '@/components/dashboard/users/ActivityHistoryPageView';
+import { BookingActivityDetailView } from '@/components/dashboard/users/BookingActivityDetailView';
+import { BoxManagementView } from '@/components/dashboard/box/BoxManagementView';
 import { BoxRegistrationView } from '@/components/dashboard/box/BoxRegistrationView';
 
 export default function DashboardPage() {
@@ -21,10 +24,15 @@ export default function DashboardPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLightMode, setIsLightMode] = useState(false);
   const [selectedProfileUserId, setSelectedProfileUserId] = useState<string | null>(null);
+  const [viewingActivityHistory, setViewingActivityHistory] = useState(false);
+  const [selectedActivityId, setSelectedActivityId] = useState<string | null>(null);
 
   const getHeaderTitle = () => {
-    if (selectedProfileUserId) return 'Aku Cynthia';
+    if (selectedActivityId) return 'Booking details';
+    if (viewingActivityHistory) return 'Activity history';
+    if (selectedProfileUserId) return ''; // Empty so back arrow and Action button display cleanly matching Figma Image 1
     if (activeTab === 'users') return 'Users';
+    if (activeTab === 'box_mgt') return 'Box management';
     if (activeTab === 'box_regt') return 'Box regt.';
     if (activeTab === 'inventory') return 'Inventory';
     if (activeTab === 'orders') return 'Orders';
@@ -37,20 +45,37 @@ export default function DashboardPage() {
     return 'Dashboard';
   };
 
+  const showBack = Boolean(selectedActivityId || viewingActivityHistory || selectedProfileUserId);
+  const showAction = Boolean(selectedProfileUserId && !viewingActivityHistory && !selectedActivityId);
+
+  const handleBack = () => {
+    if (selectedActivityId) {
+      setSelectedActivityId(null);
+    } else if (viewingActivityHistory) {
+      setViewingActivityHistory(false);
+    } else if (selectedProfileUserId) {
+      setSelectedProfileUserId(null);
+    }
+  };
+
   return (
     <div
       style={{
         display: 'flex',
-        minHeight: '100vh',
+        height: '100vh',
+        maxHeight: '100vh',
+        overflow: 'hidden',
         backgroundColor: isLightMode ? '#F4F5F7' : '#0F0F12',
         color: isLightMode ? '#111827' : '#FFFFFF',
         fontFamily: 'var(--font-outfit), sans-serif',
-        overflowX: 'hidden',
         transition: 'background-color 0.2s, color 0.2s',
       }}
     >
-      {/* 1. Left Navigation Sidebar */}
-      <div className={mobileSidebarOpen ? 'sidebar-mobile-visible' : 'sidebar-desktop-wrapper'}>
+      {/* 1. Left Navigation Sidebar (Locked in place, never scrolls away) */}
+      <div
+        className={mobileSidebarOpen ? 'sidebar-mobile-visible' : 'sidebar-desktop-wrapper'}
+        style={{ height: '100vh', flexShrink: 0 }}
+      >
         <DashboardSidebar
           collapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
@@ -59,6 +84,8 @@ export default function DashboardPage() {
           onSelectTab={(tab) => {
             setActiveTab(tab);
             setSelectedProfileUserId(null);
+            setViewingActivityHistory(false);
+            setSelectedActivityId(null);
             setMobileSidebarOpen(false);
           }}
         />
@@ -85,7 +112,9 @@ export default function DashboardPage() {
           minWidth: 0,
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh',
+          height: '100vh',
+          maxHeight: '100vh',
+          overflow: 'hidden',
         }}
       >
         {/* Full-width Top Header: spans all the way across to the right screen edge */}
@@ -97,6 +126,9 @@ export default function DashboardPage() {
           onSearchChange={setSearchQuery}
           isLightMode={isLightMode}
           onToggleTheme={() => setIsLightMode(!isLightMode)}
+          showBack={showBack}
+          onBack={handleBack}
+          showAction={showAction}
         />
 
         {/* Content container underneath Header */}
@@ -108,7 +140,7 @@ export default function DashboardPage() {
             overflow: 'hidden',
           }}
         >
-          {/* Scrollable Body Content */}
+          {/* Scrollable Body Content (Only this area scrolls!) */}
           <main
             style={{
               flex: 1,
@@ -118,12 +150,27 @@ export default function DashboardPage() {
               display: 'flex',
               flexDirection: 'column',
               gap: '20px',
+              height: '100%',
             }}
           >
-            {selectedProfileUserId ? (
+            {selectedActivityId ? (
+              <BookingActivityDetailView
+                activityId={selectedActivityId}
+                onBack={() => setSelectedActivityId(null)}
+                isLightMode={isLightMode}
+              />
+            ) : viewingActivityHistory ? (
+              <ActivityHistoryPageView
+                onBack={() => setViewingActivityHistory(false)}
+                onSelectActivity={(id) => setSelectedActivityId(id)}
+                isLightMode={isLightMode}
+              />
+            ) : selectedProfileUserId ? (
               <UserProfileDetailView
                 userId={selectedProfileUserId}
                 onBack={() => setSelectedProfileUserId(null)}
+                onSeeMoreActivity={() => setViewingActivityHistory(true)}
+                onSelectActivity={(id) => setSelectedActivityId(id)}
                 isLightMode={isLightMode}
               />
             ) : activeTab === 'users' ? (
@@ -131,6 +178,8 @@ export default function DashboardPage() {
                 isLightMode={isLightMode}
                 onSelectUser={(userId) => setSelectedProfileUserId(userId)}
               />
+            ) : activeTab === 'box_mgt' ? (
+              <BoxManagementView isLightMode={isLightMode} />
             ) : activeTab === 'box_regt' ? (
               <BoxRegistrationView isLightMode={isLightMode} />
             ) : (
@@ -170,7 +219,7 @@ export default function DashboardPage() {
           </main>
 
           {/* 3. Right Sidebar: Sits under Header on the right side (Only on main Dashboard tab, matching Figma) */}
-          {activeTab === 'dashboard' && !selectedProfileUserId && (
+          {activeTab === 'dashboard' && !selectedProfileUserId && !viewingActivityHistory && !selectedActivityId && (
             <div className={rightSidebarOpen ? 'right-sidebar-mobile-visible' : 'right-sidebar-desktop-wrapper'}>
               <RightSidebar isLightMode={isLightMode} onClose={() => setRightSidebarOpen(false)} />
             </div>

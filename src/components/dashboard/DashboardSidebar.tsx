@@ -62,8 +62,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       hasDropdown: false,
     },
     {
-      id: 'box_regt',
-      label: 'Box regt.',
+      id: 'box_mgt',
+      label: 'Box mgt.',
       icon: Box,
       hasDropdown: false,
     },

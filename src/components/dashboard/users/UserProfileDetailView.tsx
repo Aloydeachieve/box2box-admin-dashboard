@@ -29,19 +29,22 @@ interface UserProfileDetailViewProps {
   userId: string;
   onBack: () => void;
   isLightMode?: boolean;
+  onSeeMoreActivity?: () => void;
+  onSelectActivity?: (id: string) => void;
 }
 
 export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
   userId,
   onBack,
   isLightMode = false,
+  onSeeMoreActivity,
+  onSelectActivity,
 }) => {
   const [activeSubTab, setActiveSubTab] = useState<'bookings' | 'boxes' | 'wallet' | 'rewards' | 'referrals' | 'reports'>('bookings');
   const [timePeriod, setTimePeriod] = useState('Daily');
   const [showTimeMenu, setShowTimeMenu] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('Today');
-  const [actionMenuOpen, setActionMenuOpen] = useState(false);
 
   const cardBg = isLightMode ? '#FFFFFF' : '#161619';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
@@ -62,88 +65,6 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
     <div style={{ display: 'flex', gap: '20px', width: '100%', minHeight: '100%' }}>
       {/* Main Left Content: Profile, Summary, Charts, Tabs & Tables */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* Navigation & Action Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button
-            onClick={onBack}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'none',
-              border: 'none',
-              color: isLightMode ? '#111827' : '#FFFFFF',
-              fontSize: '14px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              padding: '6px 0',
-            }}
-          >
-            <ArrowLeft size={18} />
-            <span>Back to Users</span>
-          </button>
-
-          {/* Action Button (Yellow pill button from Figma Image 4 & 5) */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setActionMenuOpen(!actionMenuOpen)}
-              style={{
-                backgroundColor: '#F5C842',
-                color: '#000000',
-                fontWeight: 700,
-                fontSize: '13px',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '8px 18px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
-              }}
-            >
-              <span>Action</span>
-              <ChevronDown size={14} />
-            </button>
-
-            {actionMenuOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  right: 0,
-                  marginTop: '6px',
-                  width: '160px',
-                  backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
-                  borderRadius: '8px',
-                  border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.15)',
-                  padding: '6px',
-                  zIndex: 40,
-                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
-                }}
-              >
-                {['Edit user info', 'Reset password', 'Send message', 'Export statement'].map((act) => (
-                  <div
-                    key={act}
-                    onClick={() => setActionMenuOpen(false)}
-                    style={{
-                      padding: '8px 10px',
-                      fontSize: '12px',
-                      color: textColor,
-                      borderRadius: '6px',
-                      cursor: 'pointer',
-                    }}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30')}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                  >
-                    {act}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* 1. User Profile Details Banner Card matching Figma Image 4 */}
         <div
           style={{
@@ -432,7 +353,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
               marginTop: '4px',
             }}
           >
-            {/* Chart 1: Activity Chart */}
+            {/* Chart 1: Activity Chart with X & Y Axes */}
             <div
               style={{
                 backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
@@ -459,25 +380,72 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   +5%
                 </span>
               </div>
-              {/* Spline Wave */}
-              <div style={{ height: '80px' }}>
-                <svg width="100%" height="100%" viewBox="0 0 240 80" preserveAspectRatio="none">
+              {/* Spline Wave with Y-Axis (10k, 8k, 6k, 4k, 2k, 0) and X-Axis (Jan-Dec) */}
+              <div style={{ height: '95px', width: '100%' }}>
+                <svg width="100%" height="100%" viewBox="0 0 280 95" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="activityGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#F5C842" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#F5C842" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Horizontal Dashed Gridlines */}
+                  <line x1="26" y1="12" x2="275" y2="12" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="26" y1="26" x2="275" y2="26" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="26" y1="40" x2="275" y2="40" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="26" y1="54" x2="275" y2="54" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="26" y1="68" x2="275" y2="68" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="26" y1="80" x2="275" y2="80" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} />
+
+                  {/* Y-Axis Labels */}
+                  <text x="2" y="15" fill={subtextColor} fontSize="6.5">10k</text>
+                  <text x="5" y="29" fill={subtextColor} fontSize="6.5">8k</text>
+                  <text x="5" y="43" fill={subtextColor} fontSize="6.5">6k</text>
+                  <text x="5" y="57" fill={subtextColor} fontSize="6.5">4k</text>
+                  <text x="5" y="71" fill={subtextColor} fontSize="6.5">2k</text>
+                  <text x="10" y="83" fill={subtextColor} fontSize="6.5">0</text>
+
+                  {/* Gradient Area Fill */}
                   <path
-                    d="M 10 70 C 30 65, 45 30, 65 25 C 85 20, 95 60, 115 55 C 135 50, 145 20, 165 18 C 185 16, 200 62, 225 35"
+                    d="M 32 68 Q 45 45, 60 22 T 88 56 T 115 62 T 142 42 T 168 72 T 195 54 T 222 25 T 250 20 T 272 24 L 272 80 L 32 80 Z"
+                    fill="url(#activityGrad)"
+                  />
+
+                  {/* Smooth Spline Curve Line */}
+                  <path
+                    d="M 32 68 Q 45 45, 60 22 T 88 56 T 115 62 T 142 42 T 168 72 T 195 54 T 222 25 T 250 20 T 272 24"
                     fill="none"
                     stroke="#F5C842"
-                    strokeWidth="2"
+                    strokeWidth="1.8"
                     strokeLinecap="round"
                   />
-                  <circle cx="65" cy="25" r="2.5" fill="#F5C842" />
-                  <circle cx="115" cy="55" r="2.5" fill="#F5C842" />
-                  <circle cx="165" cy="18" r="3" fill="#F5C842" />
-                  <circle cx="225" cy="35" r="2.5" fill="#F5C842" />
+
+                  {/* Peak Point Circles */}
+                  <circle cx="60" cy="22" r="2.5" fill="#F5C842" />
+                  <circle cx="142" cy="42" r="2.5" fill="#F5C842" />
+                  <circle cx="222" cy="25" r="2.5" fill="#F5C842" />
+                  <circle cx="250" cy="20" r="2.5" fill="#F5C842" />
+                  <circle cx="272" cy="24" r="2.5" fill="#F5C842" />
+
+                  {/* X-Axis Month Labels */}
+                  <text x="32" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jan</text>
+                  <text x="54" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Feb</text>
+                  <text x="76" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Mar</text>
+                  <text x="98" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Apr</text>
+                  <text x="120" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">May</text>
+                  <text x="142" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jun</text>
+                  <text x="164" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jul</text>
+                  <text x="186" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Aug</text>
+                  <text x="208" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Sep</text>
+                  <text x="230" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Oct</text>
+                  <text x="252" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Nov</text>
+                  <text x="272" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Dec</text>
                 </svg>
               </div>
             </div>
 
-            {/* Chart 2: Spending Trend */}
+            {/* Chart 2: Spending Trend with X & Y Axes */}
             <div
               style={{
                 backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
@@ -504,20 +472,66 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   +5%
                 </span>
               </div>
-              {/* Spline Wave */}
-              <div style={{ height: '80px' }}>
-                <svg width="100%" height="100%" viewBox="0 0 240 80" preserveAspectRatio="none">
+              {/* Spline Wave with Y-Axis (100k, 80k, 60k, 40k, 20k, 0) and X-Axis (Jan-Dec) */}
+              <div style={{ height: '95px', width: '100%' }}>
+                <svg width="100%" height="100%" viewBox="0 0 280 95" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="spendingGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#F5C842" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#F5C842" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Horizontal Dashed Gridlines */}
+                  <line x1="28" y1="12" x2="275" y2="12" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="28" y1="26" x2="275" y2="26" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="28" y1="40" x2="275" y2="40" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="28" y1="54" x2="275" y2="54" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="28" y1="68" x2="275" y2="68" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+                  <line x1="28" y1="80" x2="275" y2="80" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} />
+
+                  {/* Y-Axis Labels */}
+                  <text x="2" y="15" fill={subtextColor} fontSize="6.5">100k</text>
+                  <text x="4" y="29" fill={subtextColor} fontSize="6.5">80k</text>
+                  <text x="4" y="43" fill={subtextColor} fontSize="6.5">60k</text>
+                  <text x="4" y="57" fill={subtextColor} fontSize="6.5">40k</text>
+                  <text x="4" y="71" fill={subtextColor} fontSize="6.5">20k</text>
+                  <text x="12" y="83" fill={subtextColor} fontSize="6.5">0</text>
+
+                  {/* Gradient Area Fill */}
                   <path
-                    d="M 10 65 C 30 55, 45 25, 65 30 C 85 35, 95 68, 115 62 C 135 56, 145 28, 165 24 C 185 20, 205 60, 225 28"
+                    d="M 34 65 Q 46 50, 62 20 T 92 60 T 118 64 T 145 38 T 172 70 T 198 52 T 225 22 T 252 24 T 272 26 L 272 80 L 34 80 Z"
+                    fill="url(#spendingGrad)"
+                  />
+
+                  {/* Smooth Spline Curve Line */}
+                  <path
+                    d="M 34 65 Q 46 50, 62 20 T 92 60 T 118 64 T 145 38 T 172 70 T 198 52 T 225 22 T 252 24 T 272 26"
                     fill="none"
                     stroke="#F5C842"
-                    strokeWidth="2"
+                    strokeWidth="1.8"
                     strokeLinecap="round"
                   />
-                  <circle cx="65" cy="30" r="2.5" fill="#F5C842" />
-                  <circle cx="115" cy="62" r="2.5" fill="#F5C842" />
-                  <circle cx="165" cy="24" r="3" fill="#F5C842" />
-                  <circle cx="225" cy="28" r="2.5" fill="#F5C842" />
+
+                  {/* Peak Point Circles */}
+                  <circle cx="62" cy="20" r="2.5" fill="#F5C842" />
+                  <circle cx="145" cy="38" r="2.5" fill="#F5C842" />
+                  <circle cx="225" cy="22" r="2.5" fill="#F5C842" />
+                  <circle cx="272" cy="26" r="2.5" fill="#F5C842" />
+
+                  {/* X-Axis Month Labels */}
+                  <text x="34" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jan</text>
+                  <text x="56" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Feb</text>
+                  <text x="78" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Mar</text>
+                  <text x="100" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Apr</text>
+                  <text x="122" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">May</text>
+                  <text x="144" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jun</text>
+                  <text x="166" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Jul</text>
+                  <text x="188" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Aug</text>
+                  <text x="210" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Sep</text>
+                  <text x="232" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Oct</text>
+                  <text x="254" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Nov</text>
+                  <text x="272" y="91" fill={subtextColor} fontSize="6" textAnchor="middle">Dec</text>
                 </svg>
               </div>
             </div>
@@ -539,7 +553,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Booking Types</div>
                   <div style={{ display: 'flex', gap: '8px', fontSize: '9px', color: subtextColor, marginTop: '2px' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#0C4A4D' }} /> Delivery
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#0D9488' }} /> Delivery
                     </span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                       <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#F5C842' }} /> Storage
@@ -549,12 +563,12 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 <span style={{ fontSize: '11px', fontWeight: 700, color: textColor }}>200,000,000</span>
               </div>
 
-              {/* Semi-circular gauge (75% Delivery vs 25% Storage) */}
+              {/* Semi-circular gauge (75% Delivery teal vs 25% Storage yellow) */}
               <div style={{ display: 'flex', justifyContent: 'center', margin: '4px 0' }}>
                 <svg width="150" height="75" viewBox="0 0 160 80">
                   <path d="M 20 75 A 60 60 0 0 1 140 75" fill="none" stroke="#26262B" strokeWidth="22" />
                   {/* Teal 75% */}
-                  <path d="M 20 75 A 60 60 0 0 1 115 28" fill="none" stroke="#0C4A4D" strokeWidth="22" />
+                  <path d="M 20 75 A 60 60 0 0 1 115 28" fill="none" stroke="#0D9488" strokeWidth="22" />
                   {/* Yellow 25% */}
                   <path d="M 115 28 A 60 60 0 0 1 140 75" fill="none" stroke="#F5C842" strokeWidth="22" />
 
@@ -736,6 +750,54 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           </div>
         )}
 
+        {activeSubTab === 'referrals' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+            {[
+              { label: 'Total Referrals', value: '24' },
+              { label: 'Active Users Referred', value: '18' },
+              { label: 'Referral Earnings', value: '₦180,000' },
+              { label: 'Conversion Rate', value: '75%' },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  backgroundColor: cardBg,
+                  borderRadius: '12px',
+                  border: cardBorder,
+                  padding: '14px 16px',
+                }}
+              >
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {activeSubTab === 'reports' && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+            {[
+              { label: 'Total Reports', value: '14' },
+              { label: 'Resolved Reports', value: '11' },
+              { label: 'Pending Investigation', value: '3' },
+              { label: 'Avg Resolution Time', value: '1.5 hrs' },
+            ].map((item) => (
+              <div
+                key={item.label}
+                style={{
+                  backgroundColor: cardBg,
+                  borderRadius: '12px',
+                  border: cardBorder,
+                  padding: '14px 16px',
+                }}
+              >
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
+                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* 5. Dynamic Data Table for Active Sub-Tab */}
         <div
           style={{
@@ -893,6 +955,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
             Activity history
           </h3>
           <button
+            onClick={onSeeMoreActivity}
             style={{
               background: 'none',
               border: 'none',
@@ -915,21 +978,60 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {/* Event 1 */}
-              <div style={{ borderLeft: '2px solid #F5C842', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('bk-123456')}
+                style={{
+                  borderLeft: '2px solid #F5C842',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>Nearing drop off</div>
                 <div style={{ fontSize: '9px', color: '#71717A' }}>13:25</div>
               </div>
 
               {/* Event 2 */}
-              <div style={{ borderLeft: '2px solid #F5C842', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('bk-123456-transfer')}
+                style={{
+                  borderLeft: '2px solid #F5C842',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>MyBox-123456 → MyBox123487</div>
                 <div style={{ fontSize: '9px', color: '#71717A' }}>13:25</div>
               </div>
 
               {/* Event 3: Cleanliness report */}
-              <div style={{ borderLeft: '2px solid #10B981', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('rep-clean')}
+                style={{
+                  borderLeft: '2px solid #10B981',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Cleanliness report</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>The cabinet was too dirty</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
@@ -939,7 +1041,20 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
               </div>
 
               {/* Event 4: Theft report */}
-              <div style={{ borderLeft: '2px solid #F59E0B', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('rep-theft')}
+                style={{
+                  borderLeft: '2px solid #F59E0B',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Theft report</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>My item is missing</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
@@ -949,7 +1064,20 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
               </div>
 
               {/* Event 5: Booked partition */}
-              <div style={{ borderLeft: '2px solid #71717A', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('part-booked')}
+                style={{
+                  borderLeft: '2px solid #71717A',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Booked partition</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>#012356</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
@@ -959,7 +1087,20 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
               </div>
 
               {/* Event 6: Collected package */}
-              <div style={{ borderLeft: '2px solid #71717A', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('pkg-collected')}
+                style={{
+                  borderLeft: '2px solid #71717A',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Collected package</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>#082638</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
@@ -969,7 +1110,20 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
               </div>
 
               {/* Event 7: Wallet deposit */}
-              <div style={{ borderLeft: '2px solid #10B981', paddingLeft: '10px' }}>
+              <div
+                onClick={() => onSelectActivity?.('wal-deposit')}
+                style={{
+                  borderLeft: '2px solid #10B981',
+                  paddingLeft: '10px',
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  paddingTop: '3px',
+                  paddingBottom: '3px',
+                  transition: 'background-color 0.15s',
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Wallet deposit</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>Paystack</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
