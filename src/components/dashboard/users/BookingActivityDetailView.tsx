@@ -48,25 +48,26 @@ export const BookingActivityDetailView: React.FC<BookingActivityDetailViewProps>
             padding: '24px',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700, color: textColor, margin: 0 }}>
-              Order Information
-            </h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '13px', color: subtextColor }}>#1234567879</span>
-              <span
-                style={{
-                  backgroundColor: '#F5C842',
-                  color: '#000000',
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  padding: '4px 10px',
-                  borderRadius: '12px',
-                }}
-              >
-                Picked up
-              </span>
-            </div>
+          {/* Heading */}
+          <h3 style={{ fontSize: '16px', fontWeight: 700, color: textColor, margin: '0 0 10px 0' }}>
+            Order information
+          </h3>
+
+          {/* Subheader: Order ID & Picked up badge directly under heading */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+            <span style={{ fontSize: '13px', color: subtextColor }}>#1234567879</span>
+            <span
+              style={{
+                backgroundColor: '#F5C842',
+                color: '#000000',
+                fontSize: '11px',
+                fontWeight: 700,
+                padding: '3px 10px',
+                borderRadius: '12px',
+              }}
+            >
+              Picked up
+            </span>
           </div>
 
           <div
@@ -106,7 +107,7 @@ export const BookingActivityDetailView: React.FC<BookingActivityDetailViewProps>
             </div>
             <div>
               <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>ETA</div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>13mins</div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>18mins</div>
             </div>
             <div>
               <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>Actual delivery time</div>
@@ -114,7 +115,7 @@ export const BookingActivityDetailView: React.FC<BookingActivityDetailViewProps>
             </div>
             <div>
               <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>Demurrage</div>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>00:30:00</div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>00:45:00</div>
             </div>
           </div>
         </div>

@@ -62,28 +62,28 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
   ];
 
   return (
-    <div style={{ display: 'flex', gap: '20px', width: '100%', minHeight: '100%' }}>
+    <div style={{ display: 'flex', gap: '20px', width: '100%', minHeight: '100%', paddingBottom: '80px' }}>
       {/* Main Left Content: Profile, Summary, Charts, Tabs & Tables */}
-      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        {/* 1. User Profile Details Banner Card matching Figma Image 4 */}
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        {/* 1. User Profile Details Banner Card matching Figma Image 1 & 4 */}
         <div
           style={{
             backgroundColor: cardBg,
             borderRadius: '16px',
             border: cardBorder,
-            padding: '22px',
+            padding: '16px 20px',
             boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.04)' : 'none',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flexWrap: 'wrap' }}>
             {/* Avatar with Green Online Dot */}
             <div style={{ position: 'relative' }}>
               <img
                 src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80"
                 alt="Aku Cynthia"
                 style={{
-                  width: '74px',
-                  height: '74px',
+                  width: '60px',
+                  height: '60px',
                   borderRadius: '50%',
                   objectFit: 'cover',
                   border: '2px solid rgba(245, 200, 66, 0.4)',
@@ -215,16 +215,16 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           </div>
         </div>
 
-        {/* 2. Summary Section: Mini Stat Cards + Charts matching Figma Image 4 */}
+        {/* 2. Summary Section: Mini Stat Cards + Charts matching Figma Image 1 & 4 */}
         <div
           style={{
             backgroundColor: cardBg,
             borderRadius: '16px',
             border: cardBorder,
-            padding: '22px',
+            padding: '16px 20px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '18px',
+            gap: '12px',
           }}
         >
           {/* Header with Daily filter */}
@@ -653,9 +653,9 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           </div>
         </div>
 
-        {/* 4. Active Tab Stat Cards (Image 4 & 5) */}
+        {/* 4. Active Tab Stat Cards (Image 1 & 4) */}
         {activeSubTab === 'bookings' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Cancelled Bookings', value: '7,935' },
               { label: 'Failed Deliveries', value: '8' },
@@ -668,18 +668,18 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>
         )}
 
         {activeSubTab === 'rewards' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Total Points Earned', value: '12 Pts' },
               { label: 'Total Points Spent', value: '7 Pts' },
@@ -692,18 +692,18 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>
         )}
 
         {activeSubTab === 'wallet' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Total Deposited', value: '₦150,000,000' },
               { label: 'Total Withdrawn', value: '₦70,139,100' },
@@ -716,18 +716,18 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>
         )}
 
         {activeSubTab === 'boxes' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Default Locker', value: 'A5 - Bay 4' },
               { label: 'Box Unit', value: 'MyBox-12547' },
@@ -740,18 +740,18 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>
         )}
 
         {activeSubTab === 'referrals' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Total Referrals', value: '24' },
               { label: 'Active Users Referred', value: '18' },
@@ -764,18 +764,18 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>
         )}
 
         {activeSubTab === 'reports' && (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px' }}>
             {[
               { label: 'Total Reports', value: '14' },
               { label: 'Resolved Reports', value: '11' },
@@ -788,11 +788,11 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   backgroundColor: cardBg,
                   borderRadius: '12px',
                   border: cardBorder,
-                  padding: '14px 16px',
+                  padding: '10px 14px',
                 }}
               >
-                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{item.label}</div>
-                <div style={{ fontSize: '18px', fontWeight: 700, color: textColor }}>{item.value}</div>
+                <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>{item.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 700, color: textColor }}>{item.value}</div>
               </div>
             ))}
           </div>

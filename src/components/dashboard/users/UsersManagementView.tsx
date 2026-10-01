@@ -542,7 +542,7 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
           </div>
         </div>
 
-        {/* Card 4: User growth spline curve */}
+        {/* Card 4: User growth spline curve with full X and Y axes representation */}
         <div
           style={{
             backgroundColor: cardBg,
@@ -555,34 +555,86 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
             minHeight: '170px',
           }}
         >
-          <div>
-            <div style={{ fontSize: '12px', color: textColor, fontWeight: 600 }}>User growth</div>
-            <div style={{ fontSize: '10px', color: subtextColor }}>Track user growth</div>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontSize: '12px', color: textColor, fontWeight: 600 }}>User growth</div>
+              <div style={{ fontSize: '10px', color: subtextColor }}>Track user growth over time</div>
+            </div>
+            <span
+              style={{
+                fontSize: '10px',
+                color: '#10B981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontWeight: 600,
+              }}
+            >
+              +14%
+            </span>
           </div>
 
-          <div style={{ height: '75px', marginTop: '6px' }}>
-            <svg width="100%" height="100%" viewBox="0 0 180 75" preserveAspectRatio="none">
+          {/* Full Chart with X-axis, Y-axis, 6 Gridlines, and Curve */}
+          <div style={{ height: '90px', width: '100%', marginTop: '6px' }}>
+            <svg width="100%" height="100%" viewBox="0 0 240 90" preserveAspectRatio="none">
               <defs>
-                <linearGradient id="userGrowthMiniGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#F5C842" stopOpacity="0.4" />
+                <linearGradient id="userGrowthRichGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#F5C842" stopOpacity="0.35" />
                   <stop offset="100%" stopColor="#F5C842" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
+
+              {/* 5 Horizontal Dashed Gridlines */}
+              <line x1="26" y1="10" x2="236" y2="10" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+              <line x1="26" y1="24" x2="236" y2="24" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+              <line x1="26" y1="38" x2="236" y2="38" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+              <line x1="26" y1="52" x2="236" y2="52" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+              <line x1="26" y1="66" x2="236" y2="66" stroke={isLightMode ? '#E5E7EB' : 'rgba(255,255,255,0.06)'} strokeDasharray="2,2" />
+              {/* Solid Baseline */}
+              <line x1="26" y1="76" x2="236" y2="76" stroke={isLightMode ? '#D1D5DB' : 'rgba(255,255,255,0.12)'} />
+
+              {/* Y-Axis Labels */}
+              <text x="2" y="13" fill={subtextColor} fontSize="6.5">10k</text>
+              <text x="4" y="27" fill={subtextColor} fontSize="6.5">8k</text>
+              <text x="4" y="41" fill={subtextColor} fontSize="6.5">6k</text>
+              <text x="4" y="55" fill={subtextColor} fontSize="6.5">4k</text>
+              <text x="4" y="69" fill={subtextColor} fontSize="6.5">2k</text>
+              <text x="9" y="78" fill={subtextColor} fontSize="6.5">0</text>
+
+              {/* Area Gradient Fill */}
               <path
-                d="M 10 65 C 25 60, 35 35, 50 20 C 65 10, 75 42, 90 48 C 105 54, 115 15, 130 12 C 145 10, 155 58, 170 30 L 170 65 L 10 65 Z"
-                fill="url(#userGrowthMiniGrad)"
+                d="M 30 66 Q 44 48, 60 26 T 90 56 T 120 40 T 150 20 T 180 34 T 210 16 T 234 22 L 234 76 L 30 76 Z"
+                fill="url(#userGrowthRichGrad)"
               />
+
+              {/* Smooth Spline Curve */}
               <path
-                d="M 10 65 C 25 60, 35 35, 50 20 C 65 10, 75 42, 90 48 C 105 54, 115 15, 130 12 C 145 10, 155 58, 170 30"
+                d="M 30 66 Q 44 48, 60 26 T 90 56 T 120 40 T 150 20 T 180 34 T 210 16 T 234 22"
                 fill="none"
                 stroke="#F5C842"
-                strokeWidth="2"
+                strokeWidth="1.8"
                 strokeLinecap="round"
               />
-              <circle cx="50" cy="20" r="2.5" fill="#F5C842" />
-              <circle cx="90" cy="48" r="2" fill="#F5C842" />
-              <circle cx="130" cy="12" r="2.5" fill="#F5C842" />
-              <circle cx="170" cy="30" r="2" fill="#F5C842" />
+
+              {/* Data Point Circles */}
+              <circle cx="60" cy="26" r="2.5" fill="#F5C842" />
+              <circle cx="90" cy="56" r="2" fill="#F5C842" />
+              <circle cx="120" cy="40" r="2" fill="#F5C842" />
+              <circle cx="150" cy="20" r="2.5" fill="#F5C842" />
+              <circle cx="210" cy="16" r="2.5" fill="#F5C842" />
+
+              {/* X-Axis Month Labels */}
+              <text x="30" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Jan</text>
+              <text x="50" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Feb</text>
+              <text x="70" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Mar</text>
+              <text x="90" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Apr</text>
+              <text x="110" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">May</text>
+              <text x="130" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Jun</text>
+              <text x="150" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Jul</text>
+              <text x="170" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Aug</text>
+              <text x="190" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Sep</text>
+              <text x="210" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Oct</text>
+              <text x="230" y="86" fill={subtextColor} fontSize="6" textAnchor="middle">Dec</text>
             </svg>
           </div>
         </div>
