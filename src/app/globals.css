@@ -381,3 +381,13 @@ body {
 @media (max-width: 768px) {
   .hide-on-mobile { display: none !important; }
 }
+
+/* Box2Box Logo Badge Zoom Animation (2s cycle) */
+@keyframes b2bPulseZoom {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}

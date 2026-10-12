@@ -2,19 +2,22 @@
 
 import React, { useState } from 'react';
 import {
-  MapPin,
-  Clock,
-  Battery,
-  User,
+  Battery as BatteryIcon,
   Star,
-  Box,
-  Layers,
-  Calendar,
-  CheckCircle2,
   ChevronDown,
 } from 'lucide-react';
 
 import { BoxBookingsFilterModal } from './BoxBookingsFilterModal';
+import { BoxTabFilterModal, BoxDetailSubTab } from './BoxTabFilterModal';
+
+// Modular Sub-Tab Components
+import { CabinetsTab } from './details/CabinetsTab';
+import { BookingsTab } from './details/BookingsTab';
+import { BatteryTab } from './details/BatteryTab';
+import { ReviewsTab } from './details/ReviewsTab';
+import { CodeUsageTab } from './details/CodeUsageTab';
+import { ReportsTab } from './details/ReportsTab';
+import { BoxActivityTab } from './details/BoxActivityTab';
 
 interface BoxDetailsPageViewProps {
   boxId?: string;
@@ -27,9 +30,13 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
   onBack,
   isLightMode = false,
 }) => {
-  const [activeTab, setActiveTab] = useState<'Cabinets' | 'Bookings' | 'Battery' | 'Reviews' | 'Code usage' | 'Reports' | 'Box activity'>('Cabinets');
+  const [activeTab, setActiveTab] = useState<
+    'Cabinets' | 'Bookings' | 'Battery' | 'Reviews' | 'Code usage' | 'Reports' | 'Box activity'
+  >('Cabinets');
   const [selectedCabinet, setSelectedCabinet] = useState<string | null>(null);
   const [showBookingsFilterModal, setShowBookingsFilterModal] = useState(false);
+  const [showTabFilterModal, setShowTabFilterModal] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
@@ -46,12 +53,12 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
     'Box activity',
   ];
 
-  const cabinets = [
-    { id: 'A3', status: 'Occupied', statusColor: '#EF4444', statusBg: 'rgba(239, 68, 68, 0.15)', occupant: 'Aku Cynthia' },
-    { id: 'A4', status: 'Available', statusColor: '#10B981', statusBg: 'rgba(16, 185, 129, 0.15)' },
-    { id: 'A5', status: 'Occupied', statusColor: '#F5C842', statusBg: 'rgba(245, 200, 66, 0.15)', occupant: 'Box owner' },
-    { id: 'A6', status: 'Available', statusColor: '#10B981', statusBg: 'rgba(16, 185, 129, 0.15)' },
-  ];
+  const showToast = (message: string) => {
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3000);
+  };
 
   return (
     <div
@@ -60,10 +67,34 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
         gap: '20px',
         width: '100%',
         minHeight: '100%',
+        paddingBottom: '48px', // Generous bottom spacing so cards never touch the bottom edge of screen
         fontFamily: 'Rubik, var(--font-outfit), sans-serif',
+        position: 'relative',
       }}
     >
-      {/* Main Left Content: Box Banner Card, Stat Cards, Tabs & Cabinet Layout */}
+      {/* Toast Feedback */}
+      {toastMessage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '24px',
+            right: '24px',
+            backgroundColor: '#10B981',
+            color: '#FFFFFF',
+            padding: '12px 20px',
+            borderRadius: '10px',
+            fontSize: '13px',
+            fontWeight: 600,
+            boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+            zIndex: 150,
+            animation: 'slideInRight 0.2s ease-out',
+          }}
+        >
+          {toastMessage}
+        </div>
+      )}
+
+      {/* Main Left Content: Box Banner Card, Stat Cards, Tabs & Content */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {/* 1. Box Summary Banner Card matching Figma Image 5 */}
         <div
@@ -88,7 +119,7 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
                 fontFamily: 'var(--font-outfit), sans-serif',
               }}
             >
-              MyBox-123456
+              {boxId}
             </h2>
 
             <span style={{ fontSize: '13px', color: subtextColor }}>#1234567879</span>
@@ -98,9 +129,9 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
               style={{
                 fontSize: '11px',
                 fontWeight: 600,
-                color: '#A1A1AA',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#27272A',
-                padding: '3px 8px',
+                color: '#9CA3AF',
+                backgroundColor: isLightMode ? '#F3F4F6' : '#222226',
+                padding: '4px 10px',
                 borderRadius: '6px',
               }}
             >
@@ -113,21 +144,21 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
                 fontSize: '11px',
                 fontWeight: 600,
                 color: '#10B981',
-                backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                padding: '3px 8px',
+                backgroundColor: 'rgba(16, 185, 129, 0.12)',
+                padding: '4px 10px',
                 borderRadius: '6px',
               }}
             >
               Available
             </span>
 
-            {/* Star Rating */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 600, color: textColor }}>
+            {/* Rating */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', fontWeight: 700, color: textColor }}>
               <span>4.7</span>
-              <Star size={13} fill="#F5C842" color="#F5C842" />
+              <Star size={14} fill="#F5C842" color="#F5C842" />
             </div>
 
-            {/* Battery Indicator */}
+            {/* Battery */}
             <div
               style={{
                 display: 'flex',
@@ -137,116 +168,177 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
                 fontWeight: 600,
                 color: '#10B981',
                 backgroundColor: 'rgba(16, 185, 129, 0.12)',
-                padding: '3px 8px',
+                padding: '4px 8px',
                 borderRadius: '6px',
               }}
             >
-              <Battery size={13} />
               <span>90%</span>
+              <BatteryIcon size={12} color="#10B981" />
             </div>
           </div>
 
-          {/* Details Row 1 */}
+          {/* Telemetry Metrics Row */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '24px',
-              fontSize: '13px',
+              gap: '18px',
+              fontSize: '12px',
+              color: subtextColor,
             }}
           >
             <div>
-              <span style={{ color: subtextColor }}>Location </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>Wuse II, Abuja</span>
+              <span>Location </span>
+              <strong style={{ color: textColor }}>Wuse II, Abuja</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Usage rate </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>80%</span>
+              <span>Usage rate </span>
+              <strong style={{ color: textColor }}>80%</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Uptime score </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>80%</span>
+              <span>Uptime score </span>
+              <strong style={{ color: textColor }}>80%</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Cleanliness score </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>90%</span>
+              <span>Cleanliness score </span>
+              <strong style={{ color: textColor }}>90%</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Report count </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>24</span>
+              <span>Report count </span>
+              <strong style={{ color: textColor }}>24</strong>
             </div>
           </div>
 
-          {/* Details Row 2 */}
+          {/* Operational Hours & Owner Row */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
               flexWrap: 'wrap',
-              gap: '24px',
-              fontSize: '13px',
+              gap: '18px',
+              fontSize: '12px',
+              color: subtextColor,
             }}
           >
             <div>
-              <span style={{ color: subtextColor }}>Peak period </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>09:00 AM - 05:00 PM</span>
+              <span>Peak period </span>
+              <strong style={{ color: textColor }}>09:00 AM - 05:00 PM</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Battery health </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>Good (79%)</span>
+              <span>Battery health </span>
+              <strong style={{ color: textColor }}>Good (79%)</strong>
             </div>
+
             <div>
-              <span style={{ color: subtextColor }}>Owner </span>
-              <span style={{ color: textColor, fontWeight: 600 }}>Marycynthia John</span>
+              <span>Owner </span>
+              <strong style={{ color: textColor }}>Marycynthia John</strong>
             </div>
           </div>
         </div>
 
-        {/* 2. Action Stat Cards (5 Cards) matching Figma Image 5 */}
+        {/* 2. Top Overview Stat Cards Grid */}
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
             gap: '14px',
           }}
         >
-          <div style={{ backgroundColor: cardBg, borderRadius: '14px', border: cardBorder, padding: '16px' }}>
-            <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>Total Cabinets</div>
+          {/* Card 1: Total Cabinets */}
+          <div
+            style={{
+              backgroundColor: cardBg,
+              borderRadius: '14px',
+              border: cardBorder,
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ fontSize: '11px', color: subtextColor }}>Total Cabinets</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: textColor }}>4</div>
           </div>
 
-          <div style={{ backgroundColor: cardBg, borderRadius: '14px', border: cardBorder, padding: '16px' }}>
-            <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>Available</div>
+          {/* Card 2: Available */}
+          <div
+            style={{
+              backgroundColor: cardBg,
+              borderRadius: '14px',
+              border: cardBorder,
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ fontSize: '11px', color: subtextColor }}>Available</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: textColor }}>2</div>
           </div>
 
-          <div style={{ backgroundColor: cardBg, borderRadius: '14px', border: cardBorder, padding: '16px' }}>
-            <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>Customer occupied</div>
+          {/* Card 3: Customer occupied */}
+          <div
+            style={{
+              backgroundColor: cardBg,
+              borderRadius: '14px',
+              border: cardBorder,
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ fontSize: '11px', color: subtextColor }}>Customer occupied</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: textColor }}>1</div>
           </div>
 
-          <div style={{ backgroundColor: cardBg, borderRadius: '14px', border: cardBorder, padding: '16px' }}>
-            <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>Owner occupied</div>
+          {/* Card 4: Owner occupied */}
+          <div
+            style={{
+              backgroundColor: cardBg,
+              borderRadius: '14px',
+              border: cardBorder,
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ fontSize: '11px', color: subtextColor }}>Owner occupied</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: textColor }}>1</div>
           </div>
 
-          <div style={{ backgroundColor: cardBg, borderRadius: '14px', border: cardBorder, padding: '16px' }}>
-            <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '4px' }}>Code usage</div>
+          {/* Card 5: Code usage */}
+          <div
+            style={{
+              backgroundColor: cardBg,
+              borderRadius: '14px',
+              border: cardBorder,
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '6px',
+            }}
+          >
+            <div style={{ fontSize: '11px', color: subtextColor }}>Code usage</div>
             <div style={{ fontSize: '20px', fontWeight: 700, color: textColor }}>15/20</div>
-            <div style={{ fontSize: '9px', color: subtextColor, marginTop: '2px' }}>Last used Jan 12, 2026 | 11:45 AM</div>
+            <div style={{ fontSize: '10px', color: subtextColor }}>Last used Jan 12, 2026 | 11:45 AM</div>
           </div>
         </div>
 
-        {/* 3. Sub-Tabs Bar with Inline Filter Button matching Figma Image 5 */}
+        {/* 3. Sub-Tabs Bar with Clean Filter Button */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
-            paddingBottom: '2px',
-            marginTop: '6px',
             flexShrink: 0,
             minHeight: '44px',
             gap: '16px',
@@ -268,7 +360,9 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
               return (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => {
+                    setActiveTab(tab);
+                  }}
                   style={{
                     background: 'none',
                     border: 'none',
@@ -301,10 +395,16 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
             })}
           </div>
 
-          {/* Inline Filter ▾ Button (appears when Bookings tab is active, matching Figma Image 5) */}
-          {activeTab === 'Bookings' && (
+          {/* Clean Inline Filter ▾ Button (No extra descriptions) */}
+          {activeTab !== 'Cabinets' && (
             <button
-              onClick={() => setShowBookingsFilterModal(true)}
+              onClick={() => {
+                if (activeTab === 'Bookings') {
+                  setShowBookingsFilterModal(true);
+                } else {
+                  setShowTabFilterModal(true);
+                }
+              }}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -330,283 +430,44 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
           )}
         </div>
 
-        {/* 4. Tab Content: Cabinets Layout & Info matching Figma Image 5 */}
+        {/* 4. Active Sub-Tab Modular Component */}
         {activeTab === 'Cabinets' && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0, 1.2fr) minmax(0, 1fr)',
-              gap: '16px',
-            }}
-            className="cabinet-grid-container"
-          >
-            {/* Left Card: Cabinet Layout (2x2 Grid) */}
-            <div
-              style={{
-                backgroundColor: cardBg,
-                borderRadius: '16px',
-                border: cardBorder,
-                padding: '22px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-              }}
-            >
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: textColor, margin: 0 }}>
-                Cabinet layout
-              </h3>
-
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
-                  gap: '14px',
-                }}
-              >
-                {cabinets.map((cab) => {
-                  const isSelected = selectedCabinet === cab.id;
-                  return (
-                    <div
-                      key={cab.id}
-                      onClick={() => setSelectedCabinet(cab.id)}
-                      style={{
-                        backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
-                        borderRadius: '12px',
-                        border: isSelected
-                          ? '2px solid #F5C842'
-                          : isLightMode
-                          ? '1px solid #E5E7EB'
-                          : '1px solid rgba(255, 255, 255, 0.08)',
-                        padding: '16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        minHeight: '100px',
-                        cursor: 'pointer',
-                        transition: 'all 0.15s ease',
-                      }}
-                      onMouseOver={(e) => {
-                        if (!isSelected) {
-                          e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222227';
-                        }
-                      }}
-                      onMouseOut={(e) => {
-                        if (!isSelected) {
-                          e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1A1A1E';
-                        }
-                      }}
-                    >
-                      <div style={{ fontSize: '14px', fontWeight: 700, color: textColor }}>{cab.id}</div>
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          color: cab.statusColor,
-                          backgroundColor: cab.statusBg,
-                          padding: '2px 8px',
-                          borderRadius: '6px',
-                        }}
-                      >
-                        {cab.status}
-                      </span>
-                      {cab.occupant && (
-                        <div style={{ fontSize: '11px', color: subtextColor, marginTop: '2px' }}>
-                          {cab.occupant}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Right Card: Cabinet Info */}
-            <div
-              style={{
-                backgroundColor: cardBg,
-                borderRadius: '16px',
-                border: cardBorder,
-                padding: '22px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '260px',
-                textAlign: 'center',
-              }}
-            >
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: textColor, margin: '0 0 16px 0', alignSelf: 'flex-start' }}>
-                Cabinet info
-              </h3>
-
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: '12px' }}>
-                <div
-                  style={{
-                    width: '56px',
-                    height: '56px',
-                    borderRadius: '50%',
-                    backgroundColor: isLightMode ? '#F3F4F6' : '#222226',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Box size={24} color={subtextColor} />
-                </div>
-                <div style={{ fontSize: '13px', color: subtextColor }}>
-                  {selectedCabinet ? `Selected Cabinet: ${selectedCabinet} - Full sensor data ready` : 'Select cabinet to view data'}
-                </div>
-              </div>
-            </div>
-          </div>
+          <CabinetsTab
+            isLightMode={isLightMode}
+            selectedCabinet={selectedCabinet}
+            onSelectCabinet={(id) => setSelectedCabinet(id)}
+          />
         )}
 
-        {/* Bookings Tab Content matching Figma Image 5 */}
         {activeTab === 'Bookings' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* Top Section: 5 Stat Cards */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-                gap: '14px',
-              }}
-            >
-              {[
-                { label: 'Total Bookings Value', value: '₦80,000', change: '+12% today' },
-                { label: 'Total Bookings', value: '7,935', change: '+12% today' },
-                { label: 'Avg Booking Value', value: '₦2,050', change: '+4% today' },
-                { label: 'Box2Box delivery', value: '72%', change: '+2% today' },
-                { label: 'Storage booking', value: '28%', change: '+2% today' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  style={{
-                    backgroundColor: cardBg,
-                    borderRadius: '14px',
-                    border: cardBorder,
-                    padding: '16px',
-                  }}
-                >
-                  <div style={{ fontSize: '11px', color: subtextColor, marginBottom: '6px' }}>{stat.label}</div>
-                  <div style={{ fontSize: '20px', fontWeight: 700, color: textColor, marginBottom: '4px' }}>
-                    {stat.value}
-                  </div>
-                  <div style={{ fontSize: '10px', color: '#10B981', fontWeight: 600 }}>{stat.change}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Down Section: Table Container Card */}
-            <div
-              style={{
-                backgroundColor: cardBg,
-                borderRadius: '16px',
-                border: cardBorder,
-                overflow: 'hidden',
-              }}
-            >
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
-                  <thead>
-                    <tr style={{ borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)', color: subtextColor, fontSize: '11px' }}>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Order ID</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Cabinet</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Usage</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Type</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Date</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Amount</th>
-                      <th style={{ padding: '14px 16px', fontWeight: 500 }}>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { id: '1', orderId: '#196723', cabinet: 'A5', usage: 'Pick up', type: 'Storage', date: 'Jun 12, 2025', amount: '₦300', status: 'In storage' },
-                      { id: '2', orderId: '#198096', cabinet: 'A3', usage: 'Drop off', type: 'Delivery', date: 'Jun 12, 2025', amount: '₦300', status: 'Delivered' },
-                      { id: '3', orderId: '#109456', cabinet: 'A4', usage: 'Drop off', type: 'Delivery', date: 'Jun 12, 2025', amount: '₦300', status: 'Delivered' },
-                      { id: '4', orderId: '#124897', cabinet: 'A6', usage: 'Pick up', type: 'Storage', date: 'Jun 12, 2025', amount: '₦300', status: 'Picked up' },
-                      { id: '5', orderId: '#105677', cabinet: 'A3', usage: 'Drop off', type: 'Delivery', date: 'Jun 12, 2025', amount: '₦300', status: 'In progress' },
-                      { id: '6', orderId: '#108567', cabinet: 'A3', usage: 'Drop off', type: 'Delivery', date: 'Jun 12, 2025', amount: '₦300', status: 'Delivered' },
-                    ].map((row) => (
-                      <tr
-                        key={row.id}
-                        style={{
-                          borderBottom: isLightMode ? '1px solid #F3F4F6' : '1px solid rgba(255, 255, 255, 0.04)',
-                          fontSize: '12px',
-                          transition: 'background-color 0.15s',
-                        }}
-                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1A1A1E')}
-                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                      >
-                        <td style={{ padding: '14px 16px', fontWeight: 600, color: textColor }}>{row.orderId}</td>
-                        <td style={{ padding: '14px 16px', color: textColor, fontWeight: 600 }}>{row.cabinet}</td>
-                        <td style={{ padding: '14px 16px', color: subtextColor }}>{row.usage}</td>
-                        <td style={{ padding: '14px 16px', color: textColor }}>{row.type}</td>
-                        <td style={{ padding: '14px 16px', color: subtextColor }}>{row.date}</td>
-                        <td style={{ padding: '14px 16px', fontWeight: 600, color: textColor }}>{row.amount}</td>
-                        <td style={{ padding: '14px 16px' }}>
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              padding: '3px 8px',
-                              borderRadius: '6px',
-                              color:
-                                row.status === 'Delivered' || row.status === 'Picked up'
-                                  ? '#10B981'
-                                  : row.status === 'In progress'
-                                  ? '#F5C842'
-                                  : '#A1A1AA',
-                              backgroundColor:
-                                row.status === 'Delivered' || row.status === 'Picked up'
-                                  ? 'rgba(16, 185, 129, 0.12)'
-                                  : row.status === 'In progress'
-                                  ? 'rgba(245, 200, 66, 0.12)'
-                                  : isLightMode ? '#F3F4F6' : '#27272A',
-                            }}
-                          >
-                            {row.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          <BookingsTab isLightMode={isLightMode} />
         )}
 
-        {/* Space reserved for other tab designs (Battery, Reviews, Code usage, Reports, Box activity) */}
-        {activeTab !== 'Cabinets' && activeTab !== 'Bookings' && (
-          <div
-            style={{
-              backgroundColor: cardBg,
-              borderRadius: '16px',
-              border: cardBorder,
-              padding: '48px 32px',
-              textAlign: 'center',
-              color: subtextColor,
-              fontSize: '14px',
-              minHeight: '260px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px',
-            }}
-          >
-            <div style={{ fontSize: '16px', fontWeight: 600, color: textColor }}>{activeTab} Overview</div>
-            <div style={{ maxWidth: '400px', fontSize: '13px' }}>
-              Design specifications for {activeTab} will be rendered here. Layout containers and theme tokens are fully primed.
-            </div>
-          </div>
+        {activeTab === 'Battery' && (
+          <BatteryTab isLightMode={isLightMode} />
+        )}
+
+        {activeTab === 'Reviews' && (
+          <ReviewsTab isLightMode={isLightMode} />
+        )}
+
+        {activeTab === 'Code usage' && (
+          <CodeUsageTab isLightMode={isLightMode} />
+        )}
+
+        {activeTab === 'Reports' && (
+          <ReportsTab
+            isLightMode={isLightMode}
+            onActionNotification={(msg) => showToast(msg)}
+          />
+        )}
+
+        {activeTab === 'Box activity' && (
+          <BoxActivityTab isLightMode={isLightMode} />
         )}
       </div>
 
-      {/* Right Side Column: Owner Info & Deployment History (NO card/border wrapper covering the section, sits clean on canvas as instructed!) */}
+      {/* Right Side Column: Owner Info & Deployment History */}
       <aside
         style={{
           width: '280px',
@@ -683,7 +544,7 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
           </div>
         </div>
 
-        {/* Deployment History Section (Clean on canvas, NO card/border wrapper covering the section!) */}
+        {/* Deployment History Section */}
         <div>
           <h4
             style={{
@@ -717,15 +578,28 @@ export const BoxDetailsPageView: React.FC<BoxDetailsPageViewProps> = ({
         </div>
       </aside>
 
-      {/* Box Bookings 4-Tab Filter Modal matching user specs */}
+      {/* Bookings Filter Modal */}
       <BoxBookingsFilterModal
         isOpen={showBookingsFilterModal}
         onClose={() => setShowBookingsFilterModal(false)}
         isLightMode={isLightMode}
         onApplyFilters={(filters) => {
-          console.log('Applied box bookings filters:', filters);
+          showToast('Applied box bookings filters');
         }}
       />
+
+      {/* Tab Filter Modal (Battery, Reviews, Code usage, Reports, Box activity) */}
+      {activeTab !== 'Cabinets' && activeTab !== 'Bookings' && (
+        <BoxTabFilterModal
+          isOpen={showTabFilterModal}
+          onClose={() => setShowTabFilterModal(false)}
+          activeSubTab={activeTab as BoxDetailSubTab}
+          isLightMode={isLightMode}
+          onApplyFilters={(filters) => {
+            showToast(`Applied ${activeTab} filters`);
+          }}
+        />
+      )}
 
       <style jsx global>{`
         @media (max-width: 1024px) {

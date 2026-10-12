@@ -14,6 +14,9 @@ import {
   Bell,
 } from 'lucide-react';
 import { LocationModal } from './LocationModal';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
+
+import { HeaderActionItem } from '@/components/layout/AdminContext';
 
 interface DashboardHeaderProps {
   onToggleSidebar?: () => void;
@@ -27,6 +30,7 @@ interface DashboardHeaderProps {
   showBack?: boolean;
   showAction?: boolean;
   onActionClick?: () => void;
+  actionItems?: HeaderActionItem[];
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -41,6 +45,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   showBack = false,
   showAction = false,
   onActionClick,
+  actionItems,
 }) => {
   const [selectedLocation, setSelectedLocation] = useState('Location');
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -140,11 +145,11 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                   fontWeight: 700,
                   fontSize: '13px',
                   border: 'none',
-                  borderRadius: '20px',
-                  padding: '8px 20px',
+                  borderRadius: '8px',
+                  padding: '8px 16px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '8px',
                   cursor: 'pointer',
                   boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
                   transition: 'transform 0.15s ease',
@@ -152,8 +157,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                 onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
                 onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
               >
-                <span>Action</span>
-                <ChevronDown size={14} />
+                <span>Actions</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
 
               {actionMenuOpen && (
@@ -163,7 +168,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                     top: '100%',
                     right: 0,
                     marginTop: '6px',
-                    width: '160px',
+                    width: '180px',
                     backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
                     borderRadius: '10px',
                     border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.15)',
@@ -172,23 +177,85 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                     boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
                   }}
                 >
-                  {['Edit user info', 'Reset password', 'Send message', 'Export statement'].map((act) => (
-                    <div
-                      key={act}
-                      onClick={() => setActionMenuOpen(false)}
-                      style={{
-                        padding: '8px 10px',
-                        fontSize: '12px',
-                        color: isLightMode ? '#111827' : '#FFFFFF',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                      }}
-                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30')}
-                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                    >
-                      {act}
-                    </div>
-                  ))}
+                  {actionItems && actionItems.length > 0 ? (
+                    actionItems.map((act) => (
+                      <div
+                        key={act.label}
+                        onClick={() => {
+                          if (act.disabled) return;
+                          if (!act.hasToggle) {
+                            setActionMenuOpen(false);
+                          }
+                          act.onClick();
+                        }}
+                        style={{
+                          padding: '8px 10px',
+                          fontSize: '12px',
+                          color: act.disabled
+                            ? '#71717A'
+                            : act.color || (isLightMode ? '#111827' : '#FFFFFF'),
+                          fontWeight: 500,
+                          borderRadius: '6px',
+                          cursor: act.disabled ? 'not-allowed' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: act.hasToggle ? 'space-between' : 'flex-start',
+                        }}
+                        onMouseOver={(e) => {
+                          if (!act.disabled) {
+                            e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30';
+                          }
+                        }}
+                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <span>{act.label}</span>
+                        {act.hasToggle && (
+                          <div
+                            style={{
+                              width: '28px',
+                              height: '16px',
+                              borderRadius: '10px',
+                              backgroundColor: act.isToggled ? '#EF4444' : isLightMode ? '#E5E7EB' : '#3F3F46',
+                              position: 'relative',
+                              transition: 'background-color 0.2s',
+                              flexShrink: 0,
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: '12px',
+                                height: '12px',
+                                borderRadius: '50%',
+                                backgroundColor: '#FFFFFF',
+                                position: 'absolute',
+                                top: '2px',
+                                left: act.isToggled ? '14px' : '2px',
+                                transition: 'left 0.2s',
+                              }}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    ['Edit user info', 'Reset password', 'Send message', 'Export statement'].map((act) => (
+                      <div
+                        key={act}
+                        onClick={() => setActionMenuOpen(false)}
+                        style={{
+                          padding: '8px 10px',
+                          fontSize: '12px',
+                          color: isLightMode ? '#111827' : '#FFFFFF',
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                        }}
+                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30')}
+                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        {act}
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>

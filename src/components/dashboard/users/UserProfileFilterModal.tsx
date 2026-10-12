@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Check } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 export type SubTabType = 'bookings' | 'boxes' | 'wallet' | 'rewards' | 'referrals' | 'reports';
 
@@ -367,10 +368,16 @@ export const UserProfileFilterModal: React.FC<UserProfileFilterModalProps> = ({
               fontSize: '12px',
               fontWeight: 700,
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              padding: '0 14px',
               transition: 'opacity 0.15s ease',
             }}
           >
-            Save
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={14} />
           </button>
         </div>
       </div>

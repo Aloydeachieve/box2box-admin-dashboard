@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, Search, ArrowLeft } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface ActivityItem {
   id: string;
@@ -583,9 +584,14 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
                   fontSize: '13px',
                   fontWeight: 700,
                   cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>

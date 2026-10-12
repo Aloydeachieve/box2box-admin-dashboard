@@ -1,0 +1,135 @@
+'use client';
+
+import React from 'react';
+import { X } from 'lucide-react';
+
+interface EscalateReportModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  reportId: string;
+  isLightMode?: boolean;
+  onConfirm: () => void;
+}
+
+export const EscalateReportModal: React.FC<EscalateReportModalProps> = ({
+  isOpen,
+  onClose,
+  reportId,
+  isLightMode = false,
+  onConfirm,
+}) => {
+  if (!isOpen) return null;
+
+  const textColor = isLightMode ? '#111827' : '#FFFFFF';
+  const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
+  const modalBg = isLightMode ? '#FFFFFF' : '#141416';
+  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.1)';
+
+  const handleConfirm = () => {
+    onConfirm();
+    onClose();
+  };
+
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        backdropFilter: 'blur(4px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 100,
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: '90%',
+          maxWidth: '380px',
+          backgroundColor: modalBg,
+          borderRadius: '16px',
+          border: `1px solid ${borderColor}`,
+          padding: '24px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          boxShadow: isLightMode
+            ? '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+            : '0 20px 25px -5px rgba(0, 0, 0, 0.5)',
+          fontFamily: 'var(--font-outfit), sans-serif',
+          animation: 'scaleIn 0.2s ease-out',
+        }}
+      >
+        {/* Header with Title & Close X */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: '16px', fontWeight: 600, color: textColor, margin: 0 }}>Escalate report</h3>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: subtextColor,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4px',
+            }}
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* Center prompt text matching Figma Image 3 */}
+        <div style={{ textAlign: 'center', padding: '10px 0' }}>
+          <p style={{ margin: 0, fontSize: '14px', color: textColor, fontWeight: 500 }}>
+            Escalate report to high priority?
+          </p>
+        </div>
+
+        {/* Buttons: Cancel & Escalate report */}
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              flex: 1,
+              height: '40px',
+              borderRadius: '8px',
+              backgroundColor: isLightMode ? '#F3F4F6' : '#FFFFFF',
+              border: 'none',
+              color: '#000000',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+            }}
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            onClick={handleConfirm}
+            style={{
+              flex: 1,
+              height: '40px',
+              borderRadius: '8px',
+              backgroundColor: '#F5C842',
+              border: 'none',
+              color: '#000000',
+              fontSize: '13px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            Escalate report
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

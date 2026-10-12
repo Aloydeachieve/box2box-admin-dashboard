@@ -40,8 +40,11 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   const router = useRouter();
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
     users: false,
-    inventory: false,
+    inventory: true,
     orders: false,
+    rewards: false,
+    support: false,
+    fraud_alert: false,
   });
 
   const toggleDropdown = (key: string) => {
@@ -72,28 +75,34 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       label: 'Inventory',
       icon: Layers,
       hasDropdown: true,
-      subItems: ['Stock overview', 'Unit categories', 'Stock intake'],
+      subItems: [
+        { label: 'Boxes', id: 'inventory_boxes', path: '/inventory' },
+        { label: 'Accessories', id: 'inventory_accessories', path: '/inventory/accessories' },
+        { label: 'Parts', id: 'inventory_parts', path: '/inventory/parts' },
+        { label: 'Inventory Log', id: 'inventory_log', path: '/inventory/log' },
+      ],
     },
     {
       id: 'orders',
       label: 'Orders',
       icon: ShoppingBag,
-      hasDropdown: true,
-      subItems: ['All bookings', 'Active pickups', 'Delivered items'],
+      hasDropdown: false,
     },
     {
       id: 'rewards',
       label: 'Rewards',
       icon: Gift,
       hasDropdown: true,
-      subItems: ['Points & referrals', 'Promo vouchers'],
+      subItems: [
+        { label: 'Points & referrals', id: 'rewards_points', path: '/rewards' },
+        { label: 'Promo vouchers', id: 'rewards_vouchers', path: '/rewards/vouchers' },
+      ],
     },
     {
-      id: 'admin_regt',
-      label: 'Admin regt.',
+      id: 'admin_mgt',
+      label: 'Admin mgt.',
       icon: Shield,
-      hasDropdown: true,
-      subItems: ['Staff accounts', 'Roles & access'],
+      hasDropdown: false,
     },
     {
       id: 'transactions',
@@ -106,21 +115,26 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       label: 'Support',
       icon: Headphones,
       hasDropdown: true,
-      subItems: ['Support tickets', 'Customer disputes'],
+      subItems: [
+        { label: 'Support tickets', id: 'support_tickets', path: '/support' },
+        { label: 'Customer disputes', id: 'support_disputes', path: '/support/disputes' },
+      ],
     },
     {
       id: 'fraud_alert',
       label: 'Fraud alert',
       icon: AlertTriangle,
       hasDropdown: true,
-      subItems: ['Tamper logs', 'Failed unlock attempts'],
+      subItems: [
+        { label: 'Tamper logs', id: 'fraud_tamper', path: '/fraud-alert' },
+        { label: 'Failed unlock attempts', id: 'fraud_unlocks', path: '/fraud-alert/unlocks' },
+      ],
     },
     {
       id: 'account',
       label: 'Account',
       icon: UserCircle,
-      hasDropdown: true,
-      subItems: ['Security settings', 'API integrations'],
+      hasDropdown: false,
     },
   ];
 
@@ -248,30 +262,51 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                   <div
                     style={{
                       paddingLeft: '32px',
+                      paddingRight: '8px',
                       paddingTop: '4px',
                       paddingBottom: '4px',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '2px',
+                      gap: '3px',
                     }}
                   >
-                    {item.subItems.map((sub) => (
-                      <div
-                        key={sub}
-                        style={{
-                          fontSize: '12px',
-                          color: '#71717A',
-                          padding: '6px 8px',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          transition: 'color 0.15s',
-                        }}
-                        onMouseOver={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                        onMouseOut={(e) => (e.currentTarget.style.color = '#71717A')}
-                      >
-                        {sub}
-                      </div>
-                    ))}
+                    {item.subItems.map((sub) => {
+                      const isSubActive =
+                        activeTab === sub.id ||
+                        (sub.id === 'inventory_boxes' && (activeTab === 'inventory' || activeTab === 'inventory_boxes'));
+
+                      return (
+                        <div
+                          key={sub.id}
+                          onClick={() => {
+                            onSelectTab(sub.id);
+                            router.push(sub.path);
+                          }}
+                          style={{
+                            fontSize: '12px',
+                            fontWeight: isSubActive ? 700 : 500,
+                            color: isSubActive ? '#F5C842' : '#A0A0A5',
+                            backgroundColor: isSubActive
+                              ? isLightMode
+                                ? 'rgba(245, 200, 66, 0.25)'
+                                : 'rgba(245, 200, 66, 0.18)'
+                              : 'transparent',
+                            padding: '7px 12px',
+                            borderRadius: '8px',
+                            cursor: 'pointer',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseOver={(e) => {
+                            if (!isSubActive) e.currentTarget.style.color = '#FFFFFF';
+                          }}
+                          onMouseOut={(e) => {
+                            if (!isSubActive) e.currentTarget.style.color = '#A0A0A5';
+                          }}
+                        >
+                          {sub.label}
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>

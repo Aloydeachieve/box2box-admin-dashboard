@@ -225,6 +225,16 @@ export const BoxManagementView: React.FC<BoxManagementViewProps> = ({
     }
   };
 
+  if (selectedBoxForDetails && !onViewBox) {
+    return (
+      <BoxDetailsPageView
+        boxId={selectedBoxForDetails}
+        onBack={() => setSelectedBoxForDetails(null)}
+        isLightMode={isLightMode}
+      />
+    );
+  }
+
   return (
     <div
       style={{
@@ -832,11 +842,12 @@ export const BoxManagementView: React.FC<BoxManagementViewProps> = ({
               </tr>
             </thead>
             <tbody>
-              {tableData.map((row) => {
+              {tableData.map((row, index) => {
                 const isSelected = selectedRowIds.includes(row.id);
                 const statusBadge = getStatusBadge(row.status);
                 const batteryBadge = getBatteryBadge(row.batteryHealth);
                 const isActionOpen = activeActionRowId === row.id;
+                const isNearBottom = index >= tableData.length - 2;
 
                 return (
                   <tr
@@ -877,7 +888,13 @@ export const BoxManagementView: React.FC<BoxManagementViewProps> = ({
                     </td>
 
                     {/* Box ID */}
-                    <td style={{ padding: '12px 10px', color: textColor, fontWeight: 500 }}>
+                    <td
+                      onClick={() => {
+                        setSelectedBoxForDetails(row.boxId);
+                        onViewBox?.(row.boxId);
+                      }}
+                      style={{ padding: '12px 10px', color: textColor, fontWeight: 500, cursor: 'pointer' }}
+                    >
                       {row.boxId}
                     </td>
 
@@ -969,13 +986,13 @@ export const BoxManagementView: React.FC<BoxManagementViewProps> = ({
                           style={{
                             position: 'absolute',
                             right: '10px',
-                            top: '40px',
+                            ...(isNearBottom ? { bottom: '100%', marginBottom: '4px' } : { top: '40px' }),
                             width: '200px',
                             backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
                             borderRadius: '10px',
                             border: `1px solid ${borderColor}`,
                             padding: '6px',
-                            zIndex: 40,
+                            zIndex: 50,
                             boxShadow: '0 12px 28px rgba(0, 0, 0, 0.45)',
                             display: 'flex',
                             flexDirection: 'column',
