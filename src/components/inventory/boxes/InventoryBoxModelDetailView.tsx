@@ -108,8 +108,9 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
     message: string;
   } | null>(null);
 
-  // Theme colors
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  // Theme colors matching Rule 6 (Zero Extra Contrast & Natural Background)
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
@@ -336,7 +337,8 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
                 width: '100px',
                 height: '100px',
                 borderRadius: '12px',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                border: `1px solid ${borderColor}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -429,30 +431,19 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
           </div>
         </div>
 
-        {/* 2. Main Section Container (Border 1 separating from details) */}
+        {/* 2. Decoupled Sub-tab bar: All Stock + Search & Filter (Rule 1: Sitting cleanly on page background) */}
         <div
           style={{
-            backgroundColor: cardBg,
-            borderRadius: '16px',
-            border: `1px solid ${borderColor}`,
-            padding: '24px',
             display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '16px',
           }}
         >
-          {/* Sub-tab bar: All Stock + Search & Filter */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            {/* Active Tab */}
-            <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
-              All Stock
-            </div>
+          {/* Active Tab */}
+          <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
+            All Stock
+          </div>
 
           {/* Right Search Input & Filter Button */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -734,6 +725,55 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination Footer (Inside table card) */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 18px',
+                  borderTop: `1px solid ${borderColor}`,
+                  fontSize: '12px',
+                  color: subtextColor,
+                }}
+              >
+                <span>1 - 100 of 5,000,045</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <button
+                    type="button"
+                    aria-label="Previous page"
+                    style={{
+                      background: 'none',
+                      border: `1px solid ${borderColor}`,
+                      borderRadius: '6px',
+                      color: subtextColor,
+                      cursor: 'pointer',
+                      padding: '4px 6px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ChevronLeft size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Next page"
+                    style={{
+                      background: 'none',
+                      border: `1px solid ${borderColor}`,
+                      borderRadius: '6px',
+                      color: subtextColor,
+                      cursor: 'pointer',
+                      padding: '4px 6px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
             </div>
           </>
         )}
@@ -993,7 +1033,7 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
                                   position: 'absolute',
                                   ...(isNearBottom ? { bottom: '100%', marginBottom: '4px' } : { top: '100%', marginTop: '4px' }),
                                   right: '18px',
-                                  backgroundColor: cardBg,
+                                  backgroundColor: dropdownBg,
                                   border: `1px solid ${borderColor}`,
                                   borderRadius: '10px',
                                   padding: '6px',
@@ -1186,58 +1226,59 @@ export const InventoryBoxModelDetailView: React.FC<InventoryBoxModelDetailViewPr
                   </tbody>
                 </table>
               </div>
+
+              {/* Pagination Footer (Inside table card) */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 18px',
+                  borderTop: `1px solid ${borderColor}`,
+                  fontSize: '12px',
+                  color: subtextColor,
+                }}
+              >
+                <span>1 - 100 of 5,000,045</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <button
+                    type="button"
+                    aria-label="Previous page"
+                    style={{
+                      background: 'none',
+                      border: `1px solid ${borderColor}`,
+                      borderRadius: '6px',
+                      color: subtextColor,
+                      cursor: 'pointer',
+                      padding: '4px 6px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ChevronLeft size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Next page"
+                    style={{
+                      background: 'none',
+                      border: `1px solid ${borderColor}`,
+                      borderRadius: '6px',
+                      color: subtextColor,
+                      cursor: 'pointer',
+                      padding: '4px 6px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <ChevronRight size={14} />
+                  </button>
+                </div>
+              </div>
             </div>
           </>
         )}
-
-        {/* 5. Pagination Footer */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '14px',
-            fontSize: '12px',
-            color: subtextColor,
-          }}
-        >
-          <span>1 - 100 of 5,000,045</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <button
-              type="button"
-              aria-label="Previous page"
-              style={{
-                background: 'none',
-                border: `1px solid ${borderColor}`,
-                borderRadius: '6px',
-                color: subtextColor,
-                cursor: 'pointer',
-                padding: '4px 6px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <ChevronLeft size={14} />
-            </button>
-            <button
-              type="button"
-              aria-label="Next page"
-              style={{
-                background: 'none',
-                border: `1px solid ${borderColor}`,
-                borderRadius: '6px',
-                color: subtextColor,
-                cursor: 'pointer',
-                padding: '4px 6px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <ChevronRight size={14} />
-            </button>
-          </div>
-        </div>
       </div>
-    </div>
 
       {/* Right-Hand Sidebar: Activity History matching Image 5 (Overview) / Model history */}
       <div

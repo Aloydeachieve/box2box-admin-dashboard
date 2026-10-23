@@ -12,7 +12,6 @@ import {
   ChevronRight,
   ChevronDown,
   Layers,
-  MapPin,
   TrendingUp,
 } from 'lucide-react';
 
@@ -24,6 +23,30 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
   const scrollRef = useRef<HTMLDivElement>(null);
   const [timeFilter, setTimeFilter] = useState('Daily');
   const [showTimeMenu, setShowTimeMenu] = useState(false);
+
+  // Drag-to-scroll horizontal state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftState, setScrollLeftState] = useState(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!scrollRef.current) return;
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeftState(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false);
+  };
 
   // 2 rows of items as shown in Figma Screenshot 1
   const statsList = [
@@ -90,7 +113,7 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
       isPositive: true,
       row: 2,
     },
-    // Additional Columns for slidable carousel
+    // Column 4
     {
       id: 'storage_units',
       title: 'Total Units',
@@ -123,16 +146,17 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
   return (
     <div
       style={{
-        backgroundColor: isLightMode ? '#FFFFFF' : '#161619',
+        backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
         borderRadius: '16px',
         border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '20px 22px',
+        padding: '20px 0 20px 0',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
         minWidth: 0,
-        boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.05)' : '0 4px 20px rgba(0, 0, 0, 0.25)',
+        boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.05)' : 'none',
         transition: 'all 0.2s ease',
+        overflow: 'hidden',
       }}
     >
       {/* Top Header of Overview Card: Title & Time Filter */}
@@ -142,6 +166,7 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: '16px',
+          padding: '0 22px',
         }}
       >
         <h2
@@ -166,8 +191,8 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
                 width: '26px',
                 height: '26px',
                 borderRadius: '50%',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 color: isLightMode ? '#4B5563' : '#8E8E93',
                 display: 'flex',
                 alignItems: 'center',
@@ -184,8 +209,8 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
                 width: '26px',
                 height: '26px',
                 borderRadius: '50%',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 color: isLightMode ? '#4B5563' : '#8E8E93',
                 display: 'flex',
                 alignItems: 'center',
@@ -207,8 +232,8 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
                 gap: '6px',
                 padding: '4px 12px',
                 borderRadius: '6px',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 color: isLightMode ? '#111827' : '#FFFFFF',
                 fontSize: '11px',
                 cursor: 'pointer',
@@ -261,94 +286,115 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
         </div>
       </div>
 
-      {/* Slidable 2-Row Grid Carousel matching Figma Screenshot 1 */}
+      {/* Slidable Cards List Wrapper with Edge-to-Edge bleed scrolling */}
       <div
         ref={scrollRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUpOrLeave}
+        onMouseLeave={handleMouseUpOrLeave}
         style={{
-          flex: 1,
-          display: 'grid',
-          gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
-          gridAutoFlow: 'column',
-          gridAutoColumns: '180px',
-          gap: '12px',
+          width: '100%',
           overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
           scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          cursor: isDragging ? 'grabbing' : 'grab',
+          userSelect: isDragging ? 'none' : 'auto',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
         }}
-        className="slidable-stats-row"
+        className="no-scrollbar"
       >
-        {statsList.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.id}
-              style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
-                borderRadius: '12px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)',
-                padding: '14px 16px',
-                scrollSnapAlign: 'start',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '100%',
-                boxSizing: 'border-box',
-              }}
-            >
-              {/* Header: Icon + Title matching Figma */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Icon size={14} color="#F5C842" />
-                <span
-                  style={{
-                    fontSize: '11px',
-                    color: isLightMode ? '#6B7280' : '#8E8E93',
-                    fontWeight: 500,
-                  }}
-                >
-                  {item.title}
-                </span>
-              </div>
-
-              {/* Big Metric Value */}
+        {/* Inner list holding cards with initial 22px padding so cards are NOT flush at the edge when not scrolling */}
+        <div
+          role="list"
+          style={{
+            display: 'grid',
+            gridTemplateRows: 'repeat(2, 1fr)',
+            gridAutoFlow: 'column',
+            gridAutoColumns: '162px',
+            gap: '10px',
+            paddingLeft: '22px',
+            paddingRight: '22px',
+            minWidth: 'max-content',
+            flex: 1,
+          }}
+        >
+          {statsList.map((item) => {
+            const Icon = item.icon;
+            return (
               <div
+                role="listitem"
+                key={item.id}
                 style={{
-                  fontFamily: 'var(--font-outfit), sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 700,
-                  color: isLightMode ? '#111827' : '#FFFFFF',
-                  letterSpacing: '-0.02em',
+                  backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                  borderRadius: '12px',
+                  border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+                  padding: '14px 14px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  height: '100%',
+                  minHeight: '105px',
+                  boxSizing: 'border-box',
                 }}
               >
-                {item.value}
-              </div>
+                {/* Header: Icon + Title */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Icon size={14} color="#F5C842" />
+                  <span
+                    style={{
+                      fontSize: '11px',
+                      color: isLightMode ? '#6B7280' : '#8E8E93',
+                      fontWeight: 500,
+                    }}
+                  >
+                    {item.title}
+                  </span>
+                </div>
 
-              {/* Subtext & Percent Change */}
-              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginTop: '4px' }}>
-                <span
+                {/* Big Metric Value */}
+                <div
                   style={{
-                    fontSize: '9.5px',
-                    color: isLightMode ? '#9CA3AF' : '#71717A',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '100px',
+                    fontFamily: 'var(--font-outfit), sans-serif',
+                    fontSize: '16px',
+                    fontWeight: 700,
+                    color: isLightMode ? '#111827' : '#FFFFFF',
+                    letterSpacing: '-0.02em',
                   }}
                 >
-                  {item.subtext}
-                </span>
-                <span
-                  style={{
-                    fontSize: '9.5px',
-                    fontWeight: 600,
-                    color: item.change.includes('+') ? '#10B981' : '#F5C842',
-                  }}
-                >
-                  {item.change}
-                </span>
+                  {item.value}
+                </div>
+
+                {/* Subtext & Percent Change */}
+                <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginTop: '4px' }}>
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      color: isLightMode ? '#9CA3AF' : '#71717A',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '95px',
+                    }}
+                  >
+                    {item.subtext}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: '9.5px',
+                      fontWeight: 600,
+                      color: item.change.includes('+') ? '#10B981' : '#F5C842',
+                    }}
+                  >
+                    {item.change}
+                  </span>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

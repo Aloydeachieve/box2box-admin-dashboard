@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -46,6 +46,12 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
     support: false,
     fraud_alert: false,
   });
+
+  useEffect(() => {
+    if (activeTab.startsWith('rewards')) {
+      setOpenDropdowns((prev) => ({ ...prev, rewards: true }));
+    }
+  }, [activeTab]);
 
   const toggleDropdown = (key: string) => {
     setOpenDropdowns((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -94,8 +100,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       icon: Gift,
       hasDropdown: true,
       subItems: [
-        { label: 'Points & referrals', id: 'rewards_points', path: '/rewards' },
-        { label: 'Promo vouchers', id: 'rewards_vouchers', path: '/rewards/vouchers' },
+        { label: 'Configuration', id: 'rewards_configuration', path: '/rewards' },
+        { label: 'Point usage', id: 'rewards_point_usage', path: '/rewards/point-usage' },
       ],
     },
     {
@@ -143,8 +149,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       style={{
         width: collapsed ? '72px' : '230px',
         height: '100vh',
-        backgroundColor: '#111113',
-        borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: isLightMode ? '#FFFFFF' : '#0D0D0E',
+        borderRight: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -214,9 +220,12 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
               <div key={item.id}>
                 <button
                   onClick={() => {
-                    onSelectTab(item.id);
+                    onSelectTab(item.id === 'rewards' ? 'rewards_configuration' : item.id);
                     if (item.hasDropdown) {
                       toggleDropdown(item.id);
+                      if (item.id === 'rewards') {
+                        router.push('/rewards');
+                      }
                     }
                   }}
                   title={collapsed ? item.label : undefined}
@@ -273,6 +282,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     {item.subItems.map((sub) => {
                       const isSubActive =
                         activeTab === sub.id ||
+                        (sub.id === 'rewards_configuration' && (activeTab === 'rewards' || activeTab === 'rewards_configuration')) ||
                         (sub.id === 'inventory_boxes' && (activeTab === 'inventory' || activeTab === 'inventory_boxes'));
 
                       return (

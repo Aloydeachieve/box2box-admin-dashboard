@@ -308,7 +308,7 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
     return true;
   });
 
-  const cardBg = isLightMode ? '#FFFFFF' : '#161619';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
@@ -344,8 +344,8 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
               gap: '6px',
               padding: '6px 12px',
               borderRadius: '8px',
-              backgroundColor: isLightMode ? '#FFFFFF' : '#1E1E22',
-              border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
+              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+              border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
               color: textColor,
               fontSize: '12px',
               cursor: 'pointer',
@@ -750,8 +750,8 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
                 width: '100%',
                 height: '36px',
                 borderRadius: '8px',
-                backgroundColor: isLightMode ? '#FFFFFF' : '#1A1A1E',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 padding: '0 34px 0 12px',
                 color: textColor,
                 fontSize: '12px',
@@ -775,8 +775,8 @@ export const UsersManagementView: React.FC<UsersManagementViewProps> = ({
                 height: '36px',
                 padding: '0 14px',
                 borderRadius: '8px',
-                backgroundColor: isLightMode ? '#FFFFFF' : '#1A1A1E',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 color: textColor,
                 fontSize: '12px',
                 fontWeight: 500,

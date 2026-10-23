@@ -6,6 +6,7 @@ interface Box2BoxPulsingBadgeProps {
   size?: number;
   className?: string;
   inverted?: boolean;
+  color?: string;
 }
 
 export const Box2BoxPulsingBadge: React.FC<Box2BoxPulsingBadgeProps> = ({

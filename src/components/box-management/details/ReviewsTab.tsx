@@ -10,8 +10,9 @@ interface ReviewsTabProps {
 export const ReviewsTab: React.FC<ReviewsTabProps> = ({ isLightMode = false }) => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const cardBorder = `1px solid ${borderColor}`;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -239,7 +240,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({ isLightMode = false }) =
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                border: `1px solid ${borderColor}`,
                 borderRadius: '10px',
                 padding: '12px',
                 display: 'flex',
@@ -259,7 +261,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({ isLightMode = false }) =
 
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                border: `1px solid ${borderColor}`,
                 borderRadius: '10px',
                 padding: '12px',
                 display: 'flex',
@@ -279,7 +282,8 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({ isLightMode = false }) =
 
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                border: `1px solid ${borderColor}`,
                 borderRadius: '10px',
                 padding: '12px',
                 display: 'flex',

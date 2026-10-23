@@ -17,8 +17,9 @@ interface BatteryTabProps {
 export const BatteryTab: React.FC<BatteryTabProps> = ({ isLightMode = false }) => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const cardBorder = `1px solid ${borderColor}`;
   const gridLineColor = isLightMode ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.06)';
 
   return (
@@ -547,7 +548,8 @@ export const BatteryTab: React.FC<BatteryTabProps> = ({ isLightMode = false }) =
                       width: '28px',
                       height: '28px',
                       borderRadius: '6px',
-                      backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
+                      backgroundColor: isLightMode ? '#F3F4F6' : 'rgba(255, 255, 255, 0.05)',
+                      border: `1px solid ${borderColor}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

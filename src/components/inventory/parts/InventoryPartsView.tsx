@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { useAdmin } from '@/components/layout/AdminContext';
 import { ToastNotification } from '@/components/common/ToastNotification';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 import {
   initialBoxParts,
   initialBoxPartsStock,
@@ -108,10 +109,12 @@ export const InventoryPartsView: React.FC = () => {
   // Styling Tokens
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const inputBg = isLightMode ? '#F9FAFB' : '#18181B';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
+  const modalBg = isLightMode ? '#FFFFFF' : '#18181B';
+  const modalInputBg = isLightMode ? '#F9FAFB' : '#141416';
 
   // Setup shell header
   useEffect(() => {
@@ -436,28 +439,18 @@ export const InventoryPartsView: React.FC = () => {
         ))}
       </div>
 
-      {/* MAIN TABLE CONTAINER WITH DOUBLE BORDER ARCHITECTURE */}
+      {/* STANDALONE SUB-TABS & SEARCH / FILTER BAR */}
       <div
         style={{
-          backgroundColor: cardBg,
-          borderRadius: '16px',
-          border: `1px solid ${borderColor}`,
-          padding: '20px',
           display: 'flex',
-          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: '16px',
+          marginTop: '6px',
+          marginBottom: '2px',
         }}
       >
-        {/* TAB NAVIGATION & SEARCH / FILTER BAR */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-          }}
-        >
           {/* 4 Tabs: Parts, Stock, Category, Supplier */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <button
@@ -598,11 +591,31 @@ export const InventoryPartsView: React.FC = () => {
                 <ChevronDown size={14} color={subtextColor} />
               </button>
             )}
-          </div>
         </div>
+      </div>
 
-        {/* TAB 1: PARTS TABLE (Matching Image 1) */}
-        {activeTab === 'parts' && (
+      {/* MAIN TABLE CONTAINER CARD (Separate from the tabs & controls row) */}
+      <div
+        style={{
+          backgroundColor: cardBg,
+          borderRadius: '16px',
+          border: `1px solid ${borderColor}`,
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '16px',
+        }}
+      >
+        {/* Inner container holding the main table */}
+        <div
+          style={{
+            borderRadius: '12px',
+            border: `1px solid ${borderColor}`,
+            overflow: 'visible',
+          }}
+        >
+          {/* TAB 1: PARTS TABLE (Matching Image 1) */}
+          {activeTab === 'parts' && (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
@@ -744,7 +757,7 @@ export const InventoryPartsView: React.FC = () => {
                             position: 'absolute',
                             right: '16px',
                             top: '100%',
-                            backgroundColor: cardBg,
+                            backgroundColor: modalBg,
                             border: `1px solid ${borderColor}`,
                             borderRadius: '10px',
                             padding: '6px',
@@ -758,11 +771,7 @@ export const InventoryPartsView: React.FC = () => {
                           <div
                             onClick={() => {
                               setActiveActionRowId(null);
-                              setActiveToast({
-                                type: 'success',
-                                title: 'Part Details',
-                                message: `Viewing ${row.name} (${row.sku})`,
-                              });
+                              router.push(`/inventory/parts/${row.id}`);
                             }}
                             style={{
                               padding: '8px 10px',
@@ -791,11 +800,7 @@ export const InventoryPartsView: React.FC = () => {
                           <div
                             onClick={() => {
                               setActiveActionRowId(null);
-                              setActiveToast({
-                                type: 'success',
-                                title: 'Edit Part',
-                                message: `Editing ${row.name} (${row.sku})`,
-                              });
+                              router.push(`/inventory/parts/${row.id}/edit`);
                             }}
                             style={{
                               padding: '8px 10px',
@@ -1041,7 +1046,7 @@ export const InventoryPartsView: React.FC = () => {
                             position: 'absolute',
                             right: '16px',
                             top: '100%',
-                            backgroundColor: cardBg,
+                            backgroundColor: modalBg,
                             border: `1px solid ${borderColor}`,
                             borderRadius: '10px',
                             padding: '6px',
@@ -1055,11 +1060,10 @@ export const InventoryPartsView: React.FC = () => {
                           <div
                             onClick={() => {
                               setActiveActionRowId(null);
-                              setActiveToast({
-                                type: 'success',
-                                title: 'Stock Details',
-                                message: `Viewing stock for ${row.name} at ${row.location}`,
-                              });
+                              const loc = row.location.split(',')[1]?.trim() || row.location;
+                              router.push(
+                                `/inventory/parts/bp-1?view=units&loc=${encodeURIComponent(loc)}`
+                              );
                             }}
                             style={{
                               padding: '8px 10px',
@@ -1087,10 +1091,12 @@ export const InventoryPartsView: React.FC = () => {
                           {/* Update stock */}
                           <div
                             onClick={() => {
-                              setSelectedStockItem(row);
-                              setUpdateStockQty(row.noAvailable.toString());
                               setActiveActionRowId(null);
-                              setShowUpdateStockModal(true);
+                              router.push(
+                                `/inventory/parts/bp-1?view=update-stock&loc=${encodeURIComponent(
+                                  row.location
+                                )}`
+                              );
                             }}
                             style={{
                               padding: '8px 10px',
@@ -1229,7 +1235,7 @@ export const InventoryPartsView: React.FC = () => {
                             position: 'absolute',
                             right: '16px',
                             top: '100%',
-                            backgroundColor: cardBg,
+                            backgroundColor: modalBg,
                             border: `1px solid ${borderColor}`,
                             borderRadius: '10px',
                             padding: '6px',
@@ -1242,11 +1248,7 @@ export const InventoryPartsView: React.FC = () => {
                           <div
                             onClick={() => {
                               setActiveActionRowId(null);
-                              setActiveToast({
-                                type: 'success',
-                                title: 'Category Details',
-                                message: `Viewing ${row.name}`,
-                              });
+                              router.push(`/inventory/parts/categories/${row.id}`);
                             }}
                             style={{
                               padding: '8px 10px',
@@ -1423,7 +1425,7 @@ export const InventoryPartsView: React.FC = () => {
                             position: 'absolute',
                             right: '16px',
                             top: '100%',
-                            backgroundColor: cardBg,
+                            backgroundColor: modalBg,
                             border: `1px solid ${borderColor}`,
                             borderRadius: '10px',
                             padding: '6px',
@@ -1436,11 +1438,7 @@ export const InventoryPartsView: React.FC = () => {
                           <div
                             onClick={() => {
                               setActiveActionRowId(null);
-                              setActiveToast({
-                                type: 'success',
-                                title: 'Supplier Details',
-                                message: `Viewing ${row.name}`,
-                              });
+                              router.push(`/inventory/parts/suppliers/${row.id}`);
                             }}
                             style={{
                               padding: '8px 10px',
@@ -1505,6 +1503,7 @@ export const InventoryPartsView: React.FC = () => {
             </table>
           </div>
         )}
+        </div>
 
         {/* PAGINATION ROW matching Images 1-4 */}
         <div
@@ -1606,7 +1605,7 @@ export const InventoryPartsView: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: '400px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '20px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -1653,7 +1652,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -1676,7 +1675,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setNewCategoryDesc(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -1739,10 +1738,14 @@ export const InventoryPartsView: React.FC = () => {
                   color: '#000000',
                   fontWeight: 700,
                   fontSize: '13px',
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>
@@ -1769,7 +1772,7 @@ export const InventoryPartsView: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: '400px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '20px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -1816,7 +1819,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setNewSupplierName(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -1839,7 +1842,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setNewSupplierEmail(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -1862,7 +1865,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setNewSupplierLocation(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -1925,10 +1928,14 @@ export const InventoryPartsView: React.FC = () => {
                   color: '#000000',
                   fontWeight: 700,
                   fontSize: '13px',
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>
@@ -1955,7 +1962,7 @@ export const InventoryPartsView: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: '380px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '20px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -2006,7 +2013,7 @@ export const InventoryPartsView: React.FC = () => {
                 onChange={(e) => setUpdateStockQty(e.target.value)}
                 style={{
                   width: '100%',
-                  backgroundColor: inputBg,
+                  backgroundColor: modalInputBg,
                   border: `1px solid ${yellowColor}`,
                   borderRadius: '8px',
                   padding: '10px 14px',
@@ -2068,10 +2075,14 @@ export const InventoryPartsView: React.FC = () => {
                   color: '#000000',
                   fontWeight: 700,
                   fontSize: '13px',
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>
@@ -2098,7 +2109,7 @@ export const InventoryPartsView: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: '400px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '20px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -2143,7 +2154,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setEditCategoryName(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -2165,7 +2176,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setEditCategoryDesc(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -2223,10 +2234,14 @@ export const InventoryPartsView: React.FC = () => {
                   color: '#000000',
                   fontWeight: 700,
                   fontSize: '13px',
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>
@@ -2253,7 +2268,7 @@ export const InventoryPartsView: React.FC = () => {
             style={{
               width: '100%',
               maxWidth: '400px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '20px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -2298,7 +2313,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setEditSupplierName(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -2320,7 +2335,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setEditSupplierEmail(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -2342,7 +2357,7 @@ export const InventoryPartsView: React.FC = () => {
                   onChange={(e) => setEditSupplierLocation(e.target.value)}
                   style={{
                     width: '100%',
-                    backgroundColor: inputBg,
+                    backgroundColor: modalInputBg,
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '10px 14px',
@@ -2404,10 +2419,14 @@ export const InventoryPartsView: React.FC = () => {
                   color: '#000000',
                   fontWeight: 700,
                   fontSize: '13px',
-                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
                 }}
               >
-                Save
+                <span>Save</span>
+                <Box2BoxPulsingBadge size={16} />
               </button>
             </div>
           </div>

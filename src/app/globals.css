@@ -391,3 +391,39 @@ body {
     transform: scale(1.18);
   }
 }
+
+/* Edge-to-edge horizontal scroll tracks without scrollbar */
+.charts-horizontal-track::-webkit-scrollbar,
+.slidable-stats-row::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+}
+
+.charts-horizontal-track,
+.slidable-stats-row,
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+@media (max-width: 1280px) {
+  .orders-charts-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .orders-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .orders-charts-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .orders-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .order-detail-activity-sidebar {
+    display: none !important;
+  }
+}
+

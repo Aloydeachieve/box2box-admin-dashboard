@@ -55,7 +55,8 @@ export const AccessoryUnitDetailView: React.FC<AccessoryUnitDetailViewProps> = (
   // Styling Tokens
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -310,7 +311,15 @@ export const AccessoryUnitDetailView: React.FC<AccessoryUnitDetailViewProps> = (
             Parts
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          {/* Inner border container enclosing table (per user requirement) */}
+          <div
+            style={{
+              borderRadius: '12px',
+              border: `1px solid ${borderColor}`,
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ borderBottom: `1px solid ${borderColor}` }}>
@@ -425,7 +434,7 @@ export const AccessoryUnitDetailView: React.FC<AccessoryUnitDetailViewProps> = (
                             position: 'absolute',
                             right: '16px',
                             top: '100%',
-                            backgroundColor: cardBg,
+                            backgroundColor: dropdownBg,
                             border: `1px solid ${borderColor}`,
                             borderRadius: '10px',
                             padding: '6px',
@@ -518,6 +527,7 @@ export const AccessoryUnitDetailView: React.FC<AccessoryUnitDetailViewProps> = (
           </div>
         </div>
       </div>
+    </div>
 
       {/* RIGHT SIDEBAR: Activity History matching Image 4 */}
       <div
@@ -556,7 +566,7 @@ export const AccessoryUnitDetailView: React.FC<AccessoryUnitDetailViewProps> = (
                 }}
               >
                 <span>{item.actor}</span>
-                <span style={{ color: yellowColor, fontWeight: 600, fontSize: '11px' }}>
+                <span style={{ color: subtextColor, fontWeight: 500, fontSize: '11px' }}>
                   {item.role}
                 </span>
               </div>

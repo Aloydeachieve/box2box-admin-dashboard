@@ -60,7 +60,7 @@ export default function BoxRegistrationPage() {
   };
 
   // Color Tokens based on theme
-  const cardBg = isLightMode ? '#FFFFFF' : '#161619';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
   const mutedText = isLightMode ? '#6B7280' : '#8E8E93';
   const subMutedText = isLightMode ? '#9CA3AF' : '#71717A';
@@ -375,257 +375,257 @@ export default function BoxRegistrationPage() {
         </div>
       </div>
 
-      {/* Main Container Card: Navigation Tabs, Search, Filters, and Table */}
+      {/* Top Controls Row (Decoupled Rule 1) */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px',
+          marginBottom: '16px',
+        }}
+      >
+        {/* Status Tabs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+          {[
+            { id: 'all', label: 'All Boxes', count: boxes.length },
+            { id: 'activated', label: 'Activated', count: activeCount },
+            { id: 'disabled', label: 'Disabled', count: disabledCount },
+            { id: 'maintenance', label: 'Maintenance', count: maintenanceCount },
+            { id: 'low_battery', label: 'Low Battery (<20%)', count: lowBatteryCount },
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                style={{
+                  padding: '8px 14px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  backgroundColor: isActive ? '#F5C842' : isLightMode ? '#F3F4F6' : 'rgba(255, 255, 255, 0.05)',
+                  color: isActive ? '#000000' : mutedText,
+                  fontSize: '12px',
+                  fontWeight: isActive ? 700 : 500,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  transition: 'all 0.15s ease',
+                }}
+              >
+                <span>{tab.label}</span>
+                <span
+                  style={{
+                    fontSize: '10px',
+                    padding: '1px 6px',
+                    borderRadius: '10px',
+                    backgroundColor: isActive ? 'rgba(0, 0, 0, 0.15)' : isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)',
+                    color: isActive ? '#000000' : subMutedText,
+                  }}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Right Action: Register Box Button */}
+        <button
+          onClick={() => setRegisterModalOpen(true)}
+          style={{
+            padding: '9px 18px',
+            borderRadius: '10px',
+            border: 'none',
+            backgroundColor: '#F5C842',
+            color: '#000000',
+            fontSize: '13px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
+            transition: 'transform 0.15s ease',
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
+          onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+        >
+          <Plus size={16} />
+          <span>Register New Box</span>
+        </button>
+      </div>
+
+      {/* Filter & Search Bar Row (Decoupled Rule 1) */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          marginBottom: '16px',
+        }}
+      >
+        {/* Search Box */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+            border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '10px',
+            padding: '0 12px',
+            height: '38px',
+            width: '100%',
+            maxWidth: '360px',
+          }}
+        >
+          <Search size={16} color={mutedText} />
+          <input
+            type="text"
+            placeholder="Search by Box ID, Serial, Owner, City..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: primaryText,
+              fontSize: '13px',
+              paddingLeft: '10px',
+              width: '100%',
+              outline: 'none',
+            }}
+          />
+        </div>
+
+        {/* Filters & View Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+          {/* Model Filter */}
+          <div style={{ position: 'relative' }}>
+            <select
+              value={modelFilter}
+              onChange={(e) => setModelFilter(e.target.value)}
+              style={{
+                height: '38px',
+                padding: '0 28px 0 12px',
+                borderRadius: '10px',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+                color: primaryText,
+                fontSize: '12px',
+                fontWeight: 500,
+                outline: 'none',
+                appearance: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <option value="All">All Models</option>
+              <option value="2 Cabinets">2 Cabinets</option>
+              <option value="4 Cabinets">4 Cabinets</option>
+              <option value="6 Cabinets">6 Cabinets</option>
+              <option value="8 Cabinets">8 Cabinets</option>
+            </select>
+            <ChevronDown
+              size={14}
+              color={mutedText}
+              style={{ position: 'absolute', right: '10px', top: '12px', pointerEvents: 'none' }}
+            />
+          </div>
+
+          {/* State Filter */}
+          <div style={{ position: 'relative' }}>
+            <select
+              value={stateFilter}
+              onChange={(e) => setStateFilter(e.target.value)}
+              style={{
+                height: '38px',
+                padding: '0 28px 0 12px',
+                borderRadius: '10px',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+                color: primaryText,
+                fontSize: '12px',
+                fontWeight: 500,
+                outline: 'none',
+                appearance: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              <option value="All">All States</option>
+              <option value="Lagos">Lagos</option>
+              <option value="Abuja">Abuja</option>
+              <option value="Rivers">Rivers</option>
+              <option value="Oyo">Oyo</option>
+              <option value="Enugu">Enugu</option>
+            </select>
+            <ChevronDown
+              size={14}
+              color={mutedText}
+              style={{ position: 'absolute', right: '10px', top: '12px', pointerEvents: 'none' }}
+            />
+          </div>
+
+          {/* View Mode Toggle: Table vs Visual Grid */}
+          <div
+            style={{
+              display: 'flex',
+              backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+              borderRadius: '10px',
+              padding: '3px',
+              border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+            }}
+          >
+            <button
+              type="button"
+              onClick={() => setViewMode('table')}
+              title="Table View"
+              style={{
+                padding: '6px 10px',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: viewMode === 'table' ? '#F5C842' : 'transparent',
+                color: viewMode === 'table' ? '#000000' : mutedText,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <TableIcon size={16} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              title="Visual Locker Grid View"
+              style={{
+                padding: '6px 10px',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: viewMode === 'grid' ? '#F5C842' : 'transparent',
+                color: viewMode === 'grid' ? '#000000' : mutedText,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <LayoutGrid size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Dedicated Table Container Card (Rule 1) */}
       <div
         style={{
           backgroundColor: cardBg,
           border: cardBorder,
-          borderRadius: '18px',
-          padding: '20px 24px',
-          boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.04)' : '0 4px 20px rgba(0, 0, 0, 0.25)',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          marginBottom: '28px',
         }}
       >
-        {/* Top Controls Row */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-            marginBottom: '20px',
-          }}
-        >
-          {/* Status Tabs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-            {[
-              { id: 'all', label: 'All Boxes', count: boxes.length },
-              { id: 'activated', label: 'Activated', count: activeCount },
-              { id: 'disabled', label: 'Disabled', count: disabledCount },
-              { id: 'maintenance', label: 'Maintenance', count: maintenanceCount },
-              { id: 'low_battery', label: 'Low Battery (<20%)', count: lowBatteryCount },
-            ].map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  style={{
-                    padding: '8px 14px',
-                    borderRadius: '10px',
-                    border: 'none',
-                    backgroundColor: isActive ? '#F5C842' : isLightMode ? '#F3F4F6' : '#202025',
-                    color: isActive ? '#000000' : mutedText,
-                    fontSize: '12px',
-                    fontWeight: isActive ? 700 : 500,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  <span>{tab.label}</span>
-                  <span
-                    style={{
-                      fontSize: '10px',
-                      padding: '1px 6px',
-                      borderRadius: '10px',
-                      backgroundColor: isActive ? 'rgba(0, 0, 0, 0.15)' : isLightMode ? '#E5E7EB' : '#2A2A30',
-                      color: isActive ? '#000000' : subMutedText,
-                    }}
-                  >
-                    {tab.count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Action: Register Box Button */}
-          <button
-            onClick={() => setRegisterModalOpen(true)}
-            style={{
-              padding: '9px 18px',
-              borderRadius: '10px',
-              border: 'none',
-              backgroundColor: '#F5C842',
-              color: '#000000',
-              fontSize: '13px',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
-              transition: 'transform 0.15s ease',
-            }}
-            onMouseOver={(e) => (e.currentTarget.style.transform = 'translateY(-1px)')}
-            onMouseOut={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-          >
-            <Plus size={16} />
-            <span>Register New Box</span>
-          </button>
-        </div>
-
-        {/* Filter & Search Bar Row */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px',
-            marginBottom: '16px',
-          }}
-        >
-          {/* Search Box */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: isLightMode ? '#F9FAFB' : '#111114',
-              border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
-              borderRadius: '10px',
-              padding: '0 12px',
-              height: '38px',
-              width: '100%',
-              maxWidth: '360px',
-            }}
-          >
-            <Search size={16} color={mutedText} />
-            <input
-              type="text"
-              placeholder="Search by Box ID, Serial, Owner, City..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: primaryText,
-                fontSize: '13px',
-                paddingLeft: '10px',
-                width: '100%',
-                outline: 'none',
-              }}
-            />
-          </div>
-
-          {/* Filters & View Toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-            {/* Model Filter */}
-            <div style={{ position: 'relative' }}>
-              <select
-                value={modelFilter}
-                onChange={(e) => setModelFilter(e.target.value)}
-                style={{
-                  height: '38px',
-                  padding: '0 28px 0 12px',
-                  borderRadius: '10px',
-                  backgroundColor: isLightMode ? '#F9FAFB' : '#111114',
-                  border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
-                  color: primaryText,
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  outline: 'none',
-                  appearance: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <option value="All">All Models</option>
-                <option value="2 Cabinets">2 Cabinets</option>
-                <option value="4 Cabinets">4 Cabinets</option>
-                <option value="6 Cabinets">6 Cabinets</option>
-                <option value="8 Cabinets">8 Cabinets</option>
-              </select>
-              <ChevronDown
-                size={14}
-                color={mutedText}
-                style={{ position: 'absolute', right: '10px', top: '12px', pointerEvents: 'none' }}
-              />
-            </div>
-
-            {/* State Filter */}
-            <div style={{ position: 'relative' }}>
-              <select
-                value={stateFilter}
-                onChange={(e) => setStateFilter(e.target.value)}
-                style={{
-                  height: '38px',
-                  padding: '0 28px 0 12px',
-                  borderRadius: '10px',
-                  backgroundColor: isLightMode ? '#F9FAFB' : '#111114',
-                  border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
-                  color: primaryText,
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  outline: 'none',
-                  appearance: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                <option value="All">All States</option>
-                <option value="Lagos">Lagos</option>
-                <option value="Abuja">Abuja</option>
-                <option value="Rivers">Rivers</option>
-                <option value="Oyo">Oyo</option>
-                <option value="Enugu">Enugu</option>
-              </select>
-              <ChevronDown
-                size={14}
-                color={mutedText}
-                style={{ position: 'absolute', right: '10px', top: '12px', pointerEvents: 'none' }}
-              />
-            </div>
-
-            {/* View Mode Toggle: Table vs Visual Grid */}
-            <div
-              style={{
-                display: 'flex',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#111114',
-                borderRadius: '10px',
-                padding: '3px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setViewMode('table')}
-                title="Table View"
-                style={{
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: viewMode === 'table' ? '#F5C842' : 'transparent',
-                  color: viewMode === 'table' ? '#000000' : mutedText,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <TableIcon size={16} />
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                title="Visual Locker Grid View"
-                style={{
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: viewMode === 'grid' ? '#F5C842' : 'transparent',
-                  color: viewMode === 'grid' ? '#000000' : mutedText,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <LayoutGrid size={16} />
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* Floating Multi-Select Bulk Actions Bar */}
         {selectedBoxIds.length > 0 && (
           <div
@@ -1159,8 +1159,8 @@ export default function BoxRegistrationPage() {
                     style={{
                       height: '140px',
                       borderRadius: '12px',
-                      backgroundColor: isLightMode ? '#F9FAFB' : '#1B1B1F',
-                      border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.05)',
+                      backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
+                      border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

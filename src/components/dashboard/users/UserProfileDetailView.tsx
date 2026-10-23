@@ -46,7 +46,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('Today');
 
-  const cardBg = isLightMode ? '#FFFFFF' : '#161619';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
@@ -98,7 +98,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   height: '14px',
                   borderRadius: '50%',
                   backgroundColor: '#10B981',
-                  border: isLightMode ? '2px solid #FFFFFF' : '2px solid #161619',
+                  border: isLightMode ? '2px solid #FFFFFF' : '2px solid #0D0D0E',
                 }}
               />
             </div>
@@ -250,8 +250,8 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   gap: '6px',
                   padding: '4px 10px',
                   borderRadius: '6px',
-                  backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
-                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                   color: textColor,
                   fontSize: '11px',
                   cursor: 'pointer',
@@ -322,9 +322,9 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 <div
                   key={stat.label}
                   style={{
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                    backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                     borderRadius: '12px',
-                    border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)',
+                    border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                     padding: '12px',
                     display: 'flex',
                     flexDirection: 'column',
@@ -356,9 +356,9 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
             {/* Chart 1: Activity Chart with X & Y Axes */}
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                 borderRadius: '12px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                 padding: '14px',
               }}
             >
@@ -448,9 +448,9 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
             {/* Chart 2: Spending Trend with X & Y Axes */}
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                 borderRadius: '12px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                 padding: '14px',
               }}
             >
@@ -539,9 +539,9 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
             {/* Chart 3: Booking Types Gauge */}
             <div
               style={{
-                backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                 borderRadius: '12px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                 padding: '14px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -618,8 +618,8 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                   width: '100%',
                   height: '36px',
                   borderRadius: '8px',
-                  backgroundColor: isLightMode ? '#FFFFFF' : '#1A1A1E',
-                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                   padding: '0 34px 0 12px',
                   color: textColor,
                   fontSize: '12px',
@@ -639,8 +639,8 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 height: '36px',
                 padding: '0 14px',
                 borderRadius: '8px',
-                backgroundColor: isLightMode ? '#FFFFFF' : '#1A1A1E',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 color: textColor,
                 fontSize: '12px',
                 fontWeight: 500,
@@ -812,7 +812,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           >
             <div style={{ padding: '14px 18px', borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ fontSize: '13px', fontWeight: 700, color: textColor }}>Bookings History</div>
-              <span style={{ fontSize: '11px', color: subtextColor, backgroundColor: isLightMode ? '#F3F4F6' : '#202025', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>5 records</span>
+              <span style={{ fontSize: '11px', color: subtextColor, backgroundColor: isLightMode ? '#F3F4F6' : 'rgba(255, 255, 255, 0.05)', padding: '2px 8px', borderRadius: '6px', fontWeight: 600 }}>5 records</span>
             </div>
             <div style={{ overflowX: 'auto', width: '100%' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '720px' }}>

@@ -30,7 +30,7 @@ export default function UserActivityHistoryPage() {
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
 
   const tabs: Array<'All' | 'Booking' | 'Wallet' | 'Rewards' | 'Referrals' | 'Reports'> = [
@@ -260,7 +260,7 @@ export default function UserActivityHistoryPage() {
               gap: '8px',
               padding: '8px 14px',
               borderRadius: '8px',
-              backgroundColor: isLightMode ? '#FFFFFF' : '#1A1A1E',
+              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
               border: `1px solid ${borderColor}`,
               color: textColor,
               fontSize: '13px',

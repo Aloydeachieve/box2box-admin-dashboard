@@ -9,7 +9,7 @@ interface BoxActivityTabProps {
 export const BoxActivityTab: React.FC<BoxActivityTabProps> = ({ isLightMode = false }) => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
 
   return (
@@ -170,7 +170,7 @@ export const BoxActivityTab: React.FC<BoxActivityTabProps> = ({ isLightMode = fa
                     fontSize: '12px',
                     transition: 'background-color 0.15s',
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1A1A1E')}
+                  onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : 'rgba(255, 255, 255, 0.03)')}
                   onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
                   <td style={{ padding: '14px 16px', fontWeight: 600, color: textColor }}>{row.cabinet}</td>

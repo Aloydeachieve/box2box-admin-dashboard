@@ -89,7 +89,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false,
               key={act.id}
               onClick={() => onSelectAction?.(act.id === 'boxes' ? 'box_regt' : act.id)}
               style={{
-                backgroundColor: isLightMode ? '#FFFFFF' : '#161619',
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
                 borderRadius: '12px',
                 border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
                 padding: '14px 18px',
@@ -102,11 +102,11 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false,
                 boxShadow: isLightMode ? '0 2px 6px rgba(0,0,0,0.03)' : 'none',
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1D1D22';
+                e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : 'rgba(255, 255, 255, 0.02)';
                 e.currentTarget.style.borderColor = 'rgba(245, 200, 66, 0.4)';
               }}
               onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = isLightMode ? '#FFFFFF' : '#161619';
+                e.currentTarget.style.backgroundColor = isLightMode ? '#FFFFFF' : 'transparent';
                 e.currentTarget.style.borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
               }}
             >
@@ -115,7 +115,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ isLightMode = false,
                   width: '38px',
                   height: '38px',
                   borderRadius: '8px',
-                  backgroundColor: isLightMode ? '#FEF3C7' : '#202025',
+                  backgroundColor: isLightMode ? '#FEF3C7' : 'rgba(245, 200, 66, 0.1)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',

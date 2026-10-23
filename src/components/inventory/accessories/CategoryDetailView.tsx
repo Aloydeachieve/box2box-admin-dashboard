@@ -67,8 +67,9 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({ category
   // Theme styling tokens
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const inputBg = isLightMode ? '#F9FAFB' : '#18181B';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
+  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -200,100 +201,90 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({ category
           </div>
         </div>
 
-        {/* Double-Border Container Architecture matching Image 2 */}
+        {/* Decoupled Toolbar (Table Decoupling Rule 1) */}
         <div
           style={{
-            backgroundColor: cardBg,
-            borderRadius: '16px',
-            border: `1px solid ${borderColor}`,
-            padding: '24px',
             display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '16px',
+            marginBottom: '16px',
           }}
         >
-          {/* Top Row: Section Tab ("Accessories"), Search Box, and Filter Button */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '16px',
-            }}
-          >
-            {/* Section Tab */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span
-                style={{
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  color: yellowColor,
-                  cursor: 'pointer',
-                }}
-              >
-                Accessories
-              </span>
-            </div>
+          {/* Section Tab */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span
+              style={{
+                fontSize: '14px',
+                fontWeight: 700,
+                color: yellowColor,
+                cursor: 'pointer',
+              }}
+            >
+              Accessories
+            </span>
+          </div>
 
-            {/* Right Controls: Search + Filter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              {/* Search Box */}
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    backgroundColor: inputBg,
-                    border: `1px solid ${borderColor}`,
-                    borderRadius: '8px',
-                    padding: '8px 36px 8px 14px',
-                    fontSize: '13px',
-                    color: textColor,
-                    outline: 'none',
-                    width: '220px',
-                  }}
-                />
-                <Search
-                  size={15}
-                  color={subtextColor}
-                  style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
-                />
-              </div>
-
-              {/* Filter Button */}
-              <button
-                type="button"
-                onClick={() => setShowFilterModal(true)}
+          {/* Right Controls: Search + Filter */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* Search Box */}
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
                   backgroundColor: inputBg,
                   border: `1px solid ${borderColor}`,
                   borderRadius: '8px',
-                  padding: '8px 14px',
+                  padding: '8px 36px 8px 14px',
                   fontSize: '13px',
                   color: textColor,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  cursor: 'pointer',
+                  outline: 'none',
+                  width: '220px',
                 }}
-              >
-                <span>Filter</span>
-                <ChevronDown size={14} color={subtextColor} />
-              </button>
+              />
+              <Search
+                size={15}
+                color={subtextColor}
+                style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
+              />
             </div>
-          </div>
 
-          {/* Inner Table Container (Border 2) */}
-          <div
-            style={{
-              borderRadius: '12px',
-              border: `1px solid ${borderColor}`,
-              overflow: 'visible',
-            }}
-          >
+            {/* Filter Button */}
+            <button
+              type="button"
+              onClick={() => setShowFilterModal(true)}
+              style={{
+                backgroundColor: inputBg,
+                border: `1px solid ${borderColor}`,
+                borderRadius: '8px',
+                padding: '8px 14px',
+                fontSize: '13px',
+                color: textColor,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+              }}
+            >
+              <span>Filter</span>
+              <ChevronDown size={14} color={subtextColor} />
+            </button>
+          </div>
+        </div>
+
+        {/* Table Container Card (Rule 6: Natural background & 1px border) */}
+        <div
+          style={{
+            borderRadius: '16px',
+            border: `1px solid ${borderColor}`,
+            backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+            overflow: 'hidden',
+          }}
+        >
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
@@ -416,7 +407,7 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({ category
                                   ? { bottom: '100%', marginBottom: '4px' }
                                   : { top: '100%', marginTop: '4px' }),
                                 right: '18px',
-                                backgroundColor: cardBg,
+                                backgroundColor: dropdownBg,
                                 border: `1px solid ${borderColor}`,
                                 borderRadius: '10px',
                                 padding: '6px',
@@ -590,7 +581,6 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({ category
             </div>
           </div>
         </div>
-      </div>
 
       {/* RIGHT COLUMN: Activity History Sidebar matching Image 2 */}
       <div
@@ -637,9 +627,9 @@ export const CategoryDetailView: React.FC<CategoryDetailViewProps> = ({ category
                 <span>{item.actor}</span>
                 <span
                   style={{
-                    color: item.role === 'Auto' ? '#10B981' : yellowColor,
+                    color: subtextColor,
                     fontSize: '11px',
-                    fontWeight: 600,
+                    fontWeight: 500,
                   }}
                 >
                   {item.role}

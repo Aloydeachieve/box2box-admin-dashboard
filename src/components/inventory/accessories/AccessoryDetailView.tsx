@@ -105,8 +105,11 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
   // Theme styling tokens
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const inputBg = isLightMode ? '#F9FAFB' : '#18181B';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const modalBg = isLightMode ? '#FFFFFF' : '#18181B';
+  const modalInputBg = isLightMode ? '#F9FAFB' : '#141416';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
+  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -333,7 +336,8 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                     width: '90px',
                     height: '90px',
                     borderRadius: '12px',
-                    backgroundColor: isLightMode ? '#F3F4F6' : '#1A1A1E',
+                    backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                    border: `1px solid ${borderColor}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -409,29 +413,18 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
               </div>
             </div>
 
-            {/* Double-Border Section: Outer Container (Border 1) */}
+            {/* Decoupled Toolbar (Rule 1: Hangs cleanly above table on page background) */}
             <div
               style={{
-                backgroundColor: cardBg,
-                borderRadius: '16px',
-                border: `1px solid ${borderColor}`,
-                padding: '24px',
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
               }}
             >
-              {/* Header: All Stock tab + Search + Filter */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
-                  All Stock
-                </div>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
+                All Stock
+              </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -486,6 +479,7 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                   display: 'grid',
                   gridTemplateColumns: 'repeat(6, minmax(0, 1fr))',
                   gap: '12px',
+                  marginBottom: '24px',
                 }}
               >
                 <div
@@ -579,14 +573,15 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                 </div>
               </div>
 
-              {/* Inner Table Container (Border 2) holding Locations Table */}
-              <div
-                style={{
-                  borderRadius: '12px',
-                  border: `1px solid ${borderColor}`,
-                  overflow: 'visible',
-                }}
-              >
+            {/* Table Container Card (Rule 6: Natural background & 1px border) */}
+            <div
+              style={{
+                borderRadius: '16px',
+                border: `1px solid ${borderColor}`,
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
@@ -738,7 +733,6 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                   </div>
                 </div>
               </div>
-            </div>
           </>
         )}
 
@@ -767,7 +761,8 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                     width: '90px',
                     height: '90px',
                     borderRadius: '12px',
-                    backgroundColor: isLightMode ? '#F3F4F6' : '#1A1A1E',
+                    backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                    border: `1px solid ${borderColor}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -847,29 +842,18 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
               </div>
             </div>
 
-            {/* Double-Border Section: Outer Container (Border 1) */}
+            {/* Decoupled Toolbar (Rule 1: Hangs cleanly above table on page background) */}
             <div
               style={{
-                backgroundColor: cardBg,
-                borderRadius: '16px',
-                border: `1px solid ${borderColor}`,
-                padding: '24px',
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '16px',
               }}
             >
-              {/* Header: All Stock tab + Search + Filter Button */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
-                  All Stock
-                </div>
+              <div style={{ fontSize: '14px', fontWeight: 700, color: yellowColor }}>
+                All Stock
+              </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
@@ -925,6 +909,7 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                   display: 'grid',
                   gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',
                   gap: '12px',
+                  marginBottom: '24px',
                 }}
               >
                 <div
@@ -1003,14 +988,15 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                 </div>
               </div>
 
-              {/* Inner Table Container (Border 2) holding Units Table */}
-              <div
-                style={{
-                  borderRadius: '12px',
-                  border: `1px solid ${borderColor}`,
-                  overflow: 'visible',
-                }}
-              >
+            {/* Table Container Card (Rule 6: Natural background & 1px border) */}
+            <div
+              style={{
+                borderRadius: '16px',
+                border: `1px solid ${borderColor}`,
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                overflow: 'hidden',
+              }}
+            >
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                     <thead>
@@ -1152,7 +1138,7 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                                       ? { bottom: '100%', marginBottom: '4px' }
                                       : { top: '100%', marginTop: '4px' }),
                                     right: '18px',
-                                    backgroundColor: cardBg,
+                                    backgroundColor: dropdownBg,
                                     border: `1px solid ${borderColor}`,
                                     borderRadius: '10px',
                                     padding: '6px',
@@ -1360,7 +1346,6 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                   </div>
                 </div>
               </div>
-            </div>
           </>
         )}
       </div>
@@ -1463,7 +1448,7 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
             style={{
               width: '90%',
               maxWidth: '380px',
-              backgroundColor: cardBg,
+              backgroundColor: modalBg,
               borderRadius: '16px',
               border: `1px solid ${borderColor}`,
               padding: '24px',
@@ -1506,7 +1491,7 @@ export const AccessoryDetailView: React.FC<AccessoryDetailViewProps> = ({ access
                 style={{
                   width: '100%',
                   height: '38px',
-                  backgroundColor: inputBg,
+                  backgroundColor: modalInputBg,
                   border: `1px solid ${yellowColor}`,
                   borderRadius: '8px',
                   padding: '0 12px',

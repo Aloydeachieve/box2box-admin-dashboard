@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface AccessoriesFilterModalProps {
   isOpen: boolean;
@@ -305,9 +306,14 @@ export const AccessoriesFilterModal: React.FC<AccessoriesFilterModalProps> = ({
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}
           >
-            Save
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={16} />
           </button>
         </div>
       </div>

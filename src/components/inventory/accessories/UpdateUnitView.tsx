@@ -54,8 +54,8 @@ export const UpdateUnitView: React.FC<UpdateUnitViewProps> = ({
   // Styling Tokens
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const inputBg = isLightMode ? '#F9FAFB' : '#18181B';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 

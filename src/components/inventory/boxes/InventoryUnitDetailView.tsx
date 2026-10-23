@@ -118,8 +118,8 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
     return () => setHeaderActions([]);
   }, [setHeaderActions, unitId, modelId, isUnitFaulty, router]);
 
-  // Theme colors
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  // Theme colors matching Rule 6
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
@@ -353,19 +353,8 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
           </div>
         </div>
 
-        {/* 2. Parts Distribution Main Container (Border 1 separating from details) */}
-        <div
-          style={{
-            backgroundColor: cardBg,
-            borderRadius: '16px',
-            border: `1px solid ${borderColor}`,
-            padding: '24px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '18px',
-          }}
-        >
-          {/* Header */}
+        {/* Header & Sub-tabs Toolbar hanging cleanly above table on page background (Rule 1) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '16px' }}>
           <div style={{ fontSize: '15px', fontWeight: 700, color: textColor }}>
             Parts distribution
           </div>
@@ -415,7 +404,7 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
                   style={{
                     width: '210px',
                     height: '36px',
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#111113',
+                    backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                     border: `1px solid ${borderColor}`,
                     borderRadius: '8px',
                     padding: '0 36px 0 12px',
@@ -435,7 +424,7 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
                 type="button"
                 onClick={() => setShowFilterModal(true)}
                 style={{
-                  backgroundColor: isLightMode ? '#F9FAFB' : '#111113',
+                  backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                   border: `1px solid ${borderColor}`,
                   borderRadius: '8px',
                   padding: '8px 14px',
@@ -452,16 +441,18 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Border 2: Inner container holding the main table */}
-          <div
-            style={{
-              borderRadius: '12px',
-              border: `1px solid ${borderColor}`,
-              overflow: 'visible',
-            }}
-          >
-            <div style={{ overflowX: 'auto' }}>
+        {/* Table Card Container (Rule 1 & 6) */}
+        <div
+          style={{
+            backgroundColor: cardBg,
+            borderRadius: '16px',
+            border: `1px solid ${borderColor}`,
+            overflow: 'hidden',
+          }}
+        >
+          <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr
@@ -597,7 +588,7 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
                               position: 'absolute',
                               ...(isNearBottom ? { bottom: '100%', marginBottom: '4px' } : { top: '100%', marginTop: '4px' }),
                               right: '18px',
-                              backgroundColor: cardBg,
+                              backgroundColor: isLightMode ? '#FFFFFF' : '#18181B',
                               border: `1px solid ${borderColor}`,
                               borderRadius: '10px',
                               padding: '6px',
@@ -686,7 +677,6 @@ export const InventoryUnitDetailView: React.FC<InventoryUnitDetailViewProps> = (
           </div>
         </div>
       </div>
-    </div>
 
       {/* Right-Hand Sidebar: Activity History matching exact user description */}
       <div

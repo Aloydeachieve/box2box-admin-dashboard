@@ -14,7 +14,7 @@ export default function BookingActivityDetailPage() {
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
 
   return (

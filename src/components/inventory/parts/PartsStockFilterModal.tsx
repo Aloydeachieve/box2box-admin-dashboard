@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Search } from 'lucide-react';
+import { X } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface PartsStockFilterModalProps {
   isOpen: boolean;
@@ -17,7 +18,6 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
   onApplyFilters,
 }) => {
   const [activeTab, setActiveTab] = useState<'category' | 'status' | 'location'>('category');
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Selected filters state
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['All']);
@@ -217,32 +217,6 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
           </button>
         </div>
 
-        {/* Search */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: '100%',
-              backgroundColor: inputBg,
-              border: `1px solid ${borderColor}`,
-              borderRadius: '8px',
-              padding: '10px 38px 10px 14px',
-              fontSize: '13px',
-              color: textColor,
-              outline: 'none',
-              boxSizing: 'border-box',
-            }}
-          />
-          <Search
-            size={16}
-            color={subtextColor}
-            style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
-          />
-        </div>
-
         {/* Tab Content */}
         <div
           style={{
@@ -254,9 +228,7 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
           }}
         >
           {activeTab === 'category' &&
-            categoryOptions
-              .filter((c) => c.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((cat) => {
+            categoryOptions.map((cat) => {
                 const isSelected = selectedCategories.includes(cat);
                 return (
                   <div
@@ -310,9 +282,7 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
               })}
 
           {activeTab === 'status' &&
-            statusOptions
-              .filter((st) => st.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((st) => {
+            statusOptions.map((st) => {
                 const isSelected = selectedStatuses.includes(st);
                 return (
                   <div
@@ -366,9 +336,7 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
               })}
 
           {activeTab === 'location' &&
-            locationOptions
-              .filter((loc) => loc.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((loc) => {
+            locationOptions.map((loc) => {
                 const isSelected = selectedLocations.includes(loc);
                 return (
                   <div
@@ -455,10 +423,14 @@ export const PartsStockFilterModal: React.FC<PartsStockFilterModalProps> = ({
               fontWeight: 700,
               fontSize: '13px',
               cursor: 'pointer',
-              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}
           >
-            Save
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={16} />
           </button>
         </div>
       </div>

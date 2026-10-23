@@ -47,8 +47,9 @@ export default function ViewReportPage({
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const cardBorder = `1px solid ${borderColor}`;
 
   return (
     <div
@@ -191,7 +192,8 @@ export default function ViewReportPage({
                 maxHeight: '160px',
                 borderRadius: '10px',
                 overflow: 'hidden',
-                backgroundColor: '#1E1E22',
+                backgroundColor: 'transparent',
+                border: `1px solid ${borderColor}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

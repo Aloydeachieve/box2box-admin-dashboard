@@ -99,8 +99,9 @@ export const InventoryAccessoriesView: React.FC = () => {
   // Theme styling tokens matching design
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
-  const innerCardBg = isLightMode ? '#F9FAFB' : '#111113';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
+  const innerCardBg = isLightMode ? '#F9FAFB' : 'transparent';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -582,121 +583,110 @@ export const InventoryAccessoriesView: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Main Section Container (Border 1: Outer container separating from header) */}
+      {/* 3. Decoupled Table Toolbar (Table Decoupling Rule 1) */}
       <div
         style={{
-          backgroundColor: cardBg,
-          borderRadius: '16px',
-          border: `1px solid ${borderColor}`,
-          padding: '24px',
           display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '16px',
         }}
       >
-        {/* Top Header of Section: 3 Tabs (Accessories, Stock, Category) + Search + Filter */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-          }}
-        >
-          {/* 3 Tabs */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            {(['Accessories', 'Stock', 'Category'] as const).map((tab) => {
-              const isActive = activeTab === tab;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setActiveTab(tab)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '14px',
-                    fontWeight: isActive ? 700 : 500,
-                    color: isActive ? yellowColor : subtextColor,
-                    cursor: 'pointer',
-                    padding: '6px 0',
-                    borderBottom: isActive ? `2px solid ${yellowColor}` : '2px solid transparent',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  {tab}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right: Search Input + Filter Button (Only on Accessories & Stock tabs) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  width: '210px',
-                  height: '36px',
-                  backgroundColor: innerCardBg,
-                  border: `1px solid ${borderColor}`,
-                  borderRadius: '8px',
-                  padding: '0 36px 0 12px',
-                  fontSize: '13px',
-                  color: textColor,
-                  outline: 'none',
-                }}
-              />
-              <Search
-                size={15}
-                color={subtextColor}
-                style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
-              />
-            </div>
-
-            {/* Filter button: only shown on Accessories and Stock tabs */}
-            {activeTab !== 'Category' && (
+        {/* 3 Tabs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          {(['Accessories', 'Stock', 'Category'] as const).map((tab) => {
+            const isActive = activeTab === tab;
+            return (
               <button
+                key={tab}
                 type="button"
-                onClick={() => {
-                  if (activeTab === 'Accessories') {
-                    setShowAccessoriesFilter(true);
-                  } else if (activeTab === 'Stock') {
-                    setShowStockFilter(true);
-                  }
-                }}
+                onClick={() => setActiveTab(tab)}
                 style={{
-                  backgroundColor: innerCardBg,
-                  border: `1px solid ${borderColor}`,
-                  borderRadius: '8px',
-                  padding: '8px 14px',
-                  fontSize: '13px',
-                  color: textColor,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '14px',
+                  fontWeight: isActive ? 700 : 500,
+                  color: isActive ? yellowColor : subtextColor,
                   cursor: 'pointer',
+                  padding: '6px 0',
+                  borderBottom: isActive ? `2px solid ${yellowColor}` : '2px solid transparent',
+                  transition: 'all 0.15s ease',
                 }}
               >
-                <span>Filter</span>
-                <ChevronDown size={14} color={subtextColor} />
+                {tab}
               </button>
-            )}
-          </div>
+            );
+          })}
         </div>
 
-        {/* Border 2: Inner container holding the main table */}
-        <div
-          style={{
-            borderRadius: '12px',
-            border: `1px solid ${borderColor}`,
-            overflow: 'visible',
-          }}
-        >
+        {/* Right: Search Input + Filter Button (Only on Accessories & Stock tabs) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                width: '210px',
+                height: '36px',
+                backgroundColor: innerCardBg,
+                border: `1px solid ${borderColor}`,
+                borderRadius: '8px',
+                padding: '0 36px 0 12px',
+                fontSize: '13px',
+                color: textColor,
+                outline: 'none',
+              }}
+            />
+            <Search
+              size={15}
+              color={subtextColor}
+              style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
+            />
+          </div>
+
+          {/* Filter button: only shown on Accessories and Stock tabs */}
+          {activeTab !== 'Category' && (
+            <button
+              type="button"
+              onClick={() => {
+                if (activeTab === 'Accessories') {
+                  setShowAccessoriesFilter(true);
+                } else if (activeTab === 'Stock') {
+                  setShowStockFilter(true);
+                }
+              }}
+              style={{
+                backgroundColor: innerCardBg,
+                border: `1px solid ${borderColor}`,
+                borderRadius: '8px',
+                padding: '8px 14px',
+                fontSize: '13px',
+                color: textColor,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                cursor: 'pointer',
+              }}
+            >
+              <span>Filter</span>
+              <ChevronDown size={14} color={subtextColor} />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Table Container Card (Rule 6: Natural background & 1px border) */}
+      <div
+        style={{
+          borderRadius: '16px',
+          border: `1px solid ${borderColor}`,
+          backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+          overflow: 'hidden',
+        }}
+      >
           {/* TAB 1: ACCESSORIES TABLE (Matching Image 3) */}
           {activeTab === 'Accessories' && (
             <div style={{ overflowX: 'auto' }}>
@@ -835,7 +825,7 @@ export const InventoryAccessoriesView: React.FC = () => {
                                   ? { bottom: '100%', marginBottom: '4px' }
                                   : { top: '100%', marginTop: '4px' }),
                                 right: '18px',
-                                backgroundColor: cardBg,
+                                backgroundColor: dropdownBg,
                                 border: `1px solid ${borderColor}`,
                                 borderRadius: '10px',
                                 padding: '6px',
@@ -1102,7 +1092,7 @@ export const InventoryAccessoriesView: React.FC = () => {
                                   ? { bottom: '100%', marginBottom: '4px' }
                                   : { top: '100%', marginTop: '4px' }),
                                 right: '18px',
-                                backgroundColor: cardBg,
+                                backgroundColor: dropdownBg,
                                 border: `1px solid ${borderColor}`,
                                 borderRadius: '10px',
                                 padding: '6px',
@@ -1275,7 +1265,7 @@ export const InventoryAccessoriesView: React.FC = () => {
                                   ? { bottom: '100%', marginBottom: '4px' }
                                   : { top: '100%', marginTop: '4px' }),
                                 right: '18px',
-                                backgroundColor: cardBg,
+                                backgroundColor: dropdownBg,
                                 border: `1px solid ${borderColor}`,
                                 borderRadius: '10px',
                                 padding: '6px',
@@ -1401,7 +1391,6 @@ export const InventoryAccessoriesView: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Filter Modal for Accessories Tab */}
       <AccessoriesFilterModal

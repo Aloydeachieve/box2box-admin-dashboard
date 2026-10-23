@@ -42,7 +42,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
     <aside
       style={{
         width: '320px',
-        backgroundColor: isLightMode ? '#FFFFFF' : '#121214',
+        backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
         borderLeft: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
         height: '100%',
         padding: '20px 18px',
@@ -118,7 +118,8 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
                     width: '32px',
                     height: '32px',
                     borderRadius: '6px',
-                    backgroundColor: isLightMode ? '#F3F4F6' : '#26262B',
+                    backgroundColor: isLightMode ? '#F3F4F6' : 'rgba(255, 255, 255, 0.05)',
+                    border: `1px solid ${isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)'}`,
                     flexShrink: 0,
                     display: 'flex',
                     alignItems: 'center',

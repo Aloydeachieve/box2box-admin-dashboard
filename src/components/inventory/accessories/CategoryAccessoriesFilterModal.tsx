@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface CategoryAccessoriesFilterModalProps {
   isOpen: boolean;
@@ -285,9 +286,14 @@ export const CategoryAccessoriesFilterModal: React.FC<CategoryAccessoriesFilterM
               fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}
           >
-            Submit
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={16} />
           </button>
         </div>
       </div>

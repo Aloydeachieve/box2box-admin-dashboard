@@ -69,14 +69,14 @@ export const InventoryBoxModelFormView: React.FC<InventoryBoxModelFormViewProps>
     message: string;
   } | null>(null);
 
-  // Theme Colors
+  // Theme Colors matching Rule 6
   const bgColor = isLightMode ? '#F9FAFB' : '#0B0B0C';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const popupBg = isLightMode ? '#FFFFFF' : '#1C1C20';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
-  const inputBg = isLightMode ? '#F3F4F6' : '#141416';
+  const inputBg = isLightMode ? '#F3F4F6' : 'transparent';
   const yellowColor = '#F5C842';
 
   // Parts list filtered by search
@@ -647,7 +647,7 @@ export const InventoryBoxModelFormView: React.FC<InventoryBoxModelFormViewProps>
                       borderRadius: '10px',
                       overflow: 'hidden',
                       border: `1px solid ${borderColor}`,
-                      backgroundColor: '#1E1E22',
+                      backgroundColor: 'transparent',
                     }}
                   >
                     <img
@@ -826,7 +826,7 @@ export const InventoryBoxModelFormView: React.FC<InventoryBoxModelFormViewProps>
                       style={{
                         width: '100%',
                         height: '36px',
-                        backgroundColor: isLightMode ? '#F3F4F6' : '#141416',
+                        backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
                         border: `1px solid ${borderColor}`,
                         borderRadius: '8px',
                         padding: '0 34px 0 12px',
@@ -1002,7 +1002,7 @@ export const InventoryBoxModelFormView: React.FC<InventoryBoxModelFormViewProps>
                       style={{
                         width: '100%',
                         height: '36px',
-                        backgroundColor: isLightMode ? '#F3F4F6' : '#141416',
+                        backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
                         border: `1px solid ${borderColor}`,
                         borderRadius: '8px',
                         padding: '0 34px 0 12px',

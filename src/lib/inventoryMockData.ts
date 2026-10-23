@@ -1177,4 +1177,557 @@ export const initialBoxPartSuppliers: BoxPartSupplierItem[] = [
   },
 ];
 
+// Activity History for Part Detail Overview (Image 1)
+export const partOverviewActivityHistory: ActivityHistoryItem[] = [
+  {
+    id: 'po-act-1',
+    title: 'Part name changed',
+    description: 'Battery -> Battery-Zero System',
+    actor: 'System',
+    role: 'Auto',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'po-act-2',
+    title: 'Part created',
+    description: 'Battery created',
+    actor: 'Aku Cynthia',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+];
+
+// Part Stock Locations breakdown (Image 1)
+export interface PartStockLocationItem {
+  id: string;
+  location: string;
+  status: 'Available' | 'Low stock' | 'Out of stock';
+  noAvailable: number;
+  noInstalled: number;
+  noFaulty: number;
+}
+
+export const initialPartStockLocations: PartStockLocationItem[] = [
+  {
+    id: 'psl-1',
+    location: 'Ibariogwa Expressway, Ikeja, Lagos',
+    status: 'Available',
+    noAvailable: 100,
+    noInstalled: 2000,
+    noFaulty: 2,
+  },
+  {
+    id: 'psl-2',
+    location: 'Awka, Anambra',
+    status: 'Low stock',
+    noAvailable: 30,
+    noInstalled: 2000,
+    noFaulty: 0,
+  },
+  {
+    id: 'psl-3',
+    location: 'Onitsha, Anambra',
+    status: 'Out of stock',
+    noAvailable: 0,
+    noInstalled: 2000,
+    noFaulty: 0,
+  },
+];
+
+// Part Units per Location breakdown (Image 2)
+export interface PartUnitItem {
+  id: string;
+  itemId: string;
+  serialNumber: string;
+  supplierName: string;
+  supplierEmail: string;
+  priceBought: string;
+  status: 'Available' | 'Installed' | 'Faulty' | 'Assigned' | 'Deployed';
+  addedBy: {
+    name: string;
+    timestamp: string;
+  };
+  linkedBy?: {
+    name: string;
+    timestamp: string;
+  };
+  linkedUnit?: string;
+  isFaulty?: boolean;
+}
+
+export const initialPartUnits: PartUnitItem[] = [
+  {
+    id: 'pu-1',
+    itemId: 'P-123457',
+    serialNumber: 'KL890233',
+    supplierName: 'Abc Ltd',
+    supplierEmail: 'supply@abc.com',
+    priceBought: '₦150,000',
+    status: 'Available',
+    addedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    isFaulty: false,
+  },
+  {
+    id: 'pu-2',
+    itemId: 'P-123458',
+    serialNumber: 'KL890234',
+    supplierName: 'Abc Ltd',
+    supplierEmail: 'supply@abc.com',
+    priceBought: '₦150,000',
+    status: 'Installed',
+    addedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedUnit: 'NyBox-1234...',
+    isFaulty: false,
+  },
+  {
+    id: 'pu-3',
+    itemId: 'P-123459',
+    serialNumber: 'KL890235',
+    supplierName: 'Abc Ltd',
+    supplierEmail: 'supply@abc.com',
+    priceBought: '₦150,000',
+    status: 'Installed',
+    addedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedUnit: 'NyBox-1234...',
+    isFaulty: false,
+  },
+  {
+    id: 'pu-4',
+    itemId: 'P-123450',
+    serialNumber: 'KL890236',
+    supplierName: 'Abc Ltd',
+    supplierEmail: 'supply@abc.com',
+    priceBought: '₦150,000',
+    status: 'Installed',
+    addedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedBy: { name: 'James Moses', timestamp: 'Jun 12, 2026 | 11:15 AM' },
+    linkedUnit: 'NyBox-1234...',
+    isFaulty: false,
+  },
+];
+
+// Activity History for Part Stock Units (Image 2)
+export const partStockUnitsActivityHistory: ActivityHistoryItem[] = [
+  {
+    id: 'psu-act-1',
+    title: 'Stock status updated',
+    description: 'P-123451 was installed to A-123456',
+    actor: 'System',
+    role: 'Auto',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'psu-act-2',
+    title: 'Stock status updated',
+    description: 'P-123450 was installed to MyBox-123456',
+    actor: 'Aku Cynthia',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'psu-act-3',
+    title: 'Stock updated',
+    description: 'P-123456 was added to stock',
+    actor: 'Aku Cynthia',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+];
+
+// Category Detail Parts (Image 3)
+export interface CategoryPartItem {
+  id: string;
+  name: string;
+  suppliers: string;
+  sku: string;
+  status: 'Active' | 'Discontinue';
+  image: string;
+}
+
+export const initialCategoryParts: CategoryPartItem[] = [
+  {
+    id: 'cp-1',
+    name: 'Name of part',
+    suppliers: 'GlobalTech Solutions, VarTech Systems',
+    sku: 'MBX-789012',
+    status: 'Active',
+    image: '/image/box1.png',
+  },
+  {
+    id: 'cp-2',
+    name: 'Name of part',
+    suppliers: 'PrimeSource Ltd, Allied Manufacturing',
+    sku: 'MBX-789013',
+    status: 'Active',
+    image: '/image/box1.png',
+  },
+  {
+    id: 'cp-3',
+    name: 'Name of part',
+    suppliers: 'Apex Industrial, PetroCorp, PrimeSource Ltd, Abc...',
+    sku: 'MBX-789014',
+    status: 'Active',
+    image: '/image/box1.png',
+  },
+  {
+    id: 'cp-4',
+    name: 'Name of part',
+    suppliers: 'Zenith Innovations',
+    sku: 'MBX-789014',
+    status: 'Active',
+    image: '/image/box1.png',
+  },
+];
+
+// Activity History for Category Detail (Image 3)
+export const partCategoryActivityHistory: ActivityHistoryItem[] = [
+  {
+    id: 'pca-act-1',
+    title: 'Category description updated',
+    description: 'Old desc -> New desc',
+    actor: 'System',
+    role: 'Auto',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'pca-act-2',
+    title: 'Category name updated',
+    description: '"Main Module" -> "Core Module"',
+    actor: 'Gwen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'pca-act-3',
+    title: 'Part removed',
+    description: 'Sensor Unit removed from "Main Module"',
+    actor: 'Ada Chike',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'pca-act-4',
+    title: 'Part added',
+    description: 'Battery Module added to "Main Module"',
+    actor: 'Gwen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'pca-act-5',
+    title: 'Category created',
+    description: 'Category name',
+    actor: 'Gwen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+];
+
+// Supplier Detail Parts (Image 4)
+export interface SupplierPartItem {
+  id: string;
+  name: string;
+  sku: string;
+  avgAmount: string;
+  totalAmount: string;
+  noPurchased: number;
+  noAvailable: number;
+  noFaulty: number;
+  image: string;
+}
+
+export const initialSupplierParts: SupplierPartItem[] = [
+  {
+    id: 'sp-1',
+    name: 'Name of part',
+    sku: 'MBX-789012',
+    avgAmount: '₦150,000',
+    totalAmount: '₦150,000',
+    noPurchased: 100,
+    noAvailable: 100,
+    noFaulty: 2,
+    image: '/image/box1.png',
+  },
+  {
+    id: 'sp-2',
+    name: 'Name of part',
+    sku: 'MBX-789013',
+    avgAmount: '₦150,000',
+    totalAmount: '₦150,000',
+    noPurchased: 100,
+    noAvailable: 100,
+    noFaulty: 2,
+    image: '/image/box1.png',
+  },
+  {
+    id: 'sp-3',
+    name: 'Name of part',
+    sku: 'MBX-789014',
+    avgAmount: '₦150,000',
+    totalAmount: '₦150,000',
+    noPurchased: 100,
+    noAvailable: 100,
+    noFaulty: 2,
+    image: '/image/box1.png',
+  },
+];
+
+// Activity History for Supplier Detail (Image 4)
+export const partSupplierActivityHistory: ActivityHistoryItem[] = [
+  {
+    id: 'psup-act-1',
+    title: 'Supplier updated',
+    description: 'Email changed, abcsupply@gmail.com -> supply@abc.com',
+    actor: 'System',
+    role: 'Auto',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'psup-act-2',
+    title: 'Supplier created',
+    description: 'Category name',
+    actor: 'Gwen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+];
+// Activity History for Part Unit Detail (Image 3)
+export const partUnitActivityHistory: ActivityHistoryItem[] = [
+  {
+    id: 'pu-act-1',
+    title: 'Linked to accessory',
+    description: 'Part was linked to Battery P-123456',
+    actor: 'Owen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+  {
+    id: 'pu-act-2',
+    title: 'Unit added',
+    description: 'A-123456 added to Battery stock',
+    actor: 'Owen Benjamin',
+    role: 'Admin',
+    timestamp: 'March 15, 2026 | 13:25',
+  },
+];
+
+// ==========================================
+// INVENTORY LOG DATA (Figma Image 4 & 5)
+// ==========================================
+
+export interface InventoryLogStatItem {
+  id: string;
+  title: string;
+  value: string;
+  change: string;
+}
+
+export const initialInventoryLogStats: InventoryLogStatItem[] = [
+  {
+    id: 'inv-val',
+    title: 'Total Inventory Value',
+    value: '₦120,000,000',
+    change: '+12% today',
+  },
+  {
+    id: 'units-stock',
+    title: 'Total Units in Stock',
+    value: '7,935',
+    change: '+12% today',
+  },
+  {
+    id: 'faulty-units',
+    title: 'Faulty Units',
+    value: '30,908',
+    change: '+2% today',
+  },
+  {
+    id: 'total-boxes',
+    title: 'Total Boxes',
+    value: '1,500',
+    change: '+12% today',
+  },
+  {
+    id: 'total-accessories',
+    title: 'Total Accessories',
+    value: '72,000',
+    change: '+12% today',
+  },
+  {
+    id: 'total-parts',
+    title: 'Total Parts',
+    value: '72,000',
+    change: '+12% today',
+  },
+];
+
+export interface InventoryAlertItem {
+  id: string;
+  category: 'Stock level' | 'Faulty stock';
+  title: string;
+  location: string;
+  status: 'In progress' | 'Low stock' | 'Limited stock' | 'Out of stock';
+  countText: string;
+}
+
+export const initialInventoryLogAlerts: InventoryAlertItem[] = [
+  // Stock level alerts
+  {
+    id: 'al-1',
+    category: 'Stock level',
+    title: 'Battery (SKU No)',
+    location: 'Abuja',
+    status: 'Out of stock',
+    countText: '0 left',
+  },
+  {
+    id: 'al-2',
+    category: 'Stock level',
+    title: 'Camera (SKU No)',
+    location: 'Abuja',
+    status: 'Low stock',
+    countText: '14 left',
+  },
+  {
+    id: 'al-3',
+    category: 'Stock level',
+    title: 'Camera (SKU No)',
+    location: 'Lagos',
+    status: 'Low stock',
+    countText: '15 left',
+  },
+  {
+    id: 'al-4',
+    category: 'Stock level',
+    title: 'MyBox-Standard (SKU No)',
+    location: 'Abuja',
+    status: 'Limited stock',
+    countText: '2 left',
+  },
+  {
+    id: 'al-5',
+    category: 'Stock level',
+    title: 'Speaker (SKU No)',
+    location: 'Port Harcourt',
+    status: 'Limited stock',
+    countText: '7 left',
+  },
+  {
+    id: 'al-6',
+    category: 'Stock level',
+    title: 'MyBox-Standard (SKU No)',
+    location: 'Lagos',
+    status: 'Low stock',
+    countText: '14 left',
+  },
+  // Faulty stock alerts
+  {
+    id: 'al-7',
+    category: 'Faulty stock',
+    title: 'Battery (SKU No)',
+    location: 'Abuja',
+    status: 'In progress',
+    countText: '12',
+  },
+  {
+    id: 'al-8',
+    category: 'Faulty stock',
+    title: 'MyBox-Standard (SKU No)',
+    location: 'Abuja',
+    status: 'In progress',
+    countText: '3',
+  },
+  {
+    id: 'al-9',
+    category: 'Faulty stock',
+    title: 'Camera (SKU No)',
+    location: 'Lagos',
+    status: 'In progress',
+    countText: '2',
+  },
+  {
+    id: 'al-10',
+    category: 'Faulty stock',
+    title: 'MyBox-Standard (SKU No)',
+    location: 'Abuja',
+    status: 'In progress',
+    countText: '1',
+  },
+];
+
+export interface InventoryLogAccessoryItem {
+  id: string;
+  name: string;
+  sku: string;
+  category: string;
+  linkedBox: string;
+  amount: string;
+  status: 'Active' | 'Discontinued';
+  noAvailable: number;
+  noAssigned: number;
+  noInstalled: number;
+  noFaulty: number;
+  image: string;
+}
+
+export const initialInventoryLogAccessories: InventoryLogAccessoryItem[] = [
+  {
+    id: 'ila-1',
+    name: 'Name of accessory',
+    sku: 'S-123546',
+    category: 'Main Module',
+    linkedBox: 'MyBox-Premium',
+    amount: '₦150,000',
+    status: 'Active',
+    noAvailable: 100,
+    noAssigned: 10,
+    noInstalled: 2000,
+    noFaulty: 2,
+    image: '/image/box1.png',
+  },
+  {
+    id: 'ila-2',
+    name: 'Name of accessory',
+    sku: 'S-123546',
+    category: 'Extension',
+    linkedBox: 'MyBox-Premium',
+    amount: '₦150,000',
+    status: 'Active',
+    noAvailable: 30,
+    noAssigned: 0,
+    noInstalled: 2000,
+    noFaulty: 0,
+    image: '/image/box1.png',
+  },
+  {
+    id: 'ila-3',
+    name: 'Name of accessory',
+    sku: 'S-123546',
+    category: 'Locks',
+    linkedBox: 'MyBox-Premium',
+    amount: '₦150,000',
+    status: 'Active',
+    noAvailable: 0,
+    noAssigned: 0,
+    noInstalled: 2000,
+    noFaulty: 0,
+    image: '/image/box1.png',
+  },
+  {
+    id: 'ila-4',
+    name: 'Name of accessory',
+    sku: 'S-123546',
+    category: 'Camera',
+    linkedBox: 'MyBox-Premium',
+    amount: '₦150,000',
+    status: 'Active',
+    noAvailable: 0,
+    noAssigned: 0,
+    noInstalled: 2000,
+    noFaulty: 0,
+    image: '/image/box1.png',
+  },
+];
 

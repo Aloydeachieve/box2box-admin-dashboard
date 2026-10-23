@@ -53,8 +53,9 @@ export const InventoryBoxesView: React.FC = () => {
     message: string;
   } | null>(null);
 
-  // Theme tokens matching Figma
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  // Theme tokens matching Rule 6 (Zero Extra Contrast & Natural Background)
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const dropdownBg = isLightMode ? '#FFFFFF' : '#18181B';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
@@ -590,7 +591,7 @@ export const InventoryBoxesView: React.FC = () => {
                               position: 'absolute',
                               ...(isNearBottom ? { bottom: '100%', marginBottom: '4px' } : { top: '100%', marginTop: '4px' }),
                               right: '18px',
-                              backgroundColor: cardBg,
+                              backgroundColor: dropdownBg,
                               border: `1px solid ${borderColor}`,
                               borderRadius: '10px',
                               padding: '6px',
@@ -826,7 +827,7 @@ export const InventoryBoxesView: React.FC = () => {
                               position: 'absolute',
                               ...(isNearBottom ? { bottom: '100%', marginBottom: '4px' } : { top: '100%', marginTop: '4px' }),
                               right: '18px',
-                              backgroundColor: cardBg,
+                              backgroundColor: dropdownBg,
                               border: `1px solid ${borderColor}`,
                               borderRadius: '10px',
                               padding: '6px',

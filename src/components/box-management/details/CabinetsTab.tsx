@@ -16,7 +16,7 @@ export const CabinetsTab: React.FC<CabinetsTabProps> = ({
 }) => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
 
   const cabinets = [
@@ -90,7 +90,7 @@ export const CabinetsTab: React.FC<CabinetsTabProps> = ({
                 key={cab.id}
                 onClick={() => onSelectCabinet(cab.id)}
                 style={{
-                  backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+                  backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                   borderRadius: '12px',
                   border: isSelected
                     ? '2px solid #F5C842'
@@ -109,12 +109,12 @@ export const CabinetsTab: React.FC<CabinetsTabProps> = ({
                 }}
                 onMouseOver={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222227';
+                    e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : 'rgba(255, 255, 255, 0.04)';
                   }
                 }}
                 onMouseOut={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : '#1A1A1E';
+                    e.currentTarget.style.backgroundColor = isLightMode ? '#F9FAFB' : 'transparent';
                   }
                 }}
               >

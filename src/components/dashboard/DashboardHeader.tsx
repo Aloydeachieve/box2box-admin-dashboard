@@ -12,6 +12,7 @@ import {
   Moon,
   Menu,
   Bell,
+  X,
 } from 'lucide-react';
 import { LocationModal } from './LocationModal';
 import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
@@ -31,6 +32,7 @@ interface DashboardHeaderProps {
   showAction?: boolean;
   onActionClick?: () => void;
   actionItems?: HeaderActionItem[];
+  headerExtra?: React.ReactNode;
 }
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
@@ -46,6 +48,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   showAction = false,
   onActionClick,
   actionItems,
+  headerExtra,
 }) => {
   const [selectedLocation, setSelectedLocation] = useState('Location');
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -131,6 +134,9 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
         {/* Center / Right: Action Button (Yellow pill), Search, Location Modal Trigger, Quick Tool Icons from Screenshot 4 */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Custom Header Action Extra: e.g. Revenue Configuration button right before search */}
+          {headerExtra && <div style={{ display: 'flex', alignItems: 'center' }}>{headerExtra}</div>}
+
           {/* Action Button: appears in the header right before the search input in user profile detail view */}
           {showAction && (
             <div style={{ position: 'relative' }}>
@@ -276,8 +282,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               style={{
                 width: '100%',
                 height: '36px',
-                backgroundColor: isLightMode ? '#F3F4F6' : '#1A1A1E',
-                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                 borderRadius: '20px',
                 padding: '0 36px 0 16px',
                 color: isLightMode ? '#111827' : '#FFFFFF',
@@ -309,8 +315,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
               height: '36px',
               padding: '0 14px',
               borderRadius: '20px',
-              backgroundColor: isLightMode ? '#F3F4F6' : '#1A1A1E',
-              border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+              backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+              border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
               color: isLightMode ? '#111827' : '#FFFFFF',
               fontSize: '12px',
               cursor: 'pointer',
@@ -415,8 +421,8 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                   width: '34px',
                   height: '34px',
                   borderRadius: '50%',
-                  backgroundColor: isLightMode ? '#F3F4F6' : '#1E1E22',
-                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
+                  border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
                   color: isLightMode ? '#111827' : '#FFFFFF',
                   display: 'flex',
                   alignItems: 'center',

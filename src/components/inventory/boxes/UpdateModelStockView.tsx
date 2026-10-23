@@ -76,13 +76,13 @@ export const UpdateModelStockView: React.FC<UpdateModelStockViewProps> = ({
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Styling tokens matching Figma
-  const cardBg = isLightMode ? '#FFFFFF' : '#141416';
+  // Styling tokens matching Rule 6
+  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
-  const inputBg = isLightMode ? '#F9FAFB' : '#141416';
-  const fieldBorder = isLightMode ? '#D1D5DB' : '#27272A';
+  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const fieldBorder = isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
   // Open dropdown helper

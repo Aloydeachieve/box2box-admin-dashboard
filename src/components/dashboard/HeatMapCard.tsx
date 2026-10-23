@@ -11,7 +11,7 @@ export const HeatMapCard: React.FC<HeatMapCardProps> = ({ isLightMode = false })
   return (
     <div
       style={{
-        backgroundColor: isLightMode ? '#FFFFFF' : '#161619',
+        backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
         borderRadius: '16px',
         border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
         padding: '20px 22px',
@@ -19,7 +19,7 @@ export const HeatMapCard: React.FC<HeatMapCardProps> = ({ isLightMode = false })
         flexDirection: 'column',
         position: 'relative',
         height: '100%',
-        boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.05)' : '0 4px 20px rgba(0, 0, 0, 0.25)',
+        boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.05)' : 'none',
         transition: 'all 0.2s ease',
       }}
     >
@@ -69,13 +69,16 @@ export const HeatMapCard: React.FC<HeatMapCardProps> = ({ isLightMode = false })
           position: 'relative',
           backgroundColor: '#0D0E11',
           border: '1px solid rgba(255, 255, 255, 0.05)',
-          minHeight: '140px',
+          minHeight: '160px',
         }}
       >
         <img
           src="/image/map 1.png"
           alt="Heat map"
           style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover',

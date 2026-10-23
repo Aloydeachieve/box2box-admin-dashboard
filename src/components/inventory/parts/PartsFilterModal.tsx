@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, Search } from 'lucide-react';
+import { X } from 'lucide-react';
+import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface PartsFilterModalProps {
   isOpen: boolean;
@@ -17,7 +18,6 @@ export const PartsFilterModal: React.FC<PartsFilterModalProps> = ({
   onApplyFilters,
 }) => {
   const [activeTab, setActiveTab] = useState<'category' | 'status'>('category');
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Selected filters state
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['All']);
@@ -181,32 +181,6 @@ export const PartsFilterModal: React.FC<PartsFilterModalProps> = ({
           </button>
         </div>
 
-        {/* Search */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              width: '100%',
-              backgroundColor: inputBg,
-              border: `1px solid ${borderColor}`,
-              borderRadius: '8px',
-              padding: '10px 38px 10px 14px',
-              fontSize: '13px',
-              color: textColor,
-              outline: 'none',
-              boxSizing: 'border-box',
-            }}
-          />
-          <Search
-            size={16}
-            color={subtextColor}
-            style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
-          />
-        </div>
-
         {/* Tab Content */}
         <div
           style={{
@@ -218,65 +192,61 @@ export const PartsFilterModal: React.FC<PartsFilterModalProps> = ({
           }}
         >
           {activeTab === 'category' &&
-            categoryOptions
-              .filter((c) => c.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((cat) => {
-                const isSelected = selectedCategories.includes(cat);
-                return (
+            categoryOptions.map((cat) => {
+              const isSelected = selectedCategories.includes(cat);
+              return (
+                <div
+                  key={cat}
+                  onClick={() => toggleCategory(cat)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    cursor: 'pointer',
+                    padding: '8px 4px',
+                    borderRadius: '6px',
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = isLightMode
+                      ? 'rgba(0, 0, 0, 0.03)'
+                      : 'rgba(255, 255, 255, 0.04)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }}
+                >
+                  <span style={{ fontSize: '14px', color: textColor, fontWeight: 500 }}>
+                    {cat}
+                  </span>
                   <div
-                    key={cat}
-                    onClick={() => toggleCategory(cat)}
                     style={{
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      border: isSelected ? `2px solid ${yellowColor}` : `1.5px solid ${subtextColor}`,
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      padding: '8px 4px',
-                      borderRadius: '6px',
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.backgroundColor = isLightMode
-                        ? 'rgba(0, 0, 0, 0.03)'
-                        : 'rgba(255, 255, 255, 0.04)';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
+                      justifyContent: 'center',
+                      boxSizing: 'border-box',
                     }}
                   >
-                    <span style={{ fontSize: '14px', color: textColor, fontWeight: 500 }}>
-                      {cat}
-                    </span>
-                    <div
-                      style={{
-                        width: '18px',
-                        height: '18px',
-                        borderRadius: '50%',
-                        border: isSelected ? `2px solid ${yellowColor}` : `1.5px solid ${subtextColor}`,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxSizing: 'border-box',
-                      }}
-                    >
-                      {isSelected && (
-                        <div
-                          style={{
-                            width: '10px',
-                            height: '10px',
-                            borderRadius: '50%',
-                            backgroundColor: yellowColor,
-                          }}
-                        />
-                      )}
-                    </div>
+                    {isSelected && (
+                      <div
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                          borderRadius: '50%',
+                          backgroundColor: yellowColor,
+                        }}
+                      />
+                    )}
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
 
           {activeTab === 'status' &&
-            statusOptions
-              .filter((st) => st.toLowerCase().includes(searchQuery.toLowerCase()))
-              .map((st) => {
+            statusOptions.map((st) => {
                 const isSelected = selectedStatuses.includes(st);
                 return (
                   <div
@@ -363,10 +333,14 @@ export const PartsFilterModal: React.FC<PartsFilterModalProps> = ({
               fontWeight: 700,
               fontSize: '13px',
               cursor: 'pointer',
-              textAlign: 'center',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
             }}
           >
-            Save
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={16} />
           </button>
         </div>
       </div>
