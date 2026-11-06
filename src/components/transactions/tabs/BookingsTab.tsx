@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { UserAvatar } from '@/components/common/UserAvatar';
 import { BookingsFilterState } from '../modals/BookingsFilterModal';
 
 export interface BookingTransactionItem {
@@ -109,6 +111,7 @@ export const BookingsTab: React.FC<BookingsTabProps> = ({
   filters,
   isLightMode = false,
 }) => {
+  const router = useRouter();
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
@@ -234,29 +237,24 @@ export const BookingsTab: React.FC<BookingsTabProps> = ({
                     (e.currentTarget.style.backgroundColor = 'transparent')
                   }
                 >
-                  <td style={{ padding: '16px 20px', fontWeight: 600, color: textColor }}>
+                  <td
+                    onClick={() => {
+                      const cleanId = tx.orderId ? tx.orderId.replace('#', '') : tx.id;
+                      router.push(`/transactions/bookings/${cleanId}`);
+                    }}
+                    style={{
+                      padding: '16px 20px',
+                      fontWeight: 600,
+                      color: textColor,
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                    }}
+                  >
                     {tx.orderId}
                   </td>
                   <td style={{ padding: '16px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '50%',
-                          backgroundColor: '#374151',
-                          overflow: 'hidden',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          color: '#FFFFFF',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {tx.user.name.charAt(0)}
-                      </div>
+                      <UserAvatar src={tx.user.avatar} name={tx.user.name} size={32} />
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                         <span style={{ fontWeight: 600, color: textColor }}>{tx.user.name}</span>
                         <span style={{ fontSize: '11px', color: subtextColor }}>

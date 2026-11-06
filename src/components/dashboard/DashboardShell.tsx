@@ -16,7 +16,7 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { headerActions, isLightMode, setIsLightMode, customBack } = useAdmin();
+  const { headerActions, isLightMode, setIsLightMode, customBack, onFundWalletClick } = useAdmin();
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -141,7 +141,19 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
     if (pathname.startsWith('/admin-mgt/') && !pathname.endsWith('/new') && !pathname.endsWith('/edit') && !pathname.includes('/branches')) return '';
     if (pathname === '/admin-mgt/new') return 'New Admin';
     if (pathname.startsWith('/admin-mgt/') && pathname.endsWith('/edit')) return 'Edit Admin';
-    if (pathname.startsWith('/admin-mgt')) return 'Admin management';
+    if (pathname === '/transactions/revenue-configuration/rules/new') return 'New rule';
+    if (pathname.startsWith('/transactions/revenue-configuration/rules/') && pathname.endsWith('/edit')) return 'Edit rule';
+    if (pathname.startsWith('/transactions/revenue-configuration/rules/')) return 'Revenue rules details';
+    if (pathname === '/transactions/revenue-configuration/promotions/new') return 'New promotion';
+    if (pathname.startsWith('/transactions/revenue-configuration/promotions/') && pathname.endsWith('/edit')) return 'Edit promotion';
+    if (pathname.startsWith('/transactions/revenue-configuration/promotions/')) return 'Promotion details';
+    if (pathname === '/transactions/revenue-configuration/subscriptions/new') return 'New plan';
+    if (pathname.startsWith('/transactions/revenue-configuration/subscriptions/') && pathname.endsWith('/edit')) return 'Edit plan';
+    if (pathname.startsWith('/transactions/revenue-configuration/subscriptions/')) return 'Subscription details';
+    if (pathname === '/transactions/revenue-configuration/activity') return 'Activity history';
+    if (pathname.startsWith('/transactions/revenue-configuration')) return 'Revenue configuration';
+    if (pathname.startsWith('/transactions/bookings/')) return 'Booking details';
+    if (pathname.startsWith('/transactions/') && !pathname.startsWith('/transactions/revenue-configuration') && !pathname.startsWith('/transactions/bookings')) return 'Transaction details';
     if (pathname.startsWith('/transactions')) return 'Transactions';
     if (pathname.startsWith('/orders/')) return 'Order details';
     if (pathname === '/orders') return 'Orders';
@@ -157,7 +169,6 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
   const isBoxDetailsPage = (pathname.includes('/box-management/') || pathname.includes('/dashboard/box-management/')) && !isViewReportPage;
   const isUserProfilePage = (pathname.startsWith('/users/') || pathname.startsWith('/dashboard/users/')) && !pathname.includes('/activity') && pathname !== '/users' && pathname !== '/dashboard/users';
   const isActivityPage = pathname.endsWith('/activity');
-  const isBookingDetailPage = pathname.includes('/activity/') && !!pathname.split('/activity/')[1];
   const isOrderDetailPage = pathname.startsWith('/orders/') && pathname !== '/orders';
   const isCreateBadgePage = pathname === '/rewards/badges/new';
   const isCreatePointRulePage = pathname === '/rewards/rules/new';
@@ -170,7 +181,23 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
   const isBranchNewPage = pathname === '/admin-mgt/branches/new';
   const isBranchEditPage = pathname.startsWith('/admin-mgt/branches/') && pathname.endsWith('/edit');
   const isAdminDetailPage = pathname.startsWith('/admin-mgt/') && !pathname.endsWith('/new') && !pathname.endsWith('/edit') && !pathname.includes('/branches');
+  const isRevenueRuleNewPage = pathname === '/transactions/revenue-configuration/rules/new';
+  const isRevenueRuleEditPage = pathname.startsWith('/transactions/revenue-configuration/rules/') && pathname.endsWith('/edit');
+  const isRevenueRuleDetailPage = pathname.startsWith('/transactions/revenue-configuration/rules/') && !isRevenueRuleNewPage && !isRevenueRuleEditPage;
+  const isPromotionNewPage = pathname === '/transactions/revenue-configuration/promotions/new';
+  const isPromotionEditPage = pathname.startsWith('/transactions/revenue-configuration/promotions/') && pathname.endsWith('/edit');
+  const isPromotionDetailPage = pathname.startsWith('/transactions/revenue-configuration/promotions/') && !isPromotionNewPage && !isPromotionEditPage;
+  const isSubscriptionNewPage = pathname === '/transactions/revenue-configuration/subscriptions/new';
+  const isSubscriptionEditPage = pathname.startsWith('/transactions/revenue-configuration/subscriptions/') && pathname.endsWith('/edit');
+  const isSubscriptionDetailPage = pathname.startsWith('/transactions/revenue-configuration/subscriptions/') && !isSubscriptionNewPage && !isSubscriptionEditPage;
+  const isBookingDetailPage =
+    pathname.startsWith('/transactions/bookings/') ||
+    (pathname.includes('/activity/') && !!pathname.split('/activity/')[1]);
+  const isTransactionDetailPage = pathname.startsWith('/transactions/') && !pathname.startsWith('/transactions/revenue-configuration') && !pathname.startsWith('/transactions/bookings');
+  const isRevenueConfigActivityPage = pathname === '/transactions/revenue-configuration/activity';
+  const isRevenueConfigPage = pathname.startsWith('/transactions/revenue-configuration');
   const isTransactionsPage = pathname.startsWith('/transactions');
+  const isMainTransactionsPage = pathname === '/transactions' || pathname === '/dashboard/transactions';
 
   const isInventoryNewModelPage = pathname === '/inventory/boxes/new';
   const isInventoryEditModelPage = pathname.includes('/inventory/boxes/') && pathname.endsWith('/edit');
@@ -194,8 +221,10 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
     isViewReportPage ||
     isBoxDetailsPage ||
     isUserProfilePage ||
+    isRevenueConfigPage ||
     isActivityPage ||
     isBookingDetailPage ||
+    isTransactionDetailPage ||
     isInventoryDetailPage ||
     isInventoryNewModelPage ||
     isInventoryEditModelPage ||
@@ -219,12 +248,23 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
       isBoxDetailsPage ||
       isUserProfilePage ||
       isAdminDetailPage ||
+      isRevenueRuleDetailPage ||
+      isPromotionDetailPage ||
+      isSubscriptionDetailPage ||
       isInventoryDetailPage ||
       isInventoryAccessoryDetailPage ||
       isInventoryPartDetailPage ||
       isInventoryPartUnitDetailPage ||
       isPointRuleDetailPage ||
       isBadgeDetailPage) &&
+    !isRevenueRuleNewPage &&
+    !isRevenueRuleEditPage &&
+    !isPromotionNewPage &&
+    !isPromotionEditPage &&
+    !isSubscriptionNewPage &&
+    !isSubscriptionEditPage &&
+    !isBookingDetailPage &&
+    !isTransactionDetailPage &&
     !isInventoryNewModelPage &&
     !isInventoryEditModelPage &&
     !isInventoryUpdateStockPage &&
@@ -322,6 +362,26 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
         return;
       }
       router.back();
+    } else if (
+      isRevenueRuleNewPage ||
+      isRevenueRuleEditPage ||
+      isRevenueRuleDetailPage ||
+      isRevenueConfigActivityPage ||
+      isPromotionNewPage ||
+      isPromotionEditPage ||
+      isPromotionDetailPage ||
+      isSubscriptionNewPage ||
+      isSubscriptionEditPage ||
+      isSubscriptionDetailPage
+    ) {
+      router.push('/transactions/revenue-configuration');
+      return;
+    } else if (isBookingDetailPage || isTransactionDetailPage) {
+      router.push('/transactions');
+      return;
+    } else if (isRevenueConfigPage) {
+      router.push('/transactions');
+      return;
     } else if (pathname.startsWith('/orders/')) {
       router.push('/orders');
       return;
@@ -456,9 +516,10 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
           showAction={showAction}
           actionItems={headerActions}
           headerExtra={
-            isTransactionsPage ? (
+            isMainTransactionsPage ? (
               <button
                 type="button"
+                onClick={() => router.push('/transactions/revenue-configuration')}
                 style={{
                   backgroundColor: '#F5C842',
                   color: '#000000',
@@ -475,6 +536,28 @@ const DashboardShellInner: React.FC<DashboardShellProps> = ({ children }) => {
                 }}
               >
                 <span>Revenue configuration</span>
+                <Box2BoxPulsingBadge size={14} inverted={false} />
+              </button>
+            ) : isTransactionDetailPage ? (
+              <button
+                type="button"
+                onClick={() => onFundWalletClick?.()}
+                style={{
+                  backgroundColor: isLightMode ? '#FEF3C7' : '#2A2614',
+                  color: isLightMode ? '#92400E' : '#F5C842',
+                  fontWeight: 700,
+                  fontSize: '12.5px',
+                  border: isLightMode ? '1px solid #FDE68A' : '1px solid rgba(245, 200, 66, 0.25)',
+                  borderRadius: '8px',
+                  padding: '7px 16px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  cursor: 'pointer',
+                  transition: 'opacity 0.15s ease',
+                }}
+              >
+                <span>Fund wallet</span>
                 <Box2BoxPulsingBadge size={14} inverted={false} />
               </button>
             ) : undefined

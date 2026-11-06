@@ -10,10 +10,12 @@ export interface StatItem {
 export interface NewUserRow {
   id: string;
   name: string;
+  phone?: string;
   email: string;
   avatar: string;
   location: string;
   dateJoined: string;
+  timeJoined?: string;
   userType: 'Customer' | 'Box owner' | 'Rider';
 }
 
@@ -26,7 +28,7 @@ export interface RecentBoxRow {
   capacity: string;
   status: 'Activated' | 'Disabled';
   batteryHealth: {
-    status: 'Excellent' | 'Good' | 'Fair' | 'Critical';
+    status: 'Excellent' | 'Good' | 'Fair' | 'Poor' | 'Critical';
     percentage: number;
   };
   usageRate: string;
@@ -37,11 +39,12 @@ export interface InventoryRow {
   id: string;
   item: string;
   type: string;
+  image?: string;
   modelCategory: string;
   quantity: number;
   lastUpdated: string;
   updatedBy: string;
-  status: 'Available' | 'In demand' | 'Out of stock';
+  status: 'Available' | 'In demand' | 'Discontinued' | 'Out of stock';
   location: string;
 }
 

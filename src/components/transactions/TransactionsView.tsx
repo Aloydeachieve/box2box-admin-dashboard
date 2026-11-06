@@ -13,6 +13,10 @@ import { BookingsFilterModal, BookingsFilterState } from './modals/BookingsFilte
 import { EarningsFilterModal, EarningsFilterState } from './modals/EarningsFilterModal';
 import { DepositsFilterModal, DepositsFilterState } from './modals/DepositsFilterModal';
 import { WithdrawalsFilterModal, WithdrawalsFilterState } from './modals/WithdrawalsFilterModal';
+import { SubscriptionsTab } from './tabs/SubscriptionsTab';
+import { HardwareSalesTab } from './tabs/HardwareSalesTab';
+import { SubscriptionsFilterModal, SubscriptionsFilterState } from './modals/SubscriptionsFilterModal';
+import { HardwareSalesFilterModal, HardwareSalesFilterState } from './modals/HardwareSalesFilterModal';
 
 export const TransactionsView: React.FC = () => {
   const { isLightMode } = useAdmin();
@@ -55,6 +59,19 @@ export const TransactionsView: React.FC = () => {
   const [withdrawalsFilters, setWithdrawalsFilters] = useState<WithdrawalsFilterState>({
     statuses: ['Pending', 'Successful', 'Failed'],
     userTypes: ['Box owner', 'Rider', 'Customer'],
+    duration: 'Today',
+  });
+
+  // 5. Subscriptions Filters
+  const [subscriptionsFilters, setSubscriptionsFilters] = useState<SubscriptionsFilterState>({
+    statuses: ['Active', 'Inactive'],
+    plans: ['7 days', '1 month', '3 months', '6 months', '12 months'],
+    duration: 'Today',
+  });
+
+  // 6. Hardware Sales Filters
+  const [hardwareSalesFilters, setHardwareSalesFilters] = useState<HardwareSalesFilterState>({
+    statuses: ['Paid', 'Partially paid'],
     duration: 'Today',
   });
 
@@ -327,20 +344,20 @@ export const TransactionsView: React.FC = () => {
           />
         )}
 
-        {(activeTab === 'Subscriptions' || activeTab === 'Hardware sales') && (
-          <div
-            style={{
-              padding: '60px 20px',
-              textAlign: 'center',
-              borderRadius: '16px',
-              border: `1px solid ${borderColor}`,
-              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
-              color: subtextColor,
-              fontSize: '14px',
-            }}
-          >
-            No {activeTab.toLowerCase()} recorded yet.
-          </div>
+        {activeTab === 'Subscriptions' && (
+          <SubscriptionsTab
+            searchQuery={searchQuery}
+            filters={subscriptionsFilters}
+            isLightMode={isLightMode}
+          />
+        )}
+
+        {activeTab === 'Hardware sales' && (
+          <HardwareSalesTab
+            searchQuery={searchQuery}
+            filters={hardwareSalesFilters}
+            isLightMode={isLightMode}
+          />
         )}
       </div>
 
@@ -382,6 +399,26 @@ export const TransactionsView: React.FC = () => {
           isLightMode={isLightMode}
           initialFilters={withdrawalsFilters}
           onApplyFilters={(f) => setWithdrawalsFilters(f)}
+        />
+      )}
+
+      {activeTab === 'Subscriptions' && (
+        <SubscriptionsFilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          isLightMode={isLightMode}
+          initialFilters={subscriptionsFilters}
+          onApplyFilters={(f) => setSubscriptionsFilters(f)}
+        />
+      )}
+
+      {activeTab === 'Hardware sales' && (
+        <HardwareSalesFilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          isLightMode={isLightMode}
+          initialFilters={hardwareSalesFilters}
+          onApplyFilters={(f) => setHardwareSalesFilters(f)}
         />
       )}
     </div>

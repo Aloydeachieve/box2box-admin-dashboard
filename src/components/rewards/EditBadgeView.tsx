@@ -47,7 +47,7 @@ export const EditBadgeView: React.FC<EditBadgeViewProps> = ({ badgeId }) => {
 
   // Colors and Tokens
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
-  const innerInputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const innerInputBg = isLightMode ? '#F9FAFB' : '#141416';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';

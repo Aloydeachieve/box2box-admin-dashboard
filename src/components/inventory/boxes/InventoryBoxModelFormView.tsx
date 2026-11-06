@@ -76,7 +76,7 @@ export const InventoryBoxModelFormView: React.FC<InventoryBoxModelFormViewProps>
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
-  const inputBg = isLightMode ? '#F3F4F6' : 'transparent';
+  const inputBg = isLightMode ? '#F3F4F6' : '#141416';
   const yellowColor = '#F5C842';
 
   // Parts list filtered by search

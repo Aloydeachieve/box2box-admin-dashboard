@@ -173,7 +173,7 @@ export const OrdersView: React.FC = () => {
                 right: 0,
                 marginTop: '4px',
                 width: '120px',
-                backgroundColor: cardBg,
+                backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
                 border: `1px solid ${borderColor}`,
                 borderRadius: '8px',
                 padding: '4px',

@@ -6,6 +6,7 @@ import { ChevronDown, Plus, X } from 'lucide-react';
 import { useAdmin } from '@/components/layout/AdminContext';
 import { ToastNotification } from '@/components/common/ToastNotification';
 import { initialBoxParts } from '@/lib/inventoryMockData';
+import { PartsSearchDropdown } from './PartsSearchDropdown';
 
 interface EditPartViewProps {
   partId?: string;
@@ -38,7 +39,7 @@ export const EditPartView: React.FC<EditPartViewProps> = ({ partId = 'bp-1' }) =
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
-  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : '#141416';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -201,7 +202,7 @@ export const EditPartView: React.FC<EditPartViewProps> = ({ partId = 'bp-1' }) =
             </div>
           </div>
 
-          {/* Row 2: Category (Half-width) */}
+          {/* Row 2: Category (Half-width) with Opaque Search Dropdown */}
           <div
             style={{
               display: 'grid',
@@ -209,84 +210,17 @@ export const EditPartView: React.FC<EditPartViewProps> = ({ partId = 'bp-1' }) =
               gap: '20px',
             }}
           >
-            <div style={{ position: 'relative' }}>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowCategoryDropdown((prev) => !prev);
-                }}
-                style={{
-                  backgroundColor: inputBg,
-                  borderRadius: '8px',
-                  border: `1px solid ${borderColor}`,
-                  padding: '10px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  minHeight: '54px',
-                  boxSizing: 'border-box',
-                  cursor: 'pointer',
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '10px', color: subtextColor, fontWeight: 500, display: 'block' }}>
-                    Category
-                  </span>
-                  <span style={{ fontSize: '14px', color: textColor, fontWeight: 500 }}>
-                    {category}
-                  </span>
-                </div>
-                <ChevronDown size={16} color={subtextColor} />
-              </div>
-
-              {/* Dropdown Options */}
-              {showCategoryDropdown && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    marginTop: '6px',
-                    backgroundColor: cardBg,
-                    border: `1px solid ${borderColor}`,
-                    borderRadius: '8px',
-                    zIndex: 20,
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',
-                    overflow: 'hidden',
-                  }}
-                >
-                  {categoryOptions.map((opt) => (
-                    <div
-                      key={opt}
-                      onClick={() => {
-                        setCategory(opt);
-                        setShowCategoryDropdown(false);
-                      }}
-                      style={{
-                        padding: '10px 14px',
-                        fontSize: '13px',
-                        color: category === opt ? yellowColor : textColor,
-                        backgroundColor: category === opt ? (isLightMode ? '#FEF9C3' : '#1C1A14') : 'transparent',
-                        cursor: 'pointer',
-                      }}
-                      onMouseOver={(e) => {
-                        if (category !== opt) {
-                          e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226';
-                        }
-                      }}
-                      onMouseOut={(e) => {
-                        if (category !== opt) {
-                          e.currentTarget.style.backgroundColor = 'transparent';
-                        }
-                      }}
-                    >
-                      {opt}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PartsSearchDropdown
+              label="Category"
+              value={category}
+              options={categoryOptions}
+              isOpen={showCategoryDropdown}
+              onToggle={() => setShowCategoryDropdown(!showCategoryDropdown)}
+              onClose={() => setShowCategoryDropdown(false)}
+              onSelect={(cat) => setCategory(cat)}
+              isLightMode={isLightMode}
+              searchPlaceholder="Search category..."
+            />
           </div>
 
           {/* Row 3: Media Upload with '+' and Previews matching Image 5 */}

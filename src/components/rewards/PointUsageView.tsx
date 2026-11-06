@@ -91,6 +91,7 @@ export const PointUsageView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState('This week');
+  const [isPeriodDropdownOpen, setIsPeriodDropdownOpen] = useState(false);
 
   // Breakdown Filter State
   const [breakdownFilters, setBreakdownFilters] = useState<{
@@ -396,26 +397,73 @@ export const PointUsageView: React.FC = () => {
               </span>
             </div>
 
-            {/* Time Filter Pill */}
-            <button
-              type="button"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '6px 12px',
-                borderRadius: '8px',
-                border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
-                color: textColor,
-                fontSize: '12px',
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-            >
-              <span>{selectedPeriod}</span>
-              <ChevronDown size={14} color={subtextColor} />
-            </button>
+            {/* Time Filter Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                type="button"
+                onClick={() => setIsPeriodDropdownOpen(!isPeriodDropdownOpen)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  border: `1px solid ${borderColor}`,
+                  backgroundColor: 'transparent',
+                  color: textColor,
+                  fontSize: '12px',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                }}
+              >
+                <span>{selectedPeriod}</span>
+                <ChevronDown size={14} color={subtextColor} />
+              </button>
+
+              {isPeriodDropdownOpen && (
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: 0,
+                    marginTop: '4px',
+                    width: '130px',
+                    backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
+                    borderRadius: '8px',
+                    border: `1px solid ${borderColor}`,
+                    padding: '4px',
+                    zIndex: 30,
+                    boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                  }}
+                >
+                  {['Today', 'This week', 'This month', 'This year'].map((period) => (
+                    <div
+                      key={period}
+                      onClick={() => {
+                        setSelectedPeriod(period);
+                        setIsPeriodDropdownOpen(false);
+                      }}
+                      style={{
+                        padding: '8px 10px',
+                        fontSize: '12px',
+                        color: selectedPeriod === period ? yellowColor : textColor,
+                        cursor: 'pointer',
+                        borderRadius: '6px',
+                      }}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.backgroundColor = 'transparent')
+                      }
+                    >
+                      {period}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 5 Stat Cards (Zero Extra Contrast: transparent background + 1px subtle border) */}

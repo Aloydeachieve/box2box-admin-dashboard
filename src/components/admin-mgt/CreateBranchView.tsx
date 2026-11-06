@@ -40,6 +40,7 @@ export const CreateBranchView: React.FC = () => {
 
   // Design Tokens (Rule 6: Zero Extra Contrast & Natural Background)
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const inputBg = isLightMode ? '#FFFFFF' : '#141416';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const yellowColor = '#F5C842';
@@ -154,7 +155,7 @@ export const CreateBranchView: React.FC = () => {
                 height: '46px',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 color: textColor,
                 padding: '0 14px',
                 fontSize: '13px',
@@ -181,7 +182,7 @@ export const CreateBranchView: React.FC = () => {
                 height: '46px',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 color: textColor,
                 padding: '0 14px',
                 fontSize: '13px',
@@ -206,7 +207,7 @@ export const CreateBranchView: React.FC = () => {
                 height: '46px',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 color: country ? textColor : subtextColor,
                 padding: '0 14px',
                 fontSize: '13px',
@@ -235,7 +236,7 @@ export const CreateBranchView: React.FC = () => {
                 height: '46px',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 color: state ? textColor : subtextColor,
                 padding: '0 14px',
                 fontSize: '13px',
@@ -264,7 +265,7 @@ export const CreateBranchView: React.FC = () => {
                 height: '46px',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 color: city ? textColor : subtextColor,
                 padding: '0 14px',
                 fontSize: '13px',

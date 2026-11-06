@@ -11,12 +11,24 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
   const [revenuePeriod, setRevenuePeriod] = useState('Monthly');
   const [showRevMenu, setShowRevMenu] = useState(false);
 
+  // 7 days from Monday through Sunday matching Figma
   const revenueBars = [
-    { label: 'Mon', value: 0.65 },
-    { label: 'Tue', value: 0.90 },
-    { label: 'Wed', value: 0.45 },
+    { label: 'Mon', value: 0.38 },
+    { label: 'Tue', value: 0.68 },
+    { label: 'Wed', value: 0.42 },
     { label: 'Thu', value: 0.55 },
-    { label: 'Fri', value: 0.98 },
+    { label: 'Fri', value: 0.88 },
+    { label: 'Sat', value: 0.95 },
+    { label: 'Sun', value: 0.60 },
+  ];
+
+  const yTicks = [
+    { label: '1B', y: 20 },
+    { label: '800M', y: 51 },
+    { label: '600M', y: 82 },
+    { label: '400M', y: 113 },
+    { label: '200M', y: 144 },
+    { label: '0', y: 175 },
   ];
 
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
@@ -30,16 +42,16 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
         backgroundColor: cardBg,
         borderRadius: '16px',
         border: cardBorder,
-        padding: '20px 22px',
+        padding: '22px 24px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.05)' : 'none',
-        flex: '0 0 380px',
-        minWidth: '380px',
-        maxWidth: '380px',
+        flex: '0 0 440px',
+        minWidth: '430px',
+        maxWidth: '450px',
         boxSizing: 'border-box',
-        height: '240px',
+        height: '320px',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
@@ -50,7 +62,7 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
           <div
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
-              fontSize: '22px',
+              fontSize: '24px',
               fontWeight: 700,
               color: textColor,
               letterSpacing: '-0.02em',
@@ -67,18 +79,18 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '5px',
-              padding: '4px 10px',
+              gap: '6px',
+              padding: '5px 12px',
               borderRadius: '6px',
               backgroundColor: isLightMode ? '#F3F4F6' : 'transparent',
-              border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.08)',
+              border: isLightMode ? '1px solid #D1D5DB' : '1px solid rgba(255, 255, 255, 0.12)',
               color: isLightMode ? '#111827' : '#FFFFFF',
-              fontSize: '11px',
+              fontSize: '12px',
               cursor: 'pointer',
             }}
           >
             <span>{revenuePeriod}</span>
-            <ChevronDown size={12} color={isLightMode ? '#6B7280' : '#8E8E93'} />
+            <ChevronDown size={14} color={isLightMode ? '#6B7280' : '#8E8E93'} />
           </button>
           {showRevMenu && (
             <div
@@ -87,13 +99,13 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
                 top: '100%',
                 right: 0,
                 marginTop: '4px',
-                width: '100px',
+                width: '105px',
                 backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
-                borderRadius: '6px',
-                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+                borderRadius: '8px',
+                border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.12)',
                 padding: '4px',
                 zIndex: 20,
-                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)',
+                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.4)',
               }}
             >
               {['Daily', 'Weekly', 'Monthly'].map((p) => (
@@ -104,9 +116,9 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
                     setShowRevMenu(false);
                   }}
                   style={{
-                    padding: '5px 8px',
-                    fontSize: '11px',
-                    borderRadius: '4px',
+                    padding: '6px 10px',
+                    fontSize: '12px',
+                    borderRadius: '6px',
                     color: isLightMode ? '#111827' : '#FFFFFF',
                     cursor: 'pointer',
                   }}
@@ -121,55 +133,80 @@ export const RevenueCard: React.FC<RevenueCardProps> = ({ isLightMode = false })
         </div>
       </div>
 
-      {/* Bar chart area */}
-      <div style={{ marginTop: '16px', display: 'flex', alignItems: 'flex-end', height: '140px', gap: '12px' }}>
-        {/* Y-axis Labels: 1B, 800M, 600M, 400M, 200M, 0 from Figma */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '110px',
-            fontSize: '8px',
-            color: isLightMode ? '#9CA3AF' : '#71717A',
-            marginBottom: '20px',
-          }}
-        >
-          <span>1B</span>
-          <span>800M</span>
-          <span>600M</span>
-          <span>400M</span>
-          <span>200M</span>
-          <span>0</span>
-        </div>
-
-        {/* Bars */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', height: '100%' }}>
-          {revenueBars.map((bar) => (
-            <div
-              key={bar.label}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '6px',
-                height: '100%',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <div
-                style={{
-                  width: '18px',
-                  height: `${bar.value * 100}px`,
-                  backgroundColor: '#F5C842',
-                  borderRadius: '4px 4px 0 0',
-                  transition: 'height 0.3s ease',
-                }}
+      {/* Spacious SVG Bar Chart with white ticks and labels matching Figma */}
+      <div style={{ marginTop: '12px', height: '205px' }}>
+        <svg width="100%" height="100%" viewBox="0 0 390 205" preserveAspectRatio="none">
+          {/* Y-axis Ticks & Horizontal Dotted Gridlines in white */}
+          {yTicks.map((tick) => (
+            <g key={tick.label}>
+              <text
+                x="30"
+                y={tick.y + 4}
+                fill={isLightMode ? '#111827' : '#FFFFFF'}
+                fontSize="9.5"
+                fontWeight="500"
+                textAnchor="end"
+                fontFamily="inherit"
+              >
+                {tick.label}
+              </text>
+              {/* Dotted horizontal grid line running across chart */}
+              <line
+                x1="36"
+                y1={tick.y}
+                x2="380"
+                y2={tick.y}
+                stroke={isLightMode ? 'rgba(0,0,0,0.08)' : 'rgba(255, 255, 255, 0.08)'}
+                strokeDasharray={tick.label === '0' ? 'none' : '3 3'}
+                strokeWidth="1"
               />
-              <span style={{ fontSize: '9px', color: isLightMode ? '#6B7280' : '#8E8E93' }}>{bar.label}</span>
-            </div>
+            </g>
           ))}
-        </div>
+
+          {/* Vertical Y-axis line */}
+          <line
+            x1="36"
+            y1="20"
+            x2="36"
+            y2="175"
+            stroke={isLightMode ? 'rgba(0,0,0,0.15)' : 'rgba(255, 255, 255, 0.15)'}
+            strokeWidth="1"
+          />
+
+          {/* 7 Bars (Mon through Sun) with rounded top tips */}
+          {revenueBars.map((bar, idx) => {
+            const colWidth = 330 / 7;
+            const cx = 40 + colWidth * idx + colWidth / 2;
+            const barWidth = 18;
+            const barHeight = bar.value * 155;
+            const barY = 175 - barHeight;
+
+            return (
+              <g key={bar.label}>
+                <rect
+                  x={cx - barWidth / 2}
+                  y={barY}
+                  width={barWidth}
+                  height={barHeight}
+                  rx="4"
+                  ry="4"
+                  fill="#F5C842"
+                />
+                <text
+                  x={cx}
+                  y="195"
+                  fill={isLightMode ? '#111827' : '#FFFFFF'}
+                  fontSize="9.5"
+                  fontWeight="500"
+                  textAnchor="middle"
+                  fontFamily="inherit"
+                >
+                  {bar.label}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
       </div>
     </div>
   );

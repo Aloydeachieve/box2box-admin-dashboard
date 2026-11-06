@@ -57,5 +57,17 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - **Fixed Container Height**: Tabbed modals must have a standard fixed container height (e.g. `height: 440px`, `boxSizing: border-box`) and an inner scrollable options area (`flex: 1`, `overflowY: auto`). Switching between tabs with differing numbers of items must NEVER cause the modal container to jump, resize, or shift dimensions.
 - **Right-Aligned Indicators**: Option lists (checkboxes and radios) must align the label text to the left and the checkbox/radio indicator to the far right (`display: flex; align-items: center; justify-content: space-between; width: 100%`). Checkboxes and radios must never be positioned before or next to the label text on the left.
 
+## 9. Table Action Dropdown Positioning Rule
+- On all data tables across the dashboard that feature a 3-dots action menu (`MoreVertical`), the action dropdown menu must NEVER be clipped by table containers, horizontal scroll wrappers, or go behind other rows or the bottom of the table.
+- For rows near the bottom of the table (e.g. `index >= items.length - 2` or `index >= items.length - 1`), the dropdown MUST be positioned upward using `top: 'auto'`, `bottom: '32px'`, and a prominent `zIndex` (`zIndex: 50` or higher).
+- Table card containers must have `overflow: 'visible'` (or properly calculate dropdown placement) to ensure all menus render completely on top of the UI.
+
+## 10. Form Input Opaque Background Standard
+- Form input elements (text inputs, selects, textareas, date inputs, and floating field containers) across all dashboard forms must NOT be completely transparent or blend indistinguishably into the background.
+- All form inputs must feature a distinct, subtle dark opaque fill (`#141416` in dark mode, `#FFFFFF` / `#F9FAFB` in light mode) bounded by the standard 1px border (`rgba(255, 255, 255, 0.08)` in dark mode, `#E5E7EB` in light mode).
+- This applies consistently to all creation forms, editing views, and filter inputs across the codebase.
+
+
+
 
 

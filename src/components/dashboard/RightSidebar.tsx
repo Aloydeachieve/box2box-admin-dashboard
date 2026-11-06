@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import {
   REPORTS_DATA,
   FLAG_TRIGGERS_DATA,
@@ -15,13 +16,13 @@ interface RightSidebarProps {
 }
 
 export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode = false }) => {
+  const router = useRouter();
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'resolved':
-      case 'pickup confirmed':
         return '#10B981'; // Green
       case 'in progress':
-      case 'in transit':
       case 'needs review':
         return '#F59E0B'; // Amber
       case 'critical':
@@ -32,10 +33,19 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
     }
   };
 
-  const dividerStyle = {
-    height: '1px',
-    backgroundColor: isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.07)',
-    margin: '18px 0',
+  const getReportSvg = (title: string) => {
+    const t = title.toLowerCase();
+    if (t.includes('cleanliness')) return '/image/cleanliness-report.svg';
+    if (t.includes('theft')) return '/image/theft-report.svg';
+    if (t.includes('payment')) return '/image/payment-report.svg';
+    return '/image/package-report.svg';
+  };
+
+  const dividerStyle: React.CSSProperties = {
+    width: '100%',
+    height: '0px',
+    borderTop: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.12)',
+    margin: '22px 0',
   };
 
   return (
@@ -71,9 +81,17 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
         </div>
       )}
 
-      {/* 1. Reports Section (Figma Screenshot 2) */}
+      {/* 1. Reports Section (Figma Screenshot 1 & 2) */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '4px',
+            cursor: 'pointer',
+          }}
+        >
           <h3
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
@@ -85,15 +103,23 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
           >
             Reports
           </h3>
-          <button style={{ background: 'none', border: 'none', color: '#8E8E93', fontSize: '11px', cursor: 'pointer' }}>
+          <span style={{ color: '#8E8E93', fontSize: '11px', fontWeight: 500 }}>
             See more
-          </button>
+          </span>
         </div>
-        <div style={{ fontSize: '10px', color: '#71717A', marginBottom: '14px' }}>
+        {/* Prominent Bold Date matching Figma */}
+        <div
+          style={{
+            fontSize: '12px',
+            fontWeight: 700,
+            color: isLightMode ? '#111827' : '#FFFFFF',
+            marginBottom: '14px',
+          }}
+        >
           June 05, 2025
         </div>
 
-        {/* Clean flat list with left color-coded indicators matching Figma */}
+        {/* Clean flat list with left color-coded indicators and actual report SVGs */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {REPORTS_DATA.map((rep) => {
             const colorCode =
@@ -112,7 +138,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
                   transition: 'opacity 0.15s',
                 }}
               >
-                {/* Thumbnail Icon */}
+                {/* Official SVG Report Thumbnail from /public/image/ */}
                 <div
                   style={{
                     width: '32px',
@@ -124,11 +150,14 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#F5C842',
-                    fontSize: '12px',
+                    overflow: 'hidden',
                   }}
                 >
-                  📦
+                  <img
+                    src={getReportSvg(rep.title)}
+                    alt={rep.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
                 </div>
 
                 <div style={{ flex: 1, minWidth: 0 }}>
@@ -182,12 +211,20 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
         </div>
       </div>
 
-      {/* Light division line between sections */}
+      {/* Division line between sections */}
       <div style={dividerStyle} />
 
-      {/* 2. Flag triggers Section (Figma Screenshot 2 & 5) */}
+      {/* 2. Flag triggers Section (Figma Screenshot 1 & 2) */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '4px',
+            cursor: 'pointer',
+          }}
+        >
           <h3
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
@@ -199,11 +236,19 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
           >
             Flag triggers
           </h3>
-          <button style={{ background: 'none', border: 'none', color: '#8E8E93', fontSize: '11px', cursor: 'pointer' }}>
+          <span style={{ color: '#8E8E93', fontSize: '11px', fontWeight: 500 }}>
             See more
-          </button>
+          </span>
         </div>
-        <div style={{ fontSize: '10px', color: '#71717A', marginBottom: '14px' }}>
+        {/* Prominent Bold Date matching Figma */}
+        <div
+          style={{
+            fontSize: '12px',
+            fontWeight: 700,
+            color: isLightMode ? '#111827' : '#FFFFFF',
+            marginBottom: '14px',
+          }}
+        >
           June 05, 2025
         </div>
 
@@ -234,6 +279,7 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  {/* Clean yellow action button WITHOUT underline matching Figma */}
                   <button
                     onClick={() => alert(`Triggered action: ${flag.actionLabel} on ${flag.boxId}`)}
                     style={{
@@ -241,10 +287,10 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
                       border: 'none',
                       padding: 0,
                       color: '#F5C842',
-                      fontSize: '10px',
+                      fontSize: '11px',
                       fontWeight: 600,
                       cursor: 'pointer',
-                      textDecoration: 'underline',
+                      textDecoration: 'none',
                     }}
                   >
                     {flag.actionLabel}
@@ -266,12 +312,21 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
         </div>
       </div>
 
-      {/* Light division line between sections */}
+      {/* Division line between sections */}
       <div style={dividerStyle} />
 
-      {/* 3. New Bookings Section */}
+      {/* 3. New Bookings Section (Colourless - No left color border matching Figma) */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div
+          onClick={() => router.push('/transactions')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '4px',
+            cursor: 'pointer',
+          }}
+        >
           <h3
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
@@ -283,44 +338,60 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
           >
             New bookings
           </h3>
-          <button style={{ background: 'none', border: 'none', color: '#8E8E93', fontSize: '11px', cursor: 'pointer' }}>
+          <span style={{ color: '#8E8E93', fontSize: '11px', fontWeight: 500 }}>
             See more
-          </button>
+          </span>
         </div>
-        <div style={{ fontSize: '10px', color: '#71717A', marginBottom: '12px' }}>
+        {/* Prominent Bold Date matching Figma */}
+        <div
+          style={{
+            fontSize: '12px',
+            fontWeight: 700,
+            color: isLightMode ? '#111827' : '#FFFFFF',
+            marginBottom: '14px',
+          }}
+        >
           June 05, 2025
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {/* Clean arrangement without left border color coding */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {BOOKINGS_DATA.map((bk) => (
             <div
               key={bk.id}
               style={{
                 display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                paddingLeft: '8px',
-                borderLeft: '2.5px solid #F5C842',
+                flexDirection: 'column',
+                gap: '2px',
               }}
             >
-              <div>
-                <div style={{ fontSize: '11px', fontWeight: 600, color: isLightMode ? '#111827' : '#FFFFFF' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: isLightMode ? '#111827' : '#FFFFFF' }}>
                   {bk.bookingCode}
-                </div>
-                <div style={{ fontSize: '9px', color: '#71717A' }}>{bk.boxInfo}</div>
+                </span>
+                <span style={{ fontSize: '10px', color: '#71717A' }}>{bk.time}</span>
               </div>
-              <span style={{ fontSize: '9px', color: '#71717A' }}>{bk.time}</span>
+              <div style={{ fontSize: '10px', color: '#8E8E93' }}>{bk.boxInfo}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Light division line between sections */}
+      {/* Division line between sections */}
       <div style={dividerStyle} />
 
-      {/* 4. Active Deliveries Section */}
+      {/* 4. Active Deliveries Section (Colourless - Clean white/gray text matching Figma) */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+        <div
+          onClick={() => router.push('/transactions')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '4px',
+            cursor: 'pointer',
+          }}
+        >
           <h3
             style={{
               fontFamily: 'var(--font-outfit), sans-serif',
@@ -332,46 +403,50 @@ export const RightSidebar: React.FC<RightSidebarProps> = ({ onClose, isLightMode
           >
             Active Deliveries
           </h3>
-          <button style={{ background: 'none', border: 'none', color: '#8E8E93', fontSize: '11px', cursor: 'pointer' }}>
+          <span style={{ color: '#8E8E93', fontSize: '11px', fontWeight: 500 }}>
             See more
-          </button>
+          </span>
         </div>
-        <div style={{ fontSize: '10px', color: '#71717A', marginBottom: '12px' }}>
+        {/* Prominent Bold Date matching Figma */}
+        <div
+          style={{
+            fontSize: '12px',
+            fontWeight: 700,
+            color: isLightMode ? '#111827' : '#FFFFFF',
+            marginBottom: '14px',
+          }}
+        >
           June 05, 2025
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {/* Clean arrangement without left border color coding and without colored status text */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {ACTIVE_DELIVERIES_DATA.map((del) => {
-            const colorCode =
-              del.statusText === 'Pickup confirmed'
-                ? '#10B981'
-                : del.statusText === 'In transit'
-                ? '#F59E0B'
-                : '#71717A';
-
             return (
               <div
                 key={del.id}
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingLeft: '8px',
-                  borderLeft: `2.5px solid ${colorCode}`,
+                  flexDirection: 'column',
+                  gap: '2px',
                 }}
               >
-                <div>
-                  <div style={{ fontSize: '11px', fontWeight: 600, color: isLightMode ? '#111827' : '#FFFFFF' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 600, color: isLightMode ? '#111827' : '#FFFFFF' }}>
                     {del.bookingCode}
-                  </div>
-                  <div style={{ fontSize: '9px', color: colorCode }}>{del.statusText}</div>
+                  </span>
+                  <span style={{ fontSize: '10px', color: '#71717A' }}>{del.time}</span>
                 </div>
-                <span style={{ fontSize: '9px', color: '#71717A' }}>{del.time}</span>
+                {/* Clean neutral light gray status text matching Figma */}
+                <div style={{ fontSize: '10px', color: '#8E8E93' }}>{del.statusText}</div>
               </div>
             );
           })}
         </div>
       </div>
+
+      {/* Division line after Active Deliveries */}
+      <div style={dividerStyle} />
     </aside>
   );
 };

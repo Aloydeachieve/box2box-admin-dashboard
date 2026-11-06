@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
 import { useAdmin } from '@/components/layout/AdminContext';
 import { ToastNotification } from '@/components/common/ToastNotification';
+import { PartsSearchDropdown } from './PartsSearchDropdown';
 import {
   initialBoxParts,
   initialPartUnits,
@@ -53,7 +54,7 @@ export const EditPartStockView: React.FC<EditPartStockViewProps> = ({
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
-  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : '#141416';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -199,84 +200,19 @@ export const EditPartStockView: React.FC<EditPartStockViewProps> = ({
               />
             </div>
 
-            {/* Col 1, Row 2: Supplier Dropdown */}
-            <div style={{ position: 'relative' }}>
-              <label
-                style={{
-                  fontSize: '12px',
-                  color: subtextColor,
-                  fontWeight: 500,
-                  display: 'block',
-                  marginBottom: '8px',
-                }}
-              >
-                Supplier
-              </label>
-              <div
-                onClick={() => setShowSupplierMenu(!showSupplierMenu)}
-                style={{
-                  width: '100%',
-                  backgroundColor: inputBg,
-                  border: `1px solid ${borderColor}`,
-                  borderRadius: '8px',
-                  padding: '12px 14px',
-                  fontSize: '14px',
-                  color: textColor,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  boxSizing: 'border-box',
-                }}
-              >
-                <span>{supplier}</span>
-                <ChevronDown size={16} color={subtextColor} />
-              </div>
-
-              {showSupplierMenu && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    marginTop: '4px',
-                    backgroundColor: cardBg,
-                    border: `1px solid ${borderColor}`,
-                    borderRadius: '8px',
-                    padding: '6px',
-                    zIndex: 50,
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-                  }}
-                >
-                  {supplierOptions.map((opt) => (
-                    <div
-                      key={opt}
-                      onClick={() => {
-                        setSupplier(opt);
-                        setShowSupplierMenu(false);
-                      }}
-                      style={{
-                        padding: '8px 12px',
-                        fontSize: '13px',
-                        color: textColor,
-                        cursor: 'pointer',
-                        borderRadius: '6px',
-                      }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.backgroundColor = isLightMode
-                          ? '#F3F4F6'
-                          : '#222226')
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.backgroundColor = 'transparent')
-                      }
-                    >
-                      {opt}
-                    </div>
-                  ))}
-                </div>
-              )}
+            {/* Col 1, Row 2: Supplier Dropdown with Opaque Search Dropdown */}
+            <div>
+              <PartsSearchDropdown
+                label="Supplier"
+                value={supplier}
+                options={supplierOptions}
+                isOpen={showSupplierMenu}
+                onToggle={() => setShowSupplierMenu(!showSupplierMenu)}
+                onClose={() => setShowSupplierMenu(false)}
+                onSelect={(opt) => setSupplier(opt)}
+                isLightMode={isLightMode}
+                searchPlaceholder="Search supplier..."
+              />
             </div>
 
             {/* Col 2, Row 2: Amount (with Naira sign) */}

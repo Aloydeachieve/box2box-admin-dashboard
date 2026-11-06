@@ -46,7 +46,7 @@ export default function UsersManagementPage() {
   const [timePeriod, setTimePeriod] = useState('This week');
   const [showTimeMenu, setShowTimeMenu] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>(['1', '2', '4', '5']);
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [activeActionMenuId, setActiveActionMenuId] = useState<string | null>(null);
 
   // Confirmation Modal state

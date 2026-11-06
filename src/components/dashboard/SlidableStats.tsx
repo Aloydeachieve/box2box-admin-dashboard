@@ -313,7 +313,7 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
             display: 'grid',
             gridTemplateRows: 'repeat(2, 1fr)',
             gridAutoFlow: 'column',
-            gridAutoColumns: '162px',
+            gridAutoColumns: 'clamp(124px, calc((100% - 66px) / 3.25), 150px)',
             gap: '10px',
             paddingLeft: '22px',
             paddingRight: '22px',
@@ -331,12 +331,12 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
                   backgroundColor: isLightMode ? '#F9FAFB' : 'transparent',
                   borderRadius: '12px',
                   border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
-                  padding: '14px 14px',
+                  padding: '12px 12px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   height: '100%',
-                  minHeight: '105px',
+                  minHeight: '100px',
                   boxSizing: 'border-box',
                 }}
               >
@@ -394,6 +394,16 @@ export const SlidableStats: React.FC<SlidableStatsProps> = ({ isLightMode = fals
               </div>
             );
           })}
+
+          {/* Guaranteed 22px trailing padding when scrolled completely to the right edge */}
+          <div
+            aria-hidden="true"
+            style={{
+              width: '12px',
+              gridRow: '1 / -1',
+              pointerEvents: 'none',
+            }}
+          />
         </div>
       </div>
     </div>

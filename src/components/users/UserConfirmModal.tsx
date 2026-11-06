@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Check, AlertTriangle, Trash2, UserX, UserCheck } from 'lucide-react';
+import { X, Check } from 'lucide-react';
 
 export type UserActionType = 'suspend' | 'delete' | 'reactivate';
 
@@ -28,7 +28,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState('');
 
-  // Required keyword based on action and whether it's bulk
+  // Required keyword based on action and whether it's bulk matching Figma Image 4
   const expectedKeyword = isBulk
     ? actionType === 'suspend'
       ? 'suspend all'
@@ -51,7 +51,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Visual assets matching Figma Image 1 & 3
+  // Visual assets matching Figma Image 4
   const getModalConfig = () => {
     switch (actionType) {
       case 'suspend':
@@ -62,28 +62,34 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
             : 'Suspending a user makes them unable to use their app.',
           warning2: isBulk
             ? `Are you sure you want to suspend these ${userCount} users?`
-            : `Are you sure you want to suspend ${userName}?`,
+            : `Are you sure you want to suspend this user?`,
           buttonLabel: isBulk ? 'Suspend users' : 'Suspend user',
-          buttonBg: '#991B1B',
-          buttonHoverBg: '#DC2626',
-          buttonTextColor: '#FFFFFF',
+          activeBg: '#DC2626',
+          inactiveBg: '#351C1C',
+          inactiveTextColor: '#7A3A3A',
           icon: (
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                backgroundColor: '#2A200B',
-                border: '2px solid #F5C842',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px auto',
-                position: 'relative',
-              }}
+            <svg
+              width="60"
+              height="60"
+              viewBox="0 0 60 60"
+              fill="none"
+              style={{ margin: '0 auto 16px auto', display: 'block' }}
             >
-              <UserX size={32} color="#F5C842" />
-            </div>
+              {/* Head */}
+              <circle cx="30" cy="18" r="11" fill="#F5C842" />
+              {/* Dark X inside head */}
+              <path
+                d="M26 14L34 22M34 14L26 22"
+                stroke="#141416"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              {/* Shoulders */}
+              <path
+                d="M13 47C13 36 21 34 30 34C39 34 47 36 47 47C47 50 44 51 40 51H20C16 51 13 50 13 47Z"
+                fill="#F5C842"
+              />
+            </svg>
           ),
         };
       case 'delete':
@@ -94,26 +100,26 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
             : 'Deleting a user removes their data from the database.',
           warning2: isBulk
             ? `Are you sure you want to delete these ${userCount} users?`
-            : `Are you sure you want to delete ${userName}?`,
+            : `Are you sure you want to delete this user?`,
           buttonLabel: isBulk ? 'Delete users' : 'Delete user',
-          buttonBg: '#991B1B',
-          buttonHoverBg: '#DC2626',
-          buttonTextColor: '#FFFFFF',
+          activeBg: '#DC2626',
+          inactiveBg: '#351C1C',
+          inactiveTextColor: '#7A3A3A',
           icon: (
             <div
               style={{
-                width: '64px',
-                height: '64px',
+                width: '56px',
+                height: '56px',
                 borderRadius: '50%',
                 backgroundColor: '#EF4444',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 16px auto',
-                boxShadow: '0 4px 16px rgba(239, 68, 68, 0.4)',
+                boxShadow: '0 4px 16px rgba(239, 68, 68, 0.35)',
               }}
             >
-              <X size={34} color="#FFFFFF" strokeWidth={2.5} />
+              <X size={28} color="#FFFFFF" strokeWidth={3} />
             </div>
           ),
         };
@@ -125,26 +131,26 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
             : 'Reactivating a user allows them access to their account.',
           warning2: isBulk
             ? `Are you sure you want to reactivate these ${userCount} users?`
-            : `Are you sure you want to reactivate ${userName}?`,
+            : `Are you sure you want to reactivate this user?`,
           buttonLabel: isBulk ? 'Reactivate users' : 'Reactivate user',
-          buttonBg: '#F5C842',
-          buttonHoverBg: '#E5B832',
-          buttonTextColor: '#000000',
+          activeBg: '#F5C842',
+          inactiveBg: '#352F17',
+          inactiveTextColor: '#736B42',
           icon: (
             <div
               style={{
-                width: '64px',
-                height: '64px',
+                width: '56px',
+                height: '56px',
                 borderRadius: '50%',
                 backgroundColor: '#10B981',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 margin: '0 auto 16px auto',
-                boxShadow: '0 4px 16px rgba(16, 185, 129, 0.4)',
+                boxShadow: '0 4px 16px rgba(16, 185, 129, 0.35)',
               }}
             >
-              <Check size={34} color="#FFFFFF" strokeWidth={3} />
+              <Check size={30} color="#FFFFFF" strokeWidth={3} />
             </div>
           ),
         };
@@ -171,14 +177,13 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
       <div
         style={{
           width: '100%',
-          maxWidth: '420px',
+          maxWidth: '400px',
           backgroundColor: isLightMode ? '#FFFFFF' : '#141416',
           borderRadius: '16px',
           border: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.1)',
           padding: '24px',
           boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)',
           position: 'relative',
-          animation: 'modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -186,7 +191,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
           <h2
             style={{
-              fontSize: '16px',
+              fontSize: '15px',
               fontWeight: 700,
               color: isLightMode ? '#111827' : '#FFFFFF',
               margin: 0,
@@ -196,6 +201,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
             {config.title}
           </h2>
           <button
+            type="button"
             onClick={onClose}
             style={{
               background: 'none',
@@ -212,23 +218,23 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
           </button>
         </div>
 
-        {/* Action Icon */}
+        {/* Action Icon matching Figma Image 4 */}
         {config.icon}
 
         {/* Keyword Input Box */}
         <div style={{ marginBottom: '16px' }}>
           <input
             type="text"
-            placeholder={`Type '${expectedKeyword}' to continue`}
+            placeholder={`Type "${expectedKeyword}" to continue`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             autoFocus
             style={{
               width: '100%',
               height: '44px',
-              backgroundColor: isLightMode ? '#F9FAFB' : '#1A1A1E',
+              backgroundColor: isLightMode ? '#F9FAFB' : '#1C1C20',
               border: isConfirmed
-                ? '1px solid #F5C842'
+                ? '1.5px solid #F5C842'
                 : isLightMode
                 ? '1px solid #D1D5DB'
                 : '1px solid rgba(255, 255, 255, 0.12)',
@@ -244,11 +250,11 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
         </div>
 
         {/* Warning messages */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '22px' }}>
           <p
             style={{
               fontSize: '12px',
-              color: isLightMode ? '#4B5563' : '#A1A1AA',
+              color: isLightMode ? '#4B5563' : '#8E8E93',
               margin: '0 0 6px 0',
               lineHeight: 1.4,
             }}
@@ -267,13 +273,14 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
           </p>
         </div>
 
-        {/* Action Buttons: Cancel and Confirm */}
+        {/* Action Buttons: Cancel and Confirm matching Figma Image 4 */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           <button
+            type="button"
             onClick={onClose}
             style={{
               height: '42px',
-              borderRadius: '10px',
+              borderRadius: '8px',
               backgroundColor: isLightMode ? '#E5E7EB' : '#2A2A2E',
               border: 'none',
               color: isLightMode ? '#374151' : '#FFFFFF',
@@ -289,6 +296,7 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
           </button>
 
           <button
+            type="button"
             disabled={!isConfirmed}
             onClick={() => {
               if (isConfirmed) {
@@ -297,35 +305,21 @@ export const UserConfirmModal: React.FC<UserConfirmModalProps> = ({
             }}
             style={{
               height: '42px',
-              borderRadius: '10px',
-              backgroundColor: isConfirmed ? config.buttonBg : isLightMode ? '#F3F4F6' : '#252528',
+              borderRadius: '8px',
+              backgroundColor: isConfirmed ? config.activeBg : config.inactiveBg,
               border: 'none',
-              color: isConfirmed ? config.buttonTextColor || '#FFFFFF' : '#71717A',
+              color: isConfirmed ? (actionType === 'reactivate' ? '#000000' : '#FFFFFF') : config.inactiveTextColor,
               fontSize: '13px',
               fontWeight: 700,
               cursor: isConfirmed ? 'pointer' : 'not-allowed',
-              opacity: isConfirmed ? 1 : 0.45,
               transition: 'all 0.15s ease',
-              boxShadow: isConfirmed ? '0 4px 12px rgba(0, 0, 0, 0.25)' : 'none',
+              boxShadow: isConfirmed ? '0 4px 12px rgba(220, 38, 38, 0.35)' : 'none',
             }}
           >
             {config.buttonLabel}
           </button>
         </div>
       </div>
-
-      <style jsx global>{`
-        @keyframes modalPop {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
     </div>
   );
 };

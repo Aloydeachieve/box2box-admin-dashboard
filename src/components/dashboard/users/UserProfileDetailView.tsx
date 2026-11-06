@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Search,
@@ -23,7 +24,9 @@ import {
   Clock3,
   X,
 } from 'lucide-react';
+import { useAdmin } from '@/components/layout/AdminContext';
 import { UserProfileFilterModal } from './UserProfileFilterModal';
+import { UserConfirmModal } from './UserConfirmModal';
 
 interface UserProfileDetailViewProps {
   userId: string;
@@ -40,11 +43,84 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
   onSeeMoreActivity,
   onSelectActivity,
 }) => {
+  const router = useRouter();
+  const { setHeaderActions } = useAdmin();
+
   const [activeSubTab, setActiveSubTab] = useState<'bookings' | 'boxes' | 'wallet' | 'rewards' | 'referrals' | 'reports'>('bookings');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab')?.toLowerCase();
+      if (tab && ['bookings', 'boxes', 'wallet', 'rewards', 'referrals', 'reports'].includes(tab)) {
+        setActiveSubTab(tab as any);
+      }
+    }
+  }, []);
   const [timePeriod, setTimePeriod] = useState('Daily');
   const [showTimeMenu, setShowTimeMenu] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('Today');
+
+  // Header Actions & User Confirmation Modals
+  const [isUserSuspended, setIsUserSuspended] = useState(false);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    actionType: 'suspend' | 'delete';
+  }>({
+    isOpen: false,
+    actionType: 'suspend',
+  });
+  const [toastMessage, setToastMessage] = useState<{
+    title: string;
+    message: string;
+    type: 'success' | 'danger';
+  } | null>(null);
+
+  const showToast = (title: string, message: string, type: 'success' | 'danger' = 'success') => {
+    setToastMessage({ title, message, type });
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3500);
+  };
+
+  useEffect(() => {
+    setHeaderActions([
+      {
+        label: 'Suspend user',
+        hasToggle: true,
+        isToggled: isUserSuspended,
+        onClick: () => setConfirmModal({ isOpen: true, actionType: 'suspend' }),
+      },
+      {
+        label: 'Delete user',
+        color: '#EF4444',
+        onClick: () => setConfirmModal({ isOpen: true, actionType: 'delete' }),
+      },
+    ]);
+    return () => setHeaderActions([]);
+  }, [isUserSuspended, setHeaderActions]);
+
+  const handleConfirmAction = () => {
+    if (confirmModal.actionType === 'suspend') {
+      const nextStatus = !isUserSuspended;
+      setIsUserSuspended(nextStatus);
+      setConfirmModal({ isOpen: false, actionType: 'suspend' });
+      showToast(
+        nextStatus ? 'User suspended' : 'User reactivated',
+        nextStatus
+          ? 'You successfully suspended selected user'
+          : 'You successfully reactivated selected user',
+        'success'
+      );
+    } else if (confirmModal.actionType === 'delete') {
+      setConfirmModal({ isOpen: false, actionType: 'delete' });
+      showToast('User deleted', 'You successfully deleted selected user', 'danger');
+      setTimeout(() => {
+        router.push('/users');
+      }, 1200);
+    }
+  };
 
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
   const cardBorder = isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)';
@@ -62,7 +138,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
   ];
 
   return (
-    <div style={{ display: 'flex', gap: '20px', width: '100%', minHeight: '100%', paddingBottom: '80px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 320px', gap: '24px', width: '100%', alignItems: 'stretch', paddingBottom: '80px' }}>
       {/* Main Left Content: Profile, Summary, Charts, Tabs & Tables */}
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {/* 1. User Profile Details Banner Card matching Figma Image 1 & 4 */}
@@ -169,7 +245,7 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Users size={14} color={subtextColor} style={{ flexShrink: 0 }} />
                   <span style={{ color: subtextColor, fontWeight: 400 }}>User type: </span>
-                  <span style={{ color: textColor, fontWeight: 600 }}>Box owner</span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>Customer</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -186,17 +262,14 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Clock size={14} color={subtextColor} style={{ flexShrink: 0 }} />
-                  <span style={{ color: subtextColor, fontWeight: 400 }}>Last ride: </span>
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Last booking: </span>
                   <span style={{ color: textColor, fontWeight: 600 }}>Aug 02, 2024 | 11:56 AM</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Box size={14} color={subtextColor} style={{ flexShrink: 0 }} />
-                  <span style={{ color: subtextColor, fontWeight: 400 }}>Box owned: </span>
-                  <span style={{ color: textColor, fontWeight: 600 }}>5</span>
-                  <span style={{ color: '#F5C842', textDecoration: 'underline', cursor: 'pointer', marginLeft: '4px', fontSize: '11px' }}>
-                    (A5 4567 MyBox locker 232TE6)
-                  </span>
+                  <MapPin size={14} color={subtextColor} style={{ flexShrink: 0 }} />
+                  <span style={{ color: subtextColor, fontWeight: 400 }}>Default address: </span>
+                  <span style={{ color: textColor, fontWeight: 600 }}>A5 4567 MyBox locker 232TE6</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1185,23 +1258,34 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
         )}
       </div>
 
-      {/* Right Side Panel: Activity history matching Figma Image 4 */}
+      {/* Right Side Section: Activity history matching Figma Image 2 */}
       <aside
         style={{
-          width: '310px',
-          backgroundColor: cardBg,
-          borderRadius: '16px',
-          border: cardBorder,
-          padding: '20px 18px',
+          width: '320px',
+          backgroundColor: 'transparent',
+          borderRadius: 0,
+          border: 'none',
+          borderLeft: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+          padding: '0 0 0 24px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '14px',
+          gap: '16px',
           flexShrink: 0,
-          boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.04)' : 'none',
+          alignSelf: 'stretch',
         }}
         className="profile-activity-sidebar"
       >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Clickable Header Button Row */}
+        <div
+          onClick={onSeeMoreActivity}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            padding: '2px 0',
+          }}
+        >
           <h3
             style={{
               fontSize: '15px',
@@ -1213,106 +1297,219 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           >
             Activity history
           </h3>
-          <button
-            onClick={onSeeMoreActivity}
+          <span
             style={{
-              background: 'none',
-              border: 'none',
               color: '#8E8E93',
               fontSize: '11px',
-              cursor: 'pointer',
               fontWeight: 500,
             }}
           >
             See more
-          </button>
+          </span>
         </div>
 
-        {/* Chronological Activity Feed */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflowY: 'auto' }}>
-          {/* Section: June 03, 2025 */}
+        {/* Chronological Activity Feed (Mapped out naturally without nested scroll) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Section 1: June 03, 2025 */}
           <div>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: subtextColor, marginBottom: '8px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: subtextColor, marginBottom: '10px' }}>
               June 03, 2025
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {/* Event 1 */}
               <div
                 onClick={() => onSelectActivity?.('bk-123456')}
                 style={{
-                  borderLeft: '2px solid #F5C842',
-                  paddingLeft: '10px',
                   cursor: 'pointer',
                   borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
+                  padding: '3px 0',
+                  transition: 'opacity 0.15s',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>Nearing drop off</div>
-                <div style={{ fontSize: '9px', color: '#71717A' }}>13:25</div>
+                <div style={{ fontSize: '9px', color: '#71717A', marginTop: '2px' }}>13:25</div>
               </div>
 
               {/* Event 2 */}
               <div
                 onClick={() => onSelectActivity?.('bk-123456-transfer')}
                 style={{
-                  borderLeft: '2px solid #F5C842',
-                  paddingLeft: '10px',
                   cursor: 'pointer',
                   borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
+                  padding: '3px 0',
+                  transition: 'opacity 0.15s',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>MyBox-123456 → MyBox123487</div>
-                <div style={{ fontSize: '9px', color: '#71717A' }}>13:25</div>
+                <div style={{ fontSize: '9px', color: '#71717A', marginTop: '2px' }}>13:25</div>
               </div>
 
-              {/* Event 3: Cleanliness report */}
+              {/* Event 3: Cleanliness report (Has report in heading -> colored border) */}
               <div
                 onClick={() => onSelectActivity?.('rep-clean')}
                 style={{
-                  borderLeft: '2px solid #10B981',
-                  paddingLeft: '10px',
+                  borderLeft: '2.5px solid #10B981',
+                  paddingLeft: '8px',
                   cursor: 'pointer',
-                  borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
+                  borderRadius: '2px',
+                  paddingTop: '2px',
+                  paddingBottom: '2px',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Cleanliness report</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>The cabinet was too dirty</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
                   <span style={{ color: '#71717A' }}>13:25</span>
                   <span style={{ color: '#10B981', fontWeight: 600 }}>Resolved</span>
                 </div>
               </div>
 
-              {/* Event 4: Theft report */}
+              {/* Event 4: Theft report (Has report in heading -> colored border) */}
               <div
                 onClick={() => onSelectActivity?.('rep-theft')}
                 style={{
-                  borderLeft: '2px solid #F59E0B',
-                  paddingLeft: '10px',
+                  borderLeft: '2.5px solid #EF4444',
+                  paddingLeft: '8px',
+                  cursor: 'pointer',
+                  borderRadius: '2px',
+                  paddingTop: '2px',
+                  paddingBottom: '2px',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Theft report</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>My item is missing</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
+                  <span style={{ color: '#71717A' }}>13:25</span>
+                  <span style={{ color: '#F59E0B', fontWeight: 600 }}>In progress</span>
+                </div>
+              </div>
+
+              {/* Event 5: Booked partition (No colored border) */}
+              <div
+                onClick={() => onSelectActivity?.('part-booked')}
+                style={{
                   cursor: 'pointer',
                   borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
+                  padding: '3px 0',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Booked partition</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>#012356</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
+                  <span style={{ color: '#71717A' }}>13:25</span>
+                  <span style={{ color: '#71717A' }}>Pending</span>
+                </div>
+              </div>
+
+              {/* Event 6: Collected package (No colored border) */}
+              <div
+                onClick={() => onSelectActivity?.('pkg-collected')}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  padding: '3px 0',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Collected package</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>#082638</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
+                  <span style={{ color: '#71717A' }}>13:25</span>
+                  <span style={{ color: '#71717A' }}>Pending</span>
+                </div>
+              </div>
+
+              {/* Event 7: Wallet deposit (No colored border) */}
+              <div
+                onClick={() => onSelectActivity?.('wal-deposit')}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  padding: '3px 0',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Wallet deposit</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>Paystack</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
+                  <span style={{ color: '#71717A' }}>13:25</span>
+                  <span style={{ color: '#10B981', fontWeight: 600 }}>Successful</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: June 02, 2025 (Second Day matching Figma Image 2) */}
+          <div>
+            <div style={{ fontSize: '11px', fontWeight: 700, color: subtextColor, marginBottom: '10px' }}>
+              June 02, 2025
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {/* Event 1 */}
+              <div
+                onClick={() => onSelectActivity?.('bk-123456-d2')}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  padding: '3px 0',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>Nearing drop off</div>
+                <div style={{ fontSize: '9px', color: '#71717A', marginTop: '2px' }}>13:25</div>
+              </div>
+
+              {/* Event 2 */}
+              <div
+                onClick={() => onSelectActivity?.('bk-123456-transfer-d2')}
+                style={{
+                  cursor: 'pointer',
+                  borderRadius: '4px',
+                  padding: '3px 0',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>#BK-123456</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>MyBox-123456 → MyBox123487</div>
+                <div style={{ fontSize: '9px', color: '#71717A', marginTop: '2px' }}>13:25</div>
+              </div>
+
+              {/* Event 3: Cleanliness report (Has report in heading -> colored border) */}
+              <div
+                onClick={() => onSelectActivity?.('rep-clean-d2')}
+                style={{
+                  borderLeft: '2.5px solid #10B981',
+                  paddingLeft: '8px',
+                  cursor: 'pointer',
+                  borderRadius: '2px',
+                  paddingTop: '2px',
+                  paddingBottom: '2px',
+                }}
+              >
+                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Cleanliness report</div>
+                <div style={{ fontSize: '10px', color: subtextColor }}>The cabinet was too dirty</div>
+                <div style={{ fontSize: '9px', color: subtextColor, fontFamily: 'monospace' }}>R-123465</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
+                  <span style={{ color: '#71717A' }}>13:25</span>
+                  <span style={{ color: '#10B981', fontWeight: 600 }}>Resolved</span>
+                </div>
+              </div>
+
+              {/* Event 4: Theft report (Has report in heading -> colored border) */}
+              <div
+                onClick={() => onSelectActivity?.('rep-theft-d2')}
+                style={{
+                  borderLeft: '2.5px solid #EF4444',
+                  paddingLeft: '8px',
+                  cursor: 'pointer',
+                  borderRadius: '2px',
+                  paddingTop: '2px',
+                  paddingBottom: '2px',
+                }}
               >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Theft report</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>My item is missing</div>
@@ -1322,72 +1519,20 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
                 </div>
               </div>
 
-              {/* Event 5: Booked partition */}
+              {/* Event 5: Booked partition (No colored border) */}
               <div
-                onClick={() => onSelectActivity?.('part-booked')}
+                onClick={() => onSelectActivity?.('part-booked-d2')}
                 style={{
-                  borderLeft: '2px solid #71717A',
-                  paddingLeft: '10px',
                   cursor: 'pointer',
                   borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
+                  padding: '3px 0',
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
               >
                 <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Booked partition</div>
                 <div style={{ fontSize: '10px', color: subtextColor }}>#012356</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
                   <span style={{ color: '#71717A' }}>13:25</span>
                   <span style={{ color: '#71717A' }}>Pending</span>
-                </div>
-              </div>
-
-              {/* Event 6: Collected package */}
-              <div
-                onClick={() => onSelectActivity?.('pkg-collected')}
-                style={{
-                  borderLeft: '2px solid #71717A',
-                  paddingLeft: '10px',
-                  cursor: 'pointer',
-                  borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-              >
-                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Collected package</div>
-                <div style={{ fontSize: '10px', color: subtextColor }}>#082638</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
-                  <span style={{ color: '#71717A' }}>13:25</span>
-                  <span style={{ color: '#71717A' }}>Pending</span>
-                </div>
-              </div>
-
-              {/* Event 7: Wallet deposit */}
-              <div
-                onClick={() => onSelectActivity?.('wal-deposit')}
-                style={{
-                  borderLeft: '2px solid #10B981',
-                  paddingLeft: '10px',
-                  cursor: 'pointer',
-                  borderRadius: '4px',
-                  paddingTop: '3px',
-                  paddingBottom: '3px',
-                  transition: 'background-color 0.15s',
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#222226')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-              >
-                <div style={{ fontSize: '12px', fontWeight: 600, color: textColor }}>Wallet deposit</div>
-                <div style={{ fontSize: '10px', color: subtextColor }}>Paystack</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', marginTop: '2px' }}>
-                  <span style={{ color: '#71717A' }}>13:25</span>
-                  <span style={{ color: '#10B981', fontWeight: 600 }}>Successful</span>
                 </div>
               </div>
             </div>
@@ -1405,6 +1550,42 @@ export const UserProfileDetailView: React.FC<UserProfileDetailViewProps> = ({
           console.log('Applied filters for', activeSubTab, filters);
         }}
       />
+
+      {/* 7. Suspend / Delete Confirmation Modal matching Figma Image 4 */}
+      <UserConfirmModal
+        isOpen={confirmModal.isOpen}
+        actionType={confirmModal.actionType}
+        userName="Aku Cynthia"
+        onClose={() => setConfirmModal((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={handleConfirmAction}
+        isLightMode={isLightMode}
+      />
+
+      {/* 8. Success / Delete Toast Notification matching Figma Image 4 */}
+      {toastMessage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '24px',
+            right: '24px',
+            backgroundColor: toastMessage.type === 'danger' ? '#EF4444' : '#10B981',
+            color: '#FFFFFF',
+            padding: '14px 20px',
+            borderRadius: '10px',
+            fontSize: '13px',
+            fontWeight: 600,
+            boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4)',
+            zIndex: 200,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
+            fontFamily: 'var(--font-outfit), sans-serif',
+          }}
+        >
+          <div style={{ fontSize: '14px', fontWeight: 700 }}>{toastMessage.title}</div>
+          <div style={{ fontSize: '12px', opacity: 0.9 }}>{toastMessage.message}</div>
+        </div>
+      )}
 
       <style jsx global>{`
         @media (max-width: 1024px) {

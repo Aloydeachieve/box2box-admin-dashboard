@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, use } from 'react';
+import React, { useState, use, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   Battery as BatteryIcon,
@@ -10,6 +10,13 @@ import {
 
 import { BoxBookingsFilterModal } from '@/components/box-management/BoxBookingsFilterModal';
 import { BoxTabFilterModal } from '@/components/box-management/BoxTabFilterModal';
+
+// Action Dropdown Modals
+import { UnlockBoxModal } from '@/components/box-management/UnlockBoxModal';
+import { MakeUnavailableModal } from '@/components/box-management/MakeUnavailableModal';
+import { DisableBoxModal } from '@/components/box-management/DisableBoxModal';
+import { FlagBoxModal } from '@/components/box-management/FlagBoxModal';
+import { UpdateBoxModal } from '@/components/box-management/UpdateBoxModal';
 
 // Modular Sub-Tab Components
 import { CabinetsTab } from '@/components/box-management/details/CabinetsTab';
@@ -25,7 +32,7 @@ export default function BoxDetailsPage({ params }: { params: Promise<{ id: strin
   const resolvedParams = use(params);
   const boxId = resolvedParams?.id || 'MyBox-123456';
   const router = useRouter();
-  const { isLightMode } = useAdmin();
+  const { isLightMode, setHeaderActions } = useAdmin();
 
   const [activeTab, setActiveTab] = useState<
     'Cabinets' | 'Bookings' | 'Battery' | 'Reviews' | 'Code usage' | 'Reports' | 'Box activity'
@@ -34,6 +41,49 @@ export default function BoxDetailsPage({ params }: { params: Promise<{ id: strin
   const [showBookingsFilterModal, setShowBookingsFilterModal] = useState(false);
   const [showTabFilterModal, setShowTabFilterModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Box Action Dropdown & Modals State
+  const [isUnavailable, setIsUnavailable] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isFlagged, setIsFlagged] = useState(false);
+
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [showMakeUnavailableModal, setShowMakeUnavailableModal] = useState(false);
+  const [showDisableModal, setShowDisableModal] = useState(false);
+  const [showFlagModal, setShowFlagModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+  useEffect(() => {
+    setHeaderActions([
+      {
+        label: 'Unlock box',
+        onClick: () => setShowUnlockModal(true),
+      },
+      {
+        label: 'Make unavailable',
+        hasToggle: true,
+        isToggled: isUnavailable,
+        onClick: () => setShowMakeUnavailableModal(true),
+      },
+      {
+        label: 'Disable box',
+        hasToggle: true,
+        isToggled: isDisabled,
+        onClick: () => setShowDisableModal(true),
+      },
+      {
+        label: 'Flag box',
+        hasToggle: true,
+        isToggled: isFlagged,
+        onClick: () => setShowFlagModal(true),
+      },
+      {
+        label: 'Update box',
+        onClick: () => setShowUpdateModal(true),
+      },
+    ]);
+    return () => setHeaderActions([]);
+  }, [isUnavailable, isDisabled, isFlagged, setHeaderActions]);
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
@@ -60,11 +110,14 @@ export default function BoxDetailsPage({ params }: { params: Promise<{ id: strin
   return (
     <div
       style={{
-        display: 'flex',
-        gap: '20px',
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1fr) 300px',
+        gap: '24px',
         width: '100%',
+        alignItems: 'stretch',
         fontFamily: 'Rubik, var(--font-outfit), sans-serif',
         position: 'relative',
+        paddingBottom: '80px',
       }}
     >
       {/* Toast Feedback */}
@@ -463,11 +516,14 @@ export default function BoxDetailsPage({ params }: { params: Promise<{ id: strin
         )}
       </div>
 
-      {/* Right Side Column: Owner Info & Deployment History */}
+      {/* Right Side Column: Owner Info & Deployment History with thin demarcating line */}
       <aside
         style={{
-          width: '280px',
+          width: '300px',
           flexShrink: 0,
+          borderLeft: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
+          paddingLeft: '24px',
+          alignSelf: 'stretch',
           display: 'flex',
           flexDirection: 'column',
           gap: '24px',
@@ -618,6 +674,56 @@ export default function BoxDetailsPage({ params }: { params: Promise<{ id: strin
         onClose={() => setShowTabFilterModal(false)}
         activeSubTab={activeTab as any}
         isLightMode={isLightMode}
+      />
+
+      {/* Box Header Actions Modals */}
+      <UnlockBoxModal
+        isOpen={showUnlockModal}
+        onClose={() => setShowUnlockModal(false)}
+        boxId={boxId}
+        isLightMode={isLightMode}
+        onUnlock={() => showToast('Cabinets unlocked successfully')}
+      />
+
+      <MakeUnavailableModal
+        isOpen={showMakeUnavailableModal}
+        onClose={() => setShowMakeUnavailableModal(false)}
+        boxId={boxId}
+        isLightMode={isLightMode}
+        onConfirm={() => {
+          setIsUnavailable((prev) => !prev);
+          showToast(!isUnavailable ? 'Box marked unavailable' : 'Box marked available');
+        }}
+      />
+
+      <DisableBoxModal
+        isOpen={showDisableModal}
+        onClose={() => setShowDisableModal(false)}
+        boxId={boxId}
+        isLightMode={isLightMode}
+        onConfirm={() => {
+          setIsDisabled((prev) => !prev);
+          showToast(!isDisabled ? 'Box disabled successfully' : 'Box re-enabled');
+        }}
+      />
+
+      <FlagBoxModal
+        isOpen={showFlagModal}
+        onClose={() => setShowFlagModal(false)}
+        boxId={boxId}
+        isLightMode={isLightMode}
+        onConfirm={() => {
+          setIsFlagged((prev) => !prev);
+          showToast(!isFlagged ? 'Box flagged for review' : 'Box flag removed');
+        }}
+      />
+
+      <UpdateBoxModal
+        isOpen={showUpdateModal}
+        onClose={() => setShowUpdateModal(false)}
+        boxId={boxId}
+        isLightMode={isLightMode}
+        onUpdate={() => showToast('Box updated successfully')}
       />
     </div>
   );

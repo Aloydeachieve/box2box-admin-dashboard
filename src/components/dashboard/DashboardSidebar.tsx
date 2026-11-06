@@ -21,6 +21,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from 'lucide-react';
+import { LogoutModal } from './modals/LogoutModal';
 
 interface DashboardSidebarProps {
   collapsed: boolean;
@@ -38,9 +39,10 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   isLightMode = false,
 }) => {
   const router = useRouter();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<Record<string, boolean>>({
     users: false,
-    inventory: true,
+    inventory: false,
     orders: false,
     rewards: false,
     support: false,
@@ -50,6 +52,15 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   useEffect(() => {
     if (activeTab.startsWith('rewards')) {
       setOpenDropdowns((prev) => ({ ...prev, rewards: true }));
+    }
+    if (activeTab.startsWith('inventory')) {
+      setOpenDropdowns((prev) => ({ ...prev, inventory: true }));
+    }
+    if (activeTab.startsWith('support')) {
+      setOpenDropdowns((prev) => ({ ...prev, support: true }));
+    }
+    if (activeTab.startsWith('fraud')) {
+      setOpenDropdowns((prev) => ({ ...prev, fraud_alert: true }));
     }
   }, [activeTab]);
 
@@ -145,8 +156,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
   ];
 
   return (
-    <aside
-      style={{
+    <>
+      <aside
+        style={{
         width: collapsed ? '72px' : '230px',
         height: '100vh',
         backgroundColor: isLightMode ? '#FFFFFF' : '#0D0D0E',
@@ -218,14 +230,19 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
 
             return (
               <div key={item.id}>
-                <button
+                <div
                   onClick={() => {
-                    onSelectTab(item.id === 'rewards' ? 'rewards_configuration' : item.id);
                     if (item.hasDropdown) {
-                      toggleDropdown(item.id);
-                      if (item.id === 'rewards') {
-                        router.push('/rewards');
+                      setOpenDropdowns((prev) => ({ ...prev, [item.id]: true }));
+                      const firstSub = item.subItems?.[0];
+                      if (firstSub) {
+                        onSelectTab(firstSub.id);
+                        router.push(firstSub.path);
+                      } else {
+                        onSelectTab(item.id);
                       }
+                    } else {
+                      onSelectTab(item.id);
                     }
                   }}
                   title={collapsed ? item.label : undefined}
@@ -235,17 +252,17 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: collapsed ? 'center' : 'space-between',
-                    padding: collapsed ? '0' : '0 12px',
+                    padding: collapsed ? '0' : '0 8px 0 12px',
                     borderRadius: '8px',
-                    border: 'none',
                     cursor: 'pointer',
                     /* Active yellow highlight matching Figma Desktop - Dashboard */
-                    backgroundColor: isActive ? '#F5C842' : 'transparent',
-                    color: isActive ? '#000000' : '#A0A0A5',
+                    backgroundColor: isActive ? 'var(--admin-selected-menu, #F7DF1E33)' : 'transparent',
+                    color: isActive ? 'var(--Text-primary, #DEC91B)' : '#A0A0A5',
                     fontWeight: isActive ? 700 : 500,
                     fontSize: '13px',
                     fontFamily: 'inherit',
                     transition: 'all 0.15s ease',
+                    boxSizing: 'border-box',
                   }}
                   onMouseOver={(e) => {
                     if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
@@ -254,17 +271,46 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
                     if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Icon size={16} color={isActive ? '#000000' : '#8E8E93'} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
+                    <Icon size={16} color={isActive ? '#DEC91B' : '#8E8E93'} />
                     {!collapsed && <span>{item.label}</span>}
                   </div>
 
                   {!collapsed && item.hasDropdown && (
-                    <div style={{ color: isActive ? '#000000' : '#71717A', display: 'flex', alignItems: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleDropdown(item.id);
+                      }}
+                      title={isOpen ? 'Collapse submenu' : 'Expand submenu'}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: isActive ? '#DEC91B' : '#71717A',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        cursor: 'pointer',
+                        transition: 'color 0.15s, background-color 0.15s',
+                      }}
+                      onMouseOver={(e) => {
+                        e.stopPropagation();
+                        e.currentTarget.style.color = isActive ? '#DEC91B' : '#FFFFFF';
+                        e.currentTarget.style.backgroundColor = isActive ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.1)';
+                      }}
+                      onMouseOut={(e) => {
+                        e.stopPropagation();
+                        e.currentTarget.style.color = isActive ? '#DEC91B' : '#71717A';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
                       {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                    </div>
+                    </button>
                   )}
-                </button>
+                </div>
 
                 {/* Submenu for items with dropdown */}
                 {!collapsed && item.hasDropdown && isOpen && item.subItems && (
@@ -337,7 +383,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
       >
         {/* Logout button (red) */}
         <button
-          onClick={() => router.push('/login')}
+          onClick={() => setShowLogoutModal(true)}
           title="Logout"
           style={{
             background: 'none',
@@ -400,5 +446,13 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </div>
       </div>
     </aside>
-  );
+
+    {/* Logout Confirmation Modal matching Figma Image 5 */}
+    <LogoutModal
+      isOpen={showLogoutModal}
+      onClose={() => setShowLogoutModal(false)}
+      isLightMode={isLightMode}
+    />
+  </>
+);
 };

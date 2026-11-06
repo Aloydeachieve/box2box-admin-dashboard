@@ -9,6 +9,333 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - 2026-11-06 (Batch 19: Tracking Timeline Directional Pointed Arrows, Report Side Color Demarcation, 3-Step Fund Wallet Modal Flow, Table User Avatars, and Unified Transaction Details Views)
+- **Tracking Timeline Directional Pointed Dotted Arrows ([`BookingDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/BookingDetailView.tsx), Figma Image 1)**:
+  - Added downward directional pointed dotted arrow SVGs connecting each stage of the 4-step tracking timeline (`Pick-up confirmed` ➔ `In transit` ➔ `Nearing drop-off` ➔ `Delivered`) with consistent stroke dash and pointed arrow heads matching Image 1.
+- **Activity History Report Color Indicator ([`BookingDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/BookingDetailView.tsx), Image 1)**:
+  - Implemented left-edge colored indicators (`borderLeft: '2.5px solid ...'`, `paddingLeft: '8px'`) specifically for activity entries containing "report" in their title.
+  - Formatted resolved reports (`Cleanliness report`, `Package mishandled report`) with a clean gray border (`#71717A`) and green `#22C55E` status text, while non-report items remain without left borders.
+  - Extended the 2-column layout container with `minHeight: 'calc(100vh - 140px)'` and `alignSelf: 'stretch'` so the demarcating border runs continuously from the top to the bottom of the screen.
+- **3-Step Fund Wallet Modal Process & Header Integration ([`FundWalletModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/modals/FundWalletModal.tsx), [`DashboardShell.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardShell.tsx), [`AdminContext.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/layout/AdminContext.tsx), Figma Image 2)**:
+  - Header `Fund wallet` button styled in muted dark gold (`#2A2614` background, `#F5C842` text), wired to trigger the modal through `AdminContext` (`onFundWalletClick`).
+  - **Card 1 (Initial Modal)**: Textarea with `Enter note` placeholder, character limit counter (`0/150`), helper text (`By funding user wallet, this user's account will be funded with ₦${amount}`), white `Cancel` button, and inactive/disabled `Fund wallet` button (`#352F17` background, `#736B42` text, `cursor: not-allowed`).
+  - **Card 2 (Active Modal)**: Once a note is typed, character counter updates (`50/150`), and `Fund wallet` button activates to vibrant yellow `#F5C842` with black text and `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+  - **Card 3 (Success Modal)**: On submit, transitions to `Wallet funded` modal featuring a prominent green circular checkmark badge (`#10B981`) and `Wallet funded successfully` confirmation message.
+- **Flexible Table User Avatars with Initial Fallback ([`UserAvatar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/common/UserAvatar.tsx))**:
+  - Created reusable `UserAvatar` component that displays the user's avatar image (defaulting to `/image/order.svg`), with automatic graceful error fallback to the user's initial avatar.
+  - Implemented across all transaction tables: [`BookingsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/BookingsTab.tsx), [`EarningsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/EarningsTab.tsx), [`DepositsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/DepositsTab.tsx), and [`WithdrawalsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/WithdrawalsTab.tsx).
+- **Clickable Table ID Underlines without Yellow Hover**:
+  - Standardized `Order ID` in Bookings and `Txn ID` in Deposits and Withdrawals to feature a clean underline (`textDecoration: 'underline'`), removing the unwanted yellow hover effect while navigating smoothly to detail views.
+- **Unified & Differentiated Transaction Details Views ([`TransactionDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/TransactionDetailView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/[id]/page.tsx), Figma Images 3, 4, & 5)**:
+  - **Earnings Details (Image 3)**:
+    - Section 1: `#1234567879` `Successful`, `Transaction type` (Earning), `Date` (Aug 02, 2024 | 11:56 AM), `Amount` (₦250). Combined `User Aku Cynthia` and `Booking ID 123456` clickable to `/users/1?tab=Bookings`.
+    - Section 2: Payment type (`Earnings`), Amount (`₦250`), Transaction fee (`₦0`), and Total (`₦250`).
+    - Right Sidebar: `Earnings payment received` (₦250, System Auto).
+  - **Deposit Details (Image 4)**:
+    - Section 1: `#1234567879` `Successful` (or `Failed`), `Transaction type` (Deposit), `Payment method` (Bank transfer), `Date`, `Amount` (₦300,000), `Processing time` (15s), `User` (Aku Cynthia) clickable to `/users/1?tab=Bookings`.
+    - Section 2: `Bank transfer`, `Amount` (₦299,955), `Transaction fee` (₦50), `No fee weekend promo` (- ₦5), and Total (`₦300,000`).
+    - Right Sidebar: `Transaction successful` / `Bank transfer completed` / `Deposit request initiated`.
+  - **Withdrawals Details (Image 5)**:
+    - Section 1: `#1234567879` `Successful` (or `Failed`), `Transaction type` (Withdrawal), `Payment method` (Bank transfer), `Date`, `Amount` (₦300,000), `Processing time` (15s), `User` (Aku Cynthia) clickable to `/users/1?tab=Bookings`.
+    - Section 2: `Bank transfer`, `Account` (`8907134685 | GTB`), `Amount` (₦299,955), `Transaction fee` (₦50), `No fee weekend promo` (- ₦5), and Total (`₦300,000`).
+    - Right Sidebar: `Transaction successful` (or `Withdrawal failed`), `Withdrawal transfer sent`, `Withdrawal request initiated`.
+  - **Dynamic Status Indicator**: Displays a red `Failed` badge (`rgba(239, 68, 68, 0.15)` fill with `#EF4444` text) for failed transactions and green for successful ones.
+  - **Continuous Dividing Line**: Right sidebar border runs continuously from top to bottom across all views.
+
+### Added - 2026-11-06 (Batch 18: App-Wide Implementation of Rule 10 Form Input Opaque Background Standard)
+- **App-wide Form Input Opaque Background Alignment ([`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md) Rule 10)**:
+  - Applied the subtle dark opaque fill (`#141416` in dark mode, `#FFFFFF` / `#F9FAFB` in light mode) bounded by the subtle 1px border across all remaining creation, editing, and configuration forms throughout the codebase:
+    - **Rewards Management**: [`CreateBadgeView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/rewards/CreateBadgeView.tsx), [`EditBadgeView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/rewards/EditBadgeView.tsx), [`CreatePointRuleView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/rewards/CreatePointRuleView.tsx), [`EditPointRuleView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/rewards/EditPointRuleView.tsx).
+    - **Admin & Branch Management**: [`CreateAdminView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/admin-mgt/CreateAdminView.tsx), [`EditAdminView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/admin-mgt/EditAdminView.tsx), [`CreateBranchView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/admin-mgt/CreateBranchView.tsx), [`EditBranchView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/admin-mgt/EditBranchView.tsx).
+    - **Inventory Parts**: [`NewPartView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/NewPartView.tsx), [`EditPartView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/EditPartView.tsx), [`EditPartStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/EditPartStockView.tsx), [`UpdatePartStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/UpdatePartStockView.tsx).
+    - **Inventory Accessories**: [`NewAccessoryView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/NewAccessoryView.tsx), [`EditAccessoryView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/EditAccessoryView.tsx), [`EditAccessoryStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/EditAccessoryStockView.tsx), [`UpdateAccessoryStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/UpdateAccessoryStockView.tsx), [`UpdateUnitView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/UpdateUnitView.tsx).
+    - **Inventory Box Models**: [`InventoryBoxModelFormView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/boxes/InventoryBoxModelFormView.tsx), [`UpdateModelStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/boxes/UpdateModelStockView.tsx).
+  - Ensured all input elements, select dropdown triggers, textareas, and field containers stand out cleanly against the `#0D0D0E` natural page/card background with consistent 1px border demarcation.
+
+### Added - 2026-11-05 (Batch 17: Subscription Plan Management Suite, Booking & Transaction Details Integration, Form Input Opaque Background Standard, and User Tab Deep-Linking)
+- **Promotion Creation View Width Correction ([`CreatePromotionView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/CreatePromotionView.tsx))**:
+  - Fixed Section 2 (`Promo rules`) grid structure from full-width stretch to clean 2-column format (`gridTemplateColumns: '1fr 1fr'`), ensuring the `Type` field resides strictly on the left column matching the top section layout.
+- **Form Input Opaque Background Standard & Rule 10 ([`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md))**:
+  - Implemented subtle dark opaque fill (`#141416` in dark mode, `#FFFFFF` in light mode) across form inputs (`CreateRevenueRuleView`, `EditRevenueRuleView`, `CreatePromotionView`, `EditPromotionView`, `CreateSubscriptionPlanView`, and `EditSubscriptionPlanView`) bounded by standard 1px borders.
+  - Formally codified **Rule 10: Form Input Opaque Background Standard** in [`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md).
+- **Subscription Plan Creation View & Instant-Select Radio Popover ([`CreateSubscriptionPlanView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/CreateSubscriptionPlanView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/subscriptions/new/page.tsx), Figma Images 1 & 2)**:
+  - Form container `About plan` with 5 floating label inputs: `Plan name`, `Price` (with ₦ indicator), `Duration`, `Duration unit` (with dropdown chevron), and `Description` (left column only).
+  - Built custom `Select duration unit` modal popover matching Image 2 (`Days`, `Weeks`, `Months` with circular radio indicators and instant selection).
+  - Submit button styled with **Rule 5 Form Inactive Button State** until valid, illuminating yellow with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Edit Subscription Plan View ([`EditSubscriptionPlanView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/EditSubscriptionPlanView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/subscriptions/[id]/edit/page.tsx))**:
+  - Pre-filled with accurate data (`Basic`, `5000`, `7`, `Days`, description) and submit button `Update plan`.
+- **Subscription Plan Details View & Filter Modal ([`SubscriptionPlanDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/SubscriptionPlanDetailView.tsx), [`SubscriptionDetailsFilterModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/SubscriptionDetailsFilterModal.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/subscriptions/[id]/page.tsx), Image 3)**:
+  - Header `< Subscription details` with yellow `Actions` button (dropdown `Edit` & `Delete`).
+  - Top overview container: `Basic plan` `#19B725`, green active pill, description, and metadata row.
+  - Decoupled toolbar (**Rule 1**): `Subscribers` heading, search input, and `Filter ⌄` button.
+  - 4 Stat cards: `Total subscribers` (`6,000`), `Active Subscribers` (`4,000`), `Total Revenue` (`₦2,000,000`), and `Renewal Rate` (`18%`).
+  - Subscribers data table with 8 columns and pagination.
+  - Standardized Type 1 & 4 filter modal (`Status` checkboxes with `'All'` toggle and `Duration` radios).
+  - Continuous vertical dividing border (`borderLeft: 1px solid rgba(255, 255, 255, 0.08)`) for activity history feed.
+  - Fully wired `+ New plan`, `View`, `Edit`, and `Delete` actions in [`RevenueConfigurationView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueConfigurationView.tsx).
+- **Booking Details View & Cross-Module Deep-Linking ([`BookingDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/BookingDetailView.tsx), [`BookingsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/BookingsTab.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/bookings/[id]/page.tsx), Image 4)**:
+  - Made the `Order ID` column in Bookings table clickable, routing to `/transactions/bookings/[id]`.
+  - Section 1 (`Order Information`): `#1234567879` `Picked up` badge; customer (`Aku Cynthia`), rider (`Ahmed Musa`), distance (`30m`), ETA (`13mins`), actual delivery time (`12mins`), and demurrage (`00:00:00`) all navigate to `/users/1?tab=Bookings`.
+  - Section 2 (`Location Information`): Underlined pick-up and drop-off locations navigate to `/box-management/MyBox-123456`.
+  - Section 3 (`Payment Information`): Underlined `Transaction ID` (`123456`) navigates to `/transactions/123456`.
+  - Section 4 (`Tracking Information`): 4-step vertical tracking timeline (`Pick-up confirmed`, `In transit`, `Nearing drop-off`, `Delivered`).
+  - Continuous vertical border Activity history feed where underlined entries navigate to `/users/1?tab=Bookings`.
+- **Transaction Details View ([`TransactionDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/TransactionDetailView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/[id]/page.tsx), Image 5)**:
+  - Header displays `< Transaction details` with yellow `Fund wallet` button.
+  - Section 1 (`Transaction Information`): `#1234567879` `Successful` badge; clickable user (`Aku Cynthia`) and booking ID (`123456`) routing to `/users/1?tab=Bookings`.
+  - Section 2 (`Payment Information`): Detailed payment fee breakdown and total (`₦2,950`).
+  - Continuous vertical border Activity history feed.
+- **User Profile Deep-Linking Support ([`UserProfileDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UserProfileDetailView.tsx))**:
+  - Added URL search parameter parsing (`?tab=Bookings`) to ensure arriving on user details maintains focus on the requested tab.
+
+
+### Added - 2026-11-05 (Batch 16: Promotion Management Suite, Decoupled Promotion Details, Dynamic Delete Confirmation Modals, Upward Dropdown Positioning, and App-wide Continuous Dividing Lines)
+- **Promotion Creation View & Multi-Level Select Popovers ([`CreatePromotionView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/CreatePromotionView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/promotions/new/page.tsx), Figma Images 2 & 3)**:
+  - Wired `+ New promo` button in `RevenueConfigurationView` to navigate to `/transactions/revenue-configuration/promotions/new`.
+  - Built 2 section container forms: `About promo` (Promo name, Apply to, Start date, End date) and `Promo rules` (Type).
+  - Implemented inside-input floating label transitions across all fields, shifting smoothly to the top-left on focus or when holding content.
+  - Built custom floating popover dropdowns matching Figma Image 3:
+    - `Apply to` popover (Card 1): Multi-select checkbox dropdown with `'All'` toggle, 8 options with square 4px border-radius checkboxes, hairline divider, and bottom action row with `Discard` and vibrant yellow `Save` button with pulsing badge (Rule 3 Type 1 Modal Standard).
+    - `Select promo type` popover (Cards 2 & 3): Expandable radio menu featuring `Discount` dropdown (expanding with right-aligned radio options for `Amount (₦)` and `Percent (%)`) and `Disable fees` radio option.
+  - Enforced **Rule 5 Form Inactive Button State** on `Create promotion` button (`#352F17` background, `#736B42` text, not-allowed) until required form fields are complete, illuminating vibrant yellow `#F5C842` with black text and `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Edit Promotion View ([`EditPromotionView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/EditPromotionView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/promotions/[id]/edit/page.tsx), Image 4)**:
+  - Wired `Edit` action on the Promotions table to `/transactions/revenue-configuration/promotions/[id]/edit`.
+  - Pre-filled with accurate data matching Image 4: Promo name (`Discount weekend`), Apply to (`Deposit fee, withdrawal fee, box fee commission`), Start date (`Apr 10, 2026`), End date (`Apr 12, 2026`), Type (`Discount`), and dynamic second field `Value (percent)` (`10`).
+  - Submit button styled as `Update promotion` with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Promotion Details Page & Filter Modal ([`PromotionDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/PromotionDetailView.tsx), [`PromotionFilterModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/PromotionFilterModal.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/promotions/[id]/page.tsx), Image 5)**:
+  - Header configured with `< Promotion details` and dynamic header `Actions` dropdown with `Edit` and `Delete` options.
+  - Top promotion overview card: Title `No fees weekend`, `#19B725` ID, green active badge (`rgba(25, 183, 37, 0.15)`), metadata chips (`Type: Discount`, `Apply to: Delivery fee | Booking fee | Box fee commission`, `Start date: Aug 02, 2024 | 11:56 AM`, `End date: Aug 02, 2024 | 11:56 AM`), and amber countdown indicator `Ends in 21 days` (`#E5A83B`).
+  - Decoupled toolbar (**Rule 1 Table Decoupling Rule**): `Transaction history` heading, search input, and `Filter ⌄` button hanging directly on page background above the table.
+  - 5 Stat cards: `Total Transactions` (`6,000`), `Participating Users` (`4,000`), `Total Savings` (`₦2,000,000`), `Revenue Impact` (`1,200,000`), and `Conversion Boost` (`+18%`).
+  - Contained transactions table: `Txn ID`, `User`, `Type`, `Date`, `Original amount`, `Promo amount`, `Final amount`, and bottom pagination (`1 - 100 of 5,000,045`).
+  - Standardized `PromotionFilterModal` adhering to Type 4 filter modal specifications (440px fixed container height, underline text tabs for `Plan`, `Status`, `Duration`, right-aligned indicators, and Save button with pulsing badge).
+  - Right sidebar: Chronological activity history feed separated by a continuous 1px dividing border.
+- **Dynamic Delete Confirmation Modal & Success Card ([`DeleteRevenueItemModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/DeleteRevenueItemModal.tsx), Figma Image 1)**:
+  - Built unified 2-step modal strictly matching Figma Image 1 (`media_1793899822700_d6504c11.jpg`):
+    - **Step 1 (Confirmation Card)**: Title `Delete {itemType}`, solid red circle with white X icon (`#EF4444`), descriptive text `Deleting a {itemType} removes all the data about the {itemType}`, question `Are you sure you want to delete this {itemType}?`, and buttons `Cancel` and red `Delete {itemType}`.
+    - **Step 2 (Success Card / Toast)**: Title `{ItemType} deleted`, solid red circle with white X icon, and confirmation message `You successfully deleted this {itemType}` with auto-dismissal.
+  - Dynamically inherits the table context: `'revenue rule'`, `'promotion'`, or `'subscription'`.
+  - Wired to all three tables in [`RevenueConfigurationView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueConfigurationView.tsx) and header actions in [`PromotionDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/PromotionDetailView.tsx).
+- **Table Action Dropdown Upward Positioning & Rule 9 ([`RevenueConfigurationView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueConfigurationView.tsx), [`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md))**:
+  - Implemented dynamic bottom-row detection across all 3 tables (`index >= items.length - 2`): menus on lower rows open upward with `top: 'auto'`, `bottom: '32px'`, and `zIndex: 50`, preventing dropdowns from clipping or falling behind table containers.
+  - Added **Rule 9: Table Action Dropdown Positioning Rule** to [`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md).
+- **Users Management Initial State & Sidebar Dropdown Fix ([`UsersManagementView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UsersManagementView.tsx), [`app/(admin)/users/page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/users/page.tsx), [`DashboardSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardSidebar.tsx))**:
+  - Fixed pre-checked user rows on initial page load by resetting `selectedUserIds` to an empty array (`[]`).
+  - Fixed sidebar auto-opening the Inventory menu on load by setting initial dropdown toggle state `inventory: false`.
+- **App-wide Continuous Running Dividing Lines ([`UserProfileDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UserProfileDetailView.tsx), [`app/(admin)/box-management/[id]/page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/box-management/[id]/page.tsx), [`RevenueRuleDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueRuleDetailView.tsx), [`PromotionDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/PromotionDetailView.tsx))**:
+  - Standardized grid-based layout structure (`display: 'grid'`, `gridTemplateColumns: 'minmax(0, 1fr) ...px'`, `alignItems: 'stretch'`) with `borderLeft: 1px solid rgba(255, 255, 255, 0.08)` and `alignSelf: 'stretch'` on right sidebars, ensuring the 1px vertical border stretches continuously across the full page height and naturally grows with dynamic content.
+
+### Added - 2026-11-05 (Batch 15: Revenue Rule Edit Route & Floating Labels, User Details Actions & Modal Fidelity, Box Details Header Modals & Filter Standardization, and Opaque Inventory Search Dropdowns)
+- **Revenue Configuration Edit Rule Page & Floating Labels ([`EditRevenueRuleView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/EditRevenueRuleView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/rules/[id]/edit/page.tsx), Images 1 & 2)**:
+  - Resolved 404 on `/transactions/revenue-configuration/rules/[id]/edit` by updating route parameters to Next.js 16 compliant `use(params)` promise resolution.
+  - Implemented inside-input floating label behavior matching Image 2 across both `EditRevenueRuleView` and `CreateRevenueRuleView`:
+    - Labels (`Rule name`, `Apply to`, `Type`, `Value (Percent)` / `Value (Amount)`) reside centered inside the input field as placeholders when empty and unfocused.
+    - Upon click/focus or when containing a value, labels smoothly animate and float to the top-left edge inside the container in small text (`11px`, `subtextColor`), with the active value/input cleanly positioned beneath it (`14px`, `textColor`).
+    - Pre-filled with accurate values matching Image 2 (`Box usage commission`, `Box usage fee`, `Percent`, `10%`).
+    - Submit button styled as `Update rule` equipped with official `<Box2BoxPulsingBadge size={14} inverted={false} />` (Rule 2), enforcing **Rule 5 Form Inactive Button State** when incomplete.
+- **User Details Page Header Actions & Natural Scroll Activity Feed ([`UserProfileDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UserProfileDetailView.tsx), [`UserConfirmModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UserConfirmModal.tsx), Figma Image 4)**:
+  - Configured dedicated header `Actions` dropdown on `/users/[id]` with contextual options:
+    - `Suspend user` equipped with interactive toggle switch (`hasToggle: true`, `isToggled: isUserSuspended`), opening the suspend modal.
+    - `Delete user` in danger red (`#EF4444`), opening the delete modal.
+  - Updated `UserConfirmModal.tsx` visual fidelity strictly matching Figma Image 4:
+    - Suspend modal icon: Solid gold avatar silhouette with dark cross mark in the head (`#F5C842` fill, no enclosing border ring) matching Figma design.
+    - Delete modal icon: Solid red circle (`#EF4444`) with clean white cross mark.
+    - Muted reddish-brown button state (`#351C1C`) until the magic keyword (`"suspend"` or `"delete"`) is entered, illuminating active red (`#DC2626`) once confirmed.
+    - Action confirmation toasts: "User suspended" / "User deleted".
+  - Removed internal `overflowY: 'auto'` from the activity history container on the right sidebar, mapping all chronological entries directly on the page so the entire view scrolls together naturally without nested scrollbars.
+- **Box Management Details Page Actions, Modals & Filter Standardization ([`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/box-management/[id]/page.tsx), [`BoxBookingsFilterModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/box-management/BoxBookingsFilterModal.tsx), Image 5)**:
+  - Re-connected header `Actions` dropdown with all 5 contextual box options:
+    - `Unlock box` -> opens `UnlockBoxModal`
+    - `Make unavailable` (with notification toggle switch) -> opens `MakeUnavailableModal`
+    - `Disable box` (with notification toggle switch) -> opens `DisableBoxModal`
+    - `Flag box` (with notification toggle switch) -> opens `FlagBoxModal`
+    - `Update box` -> opens `UpdateBoxModal`
+  - Added thin dividing vertical border line (`borderLeft: 1px solid rgba(255, 255, 255, 0.08)`, `paddingLeft: 24px`, `alignSelf: stretch`) cleanly demarcating the main column from the Owner Info & Deployment History side column from top to bottom.
+  - Standardized `BoxBookingsFilterModal` to strict **Type 1 & Type 4 Filter Modal Standards** (Rules 3, 6, & 8):
+    - Standard fixed container height `440px` with inner scrollable area (`flex: 1`, `overflowY: 'auto'`).
+    - Standard title `Filter` + circular close `(X)` button, 1px horizontal hairline divider.
+    - Clean underline text tabs (`Cabinet`, `Usage`, `Type`, `Duration`) with 2px bottom yellow accent bar.
+    - Eliminated dark contrast container pills on options (`backgroundColor: 'transparent'`), utilizing right-aligned square checkboxes (`4px` border-radius, `#F5C842` checkmark) and right-aligned circular radios.
+    - Full-width bottom action row with neutral dark `Discard` button and vibrant yellow `Save` button with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Inventory Parts Forms Opaque Search Dropdowns ([`PartsSearchDropdown.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/PartsSearchDropdown.tsx), [`NewPartView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/NewPartView.tsx), [`EditPartView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/EditPartView.tsx), [`EditPartStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/EditPartStockView.tsx), [`UpdatePartStockView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/UpdatePartStockView.tsx))**:
+  - Eliminated transparent backgrounds on dropdown popovers across all Parts forms (`NewPartView`, `EditPartView`, `EditPartStockView`, `UpdatePartStockView`), replacing them with 100% solid opaque backgrounds (`isLightMode ? '#FFFFFF' : '#141416'`) to prevent seeing through behind the menus.
+  - Added title header with circular close `(X)` button and 1px hairline divider.
+  - Integrated real-time search input directly beneath header for instant category and supplier filtering.
+  - Styled options with clean hover transitions and right-aligned circular radio indicators.
+
+### Added - 2026-11-04 (Batch 14: Admin Details Container Sectioning, Natural Revenue Sidebar Partitioning, New/Edit Rule Forms with Floating Popovers, and Decoupled Revenue Rules Details Page)
+- **Admin Management Details View Sectioning ([`AdminDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/admin-mgt/AdminDetailView.tsx), Image 1)**:
+  - Enclosed the Summary stats section (`Summary` header, daily/weekly/monthly dropdown, and 4 stat cards) within a thin-bordered container card (`borderRadius: 16px`, `border: 1px solid rgba(255, 255, 255, 0.08)`, `padding: 24px`) matching the top profile card.
+  - Enclosed the Activity history section underneath within its own thin-bordered container card (`borderRadius: 16px`, `border: 1px solid rgba(255, 255, 255, 0.08)`, `padding: 24px`), eliminating uncontained items.
+- **Revenue Configuration Right Sidebar & Centered Activity Page ([`RevenueConfigurationView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueConfigurationView.tsx), [`ActivityHistoryView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/ActivityHistoryView.tsx), Image 2)**:
+  - Divided the main screen into a natural 3-column layout where the right column is partitioned by a continuous 1px border line from top to bottom (`borderLeft: 1px solid ${borderColor}`, `paddingLeft: 28px`), completely removing the wrapping card container around activity history items.
+  - Converted the `Activity history / See more` header row into an interactive clickable button row with hover feedback to navigate to `/transactions/revenue-configuration/activity`.
+  - Centralized the full activity history container on `/transactions/revenue-configuration/activity` with `maxWidth: 780px` and `margin: 0 auto`, matching the users activity history page standard.
+- **New Revenue Rule Form Page ([`CreateRevenueRuleView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/CreateRevenueRuleView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/rules/new/page.tsx), Images 3 & 4)**:
+  - Wired `+ New rule` yellow button with pulsing badge to navigate to `/transactions/revenue-configuration/rules/new`.
+  - Header displays `< New rule` (configured in `DashboardShell.tsx`).
+  - Container card titled `About rule` with 2-column input fields: `Rule name`, `Apply to` selector, `Type` selector, and `Value`.
+  - Implemented floating selector popovers anchored directly over the field clicked:
+    - `Apply to` popover: Title `Apply to` + circular close `(X)`, hairline divider, right-aligned circular radio indicators (`Box usage fee`, `Delivery fee`, `Deposit amount`, `Withdrawal amount`).
+    - `Select type` popover: Title `Select type` + circular close `(X)`, hairline divider, right-aligned circular radio indicators (`Fixed amount`, `Percentage`).
+  - Form submit button `Create rule`: Strictly enforces **Rule 5 Form Inactive Button State** (`#352F17` background, `#736B42` text, not-allowed, no badge) until all required fields are filled, then illuminates in vibrant yellow `#F5C842` with black text and `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Edit Revenue Rule Page ([`EditRevenueRuleView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/EditRevenueRuleView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/rules/[id]/edit/page.tsx))**:
+  - Wired `Edit` action on the Revenue rules table three-dot menu to `/transactions/revenue-configuration/rules/[id]/edit`.
+  - Pre-filled with rule values (`Box fee commission`, `Box usage fee`, `Fixed amount`, `200`) and submit button `Save changes` with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+  - Header configured with `< Edit rule`.
+- **Revenue Rules Details View ([`RevenueRuleDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueRuleDetailView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/rules/[id]/page.tsx), Image 5)**:
+  - Wired `View` action on the Revenue rules table three-dot menu to `/transactions/revenue-configuration/rules/[id]`.
+  - Header configured with `< Revenue rules details` and yellow `Actions` button.
+  - Two-column layout with vertical 1px dividing border line (`borderLeft: 1px solid ${borderColor}`, `paddingLeft: 24px`) separating main column from the right Activity history feed (`Rule updated`, `Rule created`).
+  - Top detailed info container: `Booking commission` `#198725` `Active` green badge, subtitle description, and inline metadata chips (`Apply To: Box usage fee`, `Fee Type: Percentage`, `Value: 10%`).
+  - Decoupled Table & Stats (Rule 1 Table Decoupling):
+    - Toolbar with `Transaction history` title, search input, and `Filter ⌄` button hanging cleanly ABOVE the stat cards and table directly on the page background.
+    - 4 Summary stat cards: `Total Transactions Affected` (80,000), `Revenue Generated` (₦500,000,000), `Average Fee Per Transaction` (₦20), `Contribution to platform revenue` (35%).
+    - Standalone table card container: Columns `Txn ID`, `User`, `Base Amount`, `Adjustment`, `Final Amount`, `Date`, with pagination `1 - 100 of 5,000,045`.
+  - Standardized Type 4 Tabbed Filter Modal (Rule 3 & 8):
+    - Fixed container height 440px with inner scrollable area.
+    - `User` tab: Checkboxes for `All`, `Customer`, `Rider`, `Box owner` with right-aligned square checkboxes.
+    - `Duration` tab: Radio buttons for `Today`, `Last 7 days`, `Last 30 days`, `Last 60 days`, `Custom` with right-aligned circular radios.
+    - Action buttons: `Discard` + vibrant yellow `Save` button with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **DashboardShell Route Mapping ([`DashboardShell.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardShell.tsx))**:
+  - Added header titles, back button navigation, and Action button logic for all revenue rule subroutes.
+- **Dashboard Overview Right Sidebar Divider ([`RightSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/RightSidebar.tsx), Image 1)**:
+  - Added clean explicit border dividers (`borderTop: 1px solid rgba(255, 255, 255, 0.12)`) separating the message sections (`Reports`, `Flag triggers`, `New bookings`, `Active deliveries`) without modifying other features.
+- **User Profile Detail View Fidelity Update ([`UserProfileDetailView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/UserProfileDetailView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/users/[id]/page.tsx), Figma Image 2)**:
+  - Topmost metadata section updated to match Figma Image 2:
+    - User type updated to `Customer`.
+    - Replaced `Last ride` with `Last booking: Aug 02, 2024 | 11:56 AM`.
+    - Replaced `Box owned: 5` with `Default address: A5 4567 MyBox locker 232TE6`.
+  - Right sidebar activity history section decoupled from container wrapping into a dedicated border-separated section (`borderLeft: 1px solid rgba(255, 255, 255, 0.08)`).
+  - Wired entire `Activity history / See more` header row as a clickable action button triggering activity navigation.
+  - Restricted coloured left border lines purely to messages containing `"report"` (`Cleanliness report` green, `Theft report` red); all other activity entries (`#BK-123456`, `Booked partition`, `Collected package`, `Wallet deposit`) render borderless.
+  - Added the second day history feed (`June 02, 2025`) matching Figma Image 2.
+  - Eliminated duplicate code in `/users/[id]/page.tsx` by directly delegating to `UserProfileDetailView`.
+- **Activity History Dedicated Page & Duration Modal ([`ActivityHistoryPageView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/users/ActivityHistoryPageView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/users/[id]/activity/page.tsx), Figma Image 4)**:
+  - Encased activity history feed within a centered container card (`maxWidth: 780px`, `margin: 0 auto`, `borderRadius: 16px`, `border: 1px solid rgba(255, 255, 255, 0.08)`) matching Figma Image 4.
+  - Category tabs (`All`, `Booking`, `Wallet`, `Rewards`, `Referrals`, `Reports`) rendered cleanly with active yellow color `#F5C842` and clean spacing without dividing hairline.
+  - Implemented standardized **Type 1 Duration Filter Modal** (`Filtered duration`) featuring circular close `(X)` button, hairline divider, right-aligned square checkboxes with `All` option, and bottom `Discard` + yellow `Save` button with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **App-Wide Opaque Dropdown Menus Fix**:
+  - Replaced transparent `cardBg` with solid opaque backgrounds (`isLightMode ? '#FFFFFF' : '#1C1C20'`) on floating dropdown menus across:
+    - [`OrdersView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/orders/OrdersView.tsx)
+    - [`InventoryLogView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/log/InventoryLogView.tsx)
+    - [`InventoryAccessoriesView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/accessories/InventoryAccessoriesView.tsx)
+    - [`InventoryBoxesView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/boxes/InventoryBoxesView.tsx)
+    - [`InventoryPartsView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/inventory/parts/InventoryPartsView.tsx)
+    - [`box-management/page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/box-management/page.tsx)
+    - [`PointUsageView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/rewards/PointUsageView.tsx)
+
+### Added - 2026-10-30 (Batch 12: Subscriptions & Hardware Sales Tabs, Filter Modals, Revenue Configuration Page with 3 Decoupled Tables, and Unified Activity History Page)
+- **Subscriptions Tab ([`SubscriptionsTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/SubscriptionsTab.tsx), Figma Image 1)**:
+  - Implemented 5 key subscription summary stat cards floating above the table: `Total Subscription Revenue` (₦80,000, +12% today), `Active Subscriptions` (7,935, +12% today), `Churn rate` (72%, +2% today), `Retention rate` (28%, +2% today), and `Subscription renewal rate` (78%, +2% today).
+  - Built subscriptions table with decoupled search & filter toolbar containing columns: `Subscription ID`, `Customer` (with avatar photo, name, phone, email), `Plan` (7 days, 1 month, 3 months), `Amount` (₦300,000,000.000), `Start date`, `End date`, `Status` (Active green pill, Inactive neutral pill), and `Action` (vibrant yellow `View` button).
+- **Subscriptions Filter Modal ([`SubscriptionsFilterModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/modals/SubscriptionsFilterModal.tsx), Figma Image 1)**:
+  - Standardized Type 1 & 4 modal layout with fixed `height: 440px` and scrollable inner area.
+  - 3 clean underline text tabs:
+    1. `Status`: `All`, `Active`, `Inactive` (square checkboxes with 4px border radius, yellow checkmarks, right-aligned).
+    2. `Plan`: `All`, `7 days`, `1 month`, `3 months`, `6 months`, `12 months` (right-aligned checkboxes).
+    3. `Duration`: `Today`, `Last 7 days`, `Last 30 days`, `Last 60 days`, `Custom` (right-aligned circular radios).
+  - Full-width bottom action row with neutral dark `Discard` button and vibrant yellow `Save` button equipped with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Hardware Sales Tab ([`HardwareSalesTab.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/tabs/HardwareSalesTab.tsx), Figma Image 2)**:
+  - Implemented 5 hardware sales summary cards: `Total Box Sales` (₦80,000, +12% today), `Total Accessories sale` (7,935, +12% today), `Avg sales value` (₦2,050, +4% today), `Total Box Sold` (72, +2% today), and `Total Accessories Sold` (28, +2% today).
+  - Built hardware sales table with decoupled toolbar and columns: `Order ID`, `User` (avatar photo, name, phone, email), `Item summary` (e.g. Box (2), Battery (1)), `Total qty`, `Total amount`, `Amount paid`, `Payment status` (Paid green badge, Partially paid amber badge), and `Date`.
+- **Hardware Sales Filter Modal ([`HardwareSalesFilterModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/modals/HardwareSalesFilterModal.tsx), Figma Image 2)**:
+  - Standardized modal with 2 tabs:
+    1. `Status`: `All`, `Paid`, `Partially paid` (right-aligned checkboxes).
+    2. `Duration`: `Today`, `Last 7 days`, `Last 30 days`, `Last 60 days` (right-aligned circular radios).
+  - Equipped with `Discard` and yellow `Save` button with `<Box2BoxPulsingBadge size={14} inverted={false} />`.
+- **Revenue Configuration Page ([`RevenueConfigurationView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/RevenueConfigurationView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/page.tsx), Figma Images 3 & 4)**:
+  - Responsive two-column layout matching design:
+    - Left column with 3 decoupled tables adhering strictly to Table Decoupling Rule 1:
+      1. `Revenue rules`: Title + `+ New rule` yellow button with pulsing badge, columns: `Rule name`, `Applies to`, `Type`, `Value`, `Status` (interactive toggle switch), `Action` (three dots `...` dropdown with `View`, `Edit`, and `Delete`).
+      2. `Promotions`: Title + `+ New promo` yellow button with pulsing badge, columns: `Promo name`, `Duration`, `Applies to`, `Type`, `Value`, `Status` (toggle switch), `Action` (three dots `...` dropdown with `View`, `Edit`, and `Delete`).
+      3. `Subscriptions`: Title + `+ New plan` yellow button with pulsing badge, columns: `Subscription name`, `Duration`, `Amount`, `Subscribers`, `Revenue`, `Status` (toggle switch), `Action` (three dots `...` dropdown with `View`, `Edit`, and `Delete`).
+    - Right column with `Activity history` feed preview grouped by date (`June 03, 2025` and `June 02, 2025`) and a clickable `See more` navigation button.
+- **Activity History Dedicated Page ([`ActivityHistoryView.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/transactions/revenue/ActivityHistoryView.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/transactions/revenue-configuration/activity/page.tsx), Figma Image 5)**:
+  - Single unified container holding the whole activity feed strictly separated by date only with zero extra container wrapping.
+  - Underline category tabs at the top: `All`, `Revenue rule`, `Promotion`, `Subscription`, alongside a `Duration` dropdown filter.
+  - Chronological activity entries showing title, subtitle, author, timestamp, and role pills (`Admin` / `Auto`).
+- **Dashboard Shell & Navigation Integration ([`DashboardShell.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardShell.tsx))**:
+  - Wired top header `Revenue configuration` button with `Box2BoxPulsingBadge` on `/transactions` to route directly to `/transactions/revenue-configuration`.
+  - Configured breadcrumb titles (`< Revenue configuration`, `< Activity history`), back button triggers, and header action visibility.
+
+### Added - 2026-10-29 (Batch 11: 6-Card Horizontal Charts Suite, Battery Health Half-Pie Gauge, Box Distribution City Paging, Modal Popups, Slidable Stats Trailing Spacing, Right Sidebar Clean Spacing, and Sidebar Active Theme)
+- **Charts Section Visibility & Full 6-Card Suite ([`ChartsSection.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/ChartsSection.tsx))**:
+  - Resolved the collapsed chart section issue by assigning explicit `flexShrink: 0`, `height: '270px'`, and `minHeight: '270px'`, preventing flexbox auto-compression inside `<main>`.
+  - Expanded from 3 to all **6 charts** in a horizontal draggable track matching Figma Images 2–4:
+    1. `UserDistributionCard`
+    2. `UserGrowthCard`
+    3. `RevenueCard`
+    4. `DeliveryVolumeCard`
+    5. `BoxDistributionCard`
+    6. `BatteryHealthCard`
+  - Added trailing breathing room spacer (`16px`) so the rightmost card stops cleanly away from the edge when scrolled horizontally.
+- **Delivery Volume Line Graph ([`DeliveryVolumeCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/DeliveryVolumeCard.tsx), Figma Image 2)**:
+  - Built cubic bezier spline curve for 200,000,000 parcels delivered with golden yellow gradient fill, key milestone circular markers, `Mon` through `Sun` day axis, vertical Y-axis line with values from `90M` down to `0`, and functional `Daily / Weekly / Monthly` dropdown.
+- **Box Distribution Dual Bar Chart with City Paging ([`BoxDistributionCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/BoxDistributionCard.tsx), Figma Images 3 & 4)**:
+  - Implemented dual bar chart with active yellow bars and inactive white/grey bars across 200 Cities.
+  - Interactive `<` and `>` chevron buttons switch seamlessly between Page 1 cities (`Lag`, `Abj`, `Phc`, `Kan`, `Enu`, `Iba`, `Ben`, `Kad`, `Jos`, `Uyo`, `War`, `Cal`) and Page 2 cities (`Mai`, `Abe`, `Aku`, `Awa`, `Mak`, `Bau`, `Sok`, `Yol`, `Ada`, `Min`, `Dut`, `Jal`).
+  - Added dotted horizontal grid lines for `1M`, `800K`, `600K`, `400K`, `200K`, `0` and a functional `Daily / Weekly / Monthly` dropdown.
+- **Battery Health 5-Color Half-Pie Gauge ([`BatteryHealthCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/BatteryHealthCard.tsx), Figma Images 3 & 4)**:
+  - Modeled 180° semi-circular gauge with 5 distinct segments matching Figma:
+    - 25% Medium Gold Yellow (`#D4A72C`) - Excellent
+    - 25% Bright Vibrant Yellow (`#F5C842`) - Good
+    - 15% Purple/Violet (`#A855F7`) - Fair
+    - 25% Orange (`#F97316`) - Poor
+    - 10% Red (`#EF4444`) - Critical
+  - Centered all percentage numbers directly inside the colored arc segments.
+  - Implemented two-line centered legend and top-right info button `(!)` triggering the `BatteryHealthModal`.
+- **Interactive Modals Suite ([`UserDistributionModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/modals/UserDistributionModal.tsx), [`BatteryHealthModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/modals/BatteryHealthModal.tsx), [`LogoutModal.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/modals/LogoutModal.tsx), Figma Image 5)**:
+  - `UserDistributionModal`: Features vibrant yellow team/users icon (`#F5C842`) and descriptive text.
+  - `BatteryHealthModal`: Features vibrant yellow battery graphic (`#F5C842`) and descriptive text explaining Good, Low, and Critical status.
+  - `LogoutModal`: Features yellow exit door graphic with white outgoing arrow, prompt question, neutral white `Cancel` button, and red `Log out` button.
+  - Modals configured with `zIndex: 9999` and `backdropFilter: blur(4px)`.
+- **Slidable Stats Trailing Spacing Fix ([`SlidableStats.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/SlidableStats.tsx))**:
+  - Added trailing spacer element (`width: '12px', gridRow: '1 / -1'`) so that when the stat card track is scrolled to the far right, the 4th cards (`Total Units` & `On-time SLA`) retain their clean 22px margin from the container edge, while preserving edge-to-edge flow during scroll.
+- **Right Sidebar Clean Spacing ([`RightSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/RightSidebar.tsx))**:
+  - Removed item-level dividing borders from `New bookings` and `Active deliveries` entries.
+  - Centered section dividers with generous margin (`margin: '24px 0'`) to give clean breathing room between feeds without visual clutter.
+- **Left Sidebar Active State Styling & Modal Trigger ([`DashboardSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardSidebar.tsx))**:
+  - Updated active navigation item text color and icon color to `var(--Text-primary, #DEC91B)`.
+  - Updated active background to `var(--admin-selected-menu, #F7DF1E33)` (transparent yellow tint instead of solid opaque yellow).
+  - Wired the red `Logout` button to open the `LogoutModal` instead of an immediate route push.
+
+### Added - 2026-10-28 (Batch 10: 100% Figma Dashboard Overview Polish, Right Sidebar Realignment, Table Structure Rule Bend, and Navigation Chevron Decoupling)
+- **Left Navigation Chevron Toggle Decoupling ([`DashboardSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardSidebar.tsx))**:
+  - Decoupled submenu expansion chevron icon from row navigation. Clicking specifically the chevron toggles open/close state without navigating or leaving the current screen (`e.stopPropagation()`).
+  - Clicking anywhere else on the row navigates to the first sub-item / parent default route (`/inventory` for Inventory, `/rewards` for Rewards, etc.) and auto-expands the dropdown.
+- **Overview Stat Cards 4th-Card Peek Layout ([`SlidableStats.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/SlidableStats.tsx))**:
+  - Adjusted `gridAutoColumns` to `clamp(124px, calc((100% - 66px) / 3.25), 150px)` and card padding to `12px 12px`, ensuring exactly 3 cards are fully visible while the 4th card peeks out slightly at the right edge across screen widths.
+- **Charts Section Drag & Layout Stabilization ([`ChartsSection.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/ChartsSection.tsx))**:
+  - Removed full-bleed negative margins that caused chart overlap or vertical shifting when scrolling downward.
+  - Set `overflowY: 'hidden'` and constrained drag interactions purely to the horizontal axis (`scrollLeft`) so cards stay firmly positioned without creeping under the stats container.
+- **User Distribution Half-Pie Chart ([`UserDistributionCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/UserDistributionCard.tsx))**:
+  - Replaced incorrect green/teal color with 3 harmonious shades of yellow (`#F5C842` vibrant yellow, `#D49A15` warm medium gold, `#85580A` deep amber bronze) matching Figma Image 1.
+  - Centered rating percentage labels (`50%`, `25%`, `25%`) precisely inside their respective arc segments.
+  - Expanded card height and surrounding padding to `260px` with generous internal spacing.
+- **User Growth Line Graph ([`UserGrowthCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/UserGrowthCard.tsx))**:
+  - Added explicit vertical Y-axis line indicating where values read from.
+  - Expanded SVG height and added generous bottom breathing room so month labels (`Jan` through `Dec`) do not sit directly on the card's bottom edge.
+- **Revenue Bar Chart Suite ([`RevenueCard.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/charts/RevenueCard.tsx))**:
+  - Extended chart to full 7-day week from `Mon` through `Sun` (resolving truncated 5-day issue).
+  - Added horizontal dotted grid lines (`strokeDasharray="2 3"`) across all Y-ticks (`1B`, `800M`, `600M`, `400M`, `200M`, `0`) and added vertical Y-axis line.
+  - Formatted bars with rounded tops (`rx="3"`) in vibrant yellow `#F5C842`.
+- **Quick Actions Styling & Route Links ([`QuickActions.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/QuickActions.tsx), [`page.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/app/(admin)/dashboard/page.tsx))**:
+  - Replaced glowing yellow icon containers with neutral dark gray rounded containers (`#1C1C20`) and muted light gray icons (`#9CA3AF`).
+  - Updated icons to match Figma (Storefront for `Inventory`, Play square for `Tutorials`).
+  - Wired routes: `User Management` -> `/users`, `Box management` -> `/box-management`, `Inventory` -> `/inventory`, `Transactions` -> `/transactions`.
+- **Dashboard Tables Rule Bend & Column Realignment ([`DashboardTables.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/DashboardTables.tsx), [`dashboardMockData.ts`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/lib/dashboardMockData.ts), [`dashboard.ts`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/types/dashboard.ts))**:
+  - Placed table titles and `See more` links directly inside the top header row of the table container cards as giant clickable action buttons navigating to `/users`, `/box-management`, and `/inventory`.
+  - **New users update**: User names underlined, stacked with phone number and email address; location in bright light white; date joined paired with time stamp.
+  - **Recent Box update**: Battery health values enclosed within badge-like cards of matching colors (`Excellent`, `Good`, `Fair`, `Poor`, `Critical`).
+  - **Recent inventory update**: Column renamed to `Stock` featuring item thumbnail images (`/image/box1.png`, etc.) alongside item name and description.
+- **Right Sidebar Activity Feeds ([`RightSidebar.tsx`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/src/components/dashboard/RightSidebar.tsx))**:
+  - Replaced placeholder emoji with official SVG assets (`package-report.svg`, `cleanliness-report.svg`, `theft-report.svg`, `payment-report.svg`) from `/public/image/`.
+  - Made section dates bold and prominent (`June 05, 2025`).
+  - Removed underline from `Disable box` yellow action text in Flag triggers.
+  - Removed left color borders and colored status text from `New bookings` and `Active deliveries` (colourless presentation matching Figma).
+  - Wired `New bookings` and `Active Deliveries` header rows to `/transactions`.
+
 ### Added - 2026-10-21 (Batch 9: Zero Extra Contrast & Table Decoupling App-wide Overhaul, Rule 8 Fixed-Height Modal Sizing Standard, Tabbed Location Modal with Cascading Filters, Admin Avatar Update, Transactions Component Modularization & Full Tabs Suite)
 - **Rulebook Update: Rule 8 Standard Modal Sizing & Right-Aligned Controls ([`AGENTS.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/AGENTS.md) & [`.agents/rules/box2box-rules.md`](file:///c:/Users/sylve/projects/box2box-admin-dashboard/.agents/rules/box2box-rules.md))**:
   - Enforced fixed container height (`height: 440px`) across all tabbed modals so modal dimensions remain perfectly stable without jumping or resizing when switching between tabs with differing item counts.

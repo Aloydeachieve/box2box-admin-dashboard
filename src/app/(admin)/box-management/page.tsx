@@ -281,7 +281,7 @@ export default function BoxManagementPage() {
                 right: 0,
                 marginTop: '4px',
                 width: '130px',
-                backgroundColor: cardBg,
+                backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
                 borderRadius: '8px',
                 border: `1px solid ${borderColor}`,
                 padding: '4px',
@@ -375,9 +375,9 @@ export default function BoxManagementPage() {
                 strokeWidth="28"
                 strokeLinecap="butt"
               />
-              <text x="50" y="62" fill="#FFFFFF" fontSize="11" fontWeight="700">50%</text>
-              <text x="118" y="38" fill="#000000" fontSize="10" fontWeight="700">25%</text>
-              <text x="154" y="74" fill="#FFFFFF" fontSize="10" fontWeight="700">25%</text>
+              <text x="20" y="50" fill="#000000" fontSize="11" fontWeight="700">50%</text>
+              <text x="118" y="18" fill="#000000" fontSize="10" fontWeight="700">25%</text>
+              <text x="170" y="74" fill="#000000" fontSize="10" fontWeight="700">25%</text>
             </svg>
           </div>
         </div>
@@ -529,19 +529,19 @@ export default function BoxManagementPage() {
           <div style={{ width: '100%', height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="100" height="100" viewBox="0 0 100 100">
               <path d="M 50 50 L 50 8 A 42 42 0 0 1 74.7 16.0 Z" fill="#A855F7" />
-              <text x="60" y="24" fill="#FFFFFF" fontSize="7" fontWeight="700">10%</text>
+              <text x="60" y="24" fill="#000000" fontSize="7" fontWeight="700">10%</text>
 
               <path d="M 50 50 L 74.7 16.0 A 42 42 0 0 1 89.9 37.0 Z" fill="#10B981" />
-              <text x="73" y="36" fill="#FFFFFF" fontSize="7" fontWeight="700">10%</text>
+              <text x="73" y="36" fill="#000000" fontSize="7" fontWeight="700">10%</text>
 
               <path d="M 50 50 L 89.9 37.0 A 42 42 0 0 1 50 92 Z" fill="#F5C842" />
               <text x="72" y="65" fill="#000000" fontSize="9" fontWeight="700">30%</text>
 
               <path d="M 50 50 L 50 92 A 42 42 0 0 1 8 50 Z" fill="#EF4444" />
-              <text x="30" y="74" fill="#FFFFFF" fontSize="9" fontWeight="700">25%</text>
+              <text x="30" y="74" fill="#000000" fontSize="9" fontWeight="700">25%</text>
 
               <path d="M 50 50 L 8 50 A 42 42 0 0 1 50 8 Z" fill="#06B6D4" />
-              <text x="24" y="38" fill="#FFFFFF" fontSize="9" fontWeight="700">25%</text>
+              <text x="24" y="38" fill="#000000" fontSize="9" fontWeight="700">25%</text>
             </svg>
           </div>
         </div>

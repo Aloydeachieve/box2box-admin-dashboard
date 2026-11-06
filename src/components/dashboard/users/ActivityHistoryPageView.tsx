@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, Search, ArrowLeft } from 'lucide-react';
+import { ChevronDown, X, Check } from 'lucide-react';
 import { Box2BoxPulsingBadge } from '@/components/common/Box2BoxPulsingBadge';
 
 interface ActivityItem {
@@ -13,11 +13,12 @@ interface ActivityItem {
   status?: string;
   statusType?: 'success' | 'warning' | 'pending' | 'danger' | 'info';
   category: 'Booking' | 'Wallet' | 'Rewards' | 'Referrals' | 'Reports';
+  hasLeftBorder?: boolean;
   borderAccent?: string;
 }
 
 interface ActivityHistoryPageViewProps {
-  onBack: () => void;
+  onBack?: () => void;
   onSelectActivity?: (id: string) => void;
   isLightMode?: boolean;
 }
@@ -28,14 +29,14 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
   isLightMode = false,
 }) => {
   const [activeTab, setActiveTab] = useState<'All' | 'Booking' | 'Wallet' | 'Rewards' | 'Referrals' | 'Reports'>('All');
-  const [duration, setDuration] = useState('Last 7 days');
+  const [duration, setDuration] = useState('Duration');
   const [showDurationModal, setShowDurationModal] = useState(false);
-  const [tempDuration, setTempDuration] = useState('Last 7 days');
+  const [selectedDurations, setSelectedDurations] = useState<string[]>(['Last 7 days']);
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
-  const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
+  const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const yellowColor = '#F5C842';
 
   const tabs: Array<'All' | 'Booking' | 'Wallet' | 'Rewards' | 'Referrals' | 'Reports'> = [
     'All',
@@ -62,7 +63,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       description: 'Nearing drop off',
       time: '13:25',
       category: 'Booking',
-      borderAccent: '#F5C842',
+      hasLeftBorder: false,
     },
     {
       id: 'act-2',
@@ -71,7 +72,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       description: 'MyBox-123456 → MyBox123487',
       time: '13:25',
       category: 'Booking',
-      borderAccent: '#F5C842',
+      hasLeftBorder: false,
     },
     {
       id: 'act-3',
@@ -81,6 +82,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'Resolved',
       statusType: 'success',
       category: 'Reports',
+      hasLeftBorder: true,
       borderAccent: '#10B981',
     },
     {
@@ -91,6 +93,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'In progress',
       statusType: 'warning',
       category: 'Reports',
+      hasLeftBorder: true,
       borderAccent: '#EF4444',
     },
     {
@@ -101,7 +104,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'Pending',
       statusType: 'pending',
       category: 'Booking',
-      borderAccent: '#71717A',
+      hasLeftBorder: false,
     },
     {
       id: 'act-6',
@@ -111,7 +114,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'Pending',
       statusType: 'pending',
       category: 'Booking',
-      borderAccent: '#71717A',
+      hasLeftBorder: false,
     },
     {
       id: 'act-7',
@@ -121,7 +124,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'Successful',
       statusType: 'success',
       category: 'Wallet',
-      borderAccent: '#10B981',
+      hasLeftBorder: false,
     },
   ];
 
@@ -133,7 +136,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       description: 'Nearing drop off',
       time: '13:25',
       category: 'Booking',
-      borderAccent: '#F5C842',
+      hasLeftBorder: false,
     },
     {
       id: 'act-9',
@@ -142,7 +145,7 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       description: 'MyBox-123456 → MyBox123487',
       time: '13:25',
       category: 'Booking',
-      borderAccent: '#F5C842',
+      hasLeftBorder: false,
     },
     {
       id: 'act-10',
@@ -152,15 +155,29 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       status: 'Resolved',
       statusType: 'success',
       category: 'Reports',
+      hasLeftBorder: true,
       borderAccent: '#10B981',
     },
     {
       id: 'act-11',
       title: 'Theft report',
-      description: 'My item is missing',
+      description: 'My item is missing\nR-123465',
       time: '13:25',
+      status: 'In progress',
+      statusType: 'warning',
       category: 'Reports',
+      hasLeftBorder: true,
       borderAccent: '#EF4444',
+    },
+    {
+      id: 'act-12',
+      title: 'Booked partition',
+      description: '#012356\nR-123465',
+      time: '13:25',
+      status: 'Pending',
+      statusType: 'pending',
+      category: 'Booking',
+      hasLeftBorder: false,
     },
   ];
 
@@ -179,8 +196,38 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
         return '#EF4444';
       case 'pending':
       default:
-        return '#A1A1AA';
+        return '#71717A';
     }
+  };
+
+  // Checkbox handling for Filtered duration Modal (Type 1 standard)
+  const isAllSelected = durationOptions.every((opt) => selectedDurations.includes(opt));
+
+  const toggleAll = () => {
+    if (isAllSelected) {
+      setSelectedDurations([]);
+    } else {
+      setSelectedDurations([...durationOptions]);
+    }
+  };
+
+  const toggleDuration = (opt: string) => {
+    if (selectedDurations.includes(opt)) {
+      setSelectedDurations(selectedDurations.filter((d) => d !== opt));
+    } else {
+      setSelectedDurations([...selectedDurations, opt]);
+    }
+  };
+
+  const handleSaveDuration = () => {
+    if (selectedDurations.length === durationOptions.length || selectedDurations.length === 0) {
+      setDuration('All');
+    } else if (selectedDurations.length === 1) {
+      setDuration(selectedDurations[0]);
+    } else {
+      setDuration(selectedDurations.join(', '));
+    }
+    setShowDurationModal(false);
   };
 
   return (
@@ -188,274 +235,262 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '20px',
         width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        fontFamily: 'Rubik, var(--font-outfit), sans-serif',
+        paddingBottom: '48px',
+        fontFamily: 'var(--font-outfit), sans-serif',
       }}
     >
-      {/* Sub-tabs & Duration Dropdown matching Figma Image 2 */}
+      {/* Centered Activity History Container Card matching Figma Image 4 */}
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-          borderBottom: `1px solid ${borderColor}`,
-          paddingBottom: '12px',
-        }}
-      >
-        {/* Sub-tabs */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', overflowX: 'auto' }}>
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab;
-            return (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: isActive ? '#F5C842' : subtextColor,
-                  fontSize: '14px',
-                  fontWeight: isActive ? 600 : 400,
-                  cursor: 'pointer',
-                  padding: '6px 0',
-                  position: 'relative',
-                  whiteSpace: 'nowrap',
-                  transition: 'color 0.15s ease',
-                }}
-              >
-                <span>{tab}</span>
-                {isActive && (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '-13px',
-                      left: 0,
-                      right: 0,
-                      height: '2px',
-                      backgroundColor: '#F5C842',
-                    }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Duration Dropdown Button */}
-        <div style={{ position: 'relative' }}>
-          <button
-            onClick={() => {
-              setTempDuration(duration);
-              setShowDurationModal(true);
-            }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 14px',
-              borderRadius: '8px',
-              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
-              border: `1px solid ${borderColor}`,
-              color: textColor,
-              fontSize: '13px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              transition: 'background-color 0.15s',
-            }}
-          >
-            <span>{duration}</span>
-            <ChevronDown size={14} color={subtextColor} />
-          </button>
-        </div>
-      </div>
-
-      {/* Activity Timeline List (Grouped by Date, Image 2) */}
-      <div
-        style={{
+          width: '100%',
+          maxWidth: '780px',
+          margin: '0 auto',
+          borderRadius: '16px',
+          border: `1px solid ${borderColor}`,
+          backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+          padding: '24px 28px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '24px',
+          boxShadow: isLightMode ? '0 4px 12px rgba(0, 0, 0, 0.04)' : 'none',
         }}
       >
-        {/* Date Group 1: June 03, 2025 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div
-            style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: textColor,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            June 03, 2025
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-            {filterList(activitiesDay1).map((item) => (
-              <div
-                key={item.id}
-                onClick={() => onSelectActivity?.(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  padding: '14px 16px',
-                  backgroundColor: 'transparent',
-                  borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
-                  borderLeft: `3px solid ${item.borderAccent || '#F5C842'}`,
-                  cursor: 'pointer',
-                  transition: 'background-color 0.15s',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = isLightMode ? 'rgba(0, 0, 0, 0.02)' : 'rgba(255, 255, 255, 0.025)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: textColor,
-                      lineHeight: '20px',
-                    }}
-                  >
-                    {item.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '13px',
-                      color: subtextColor,
-                      lineHeight: '20px',
-                      whiteSpace: 'pre-line',
-                      marginTop: '2px',
-                    }}
-                  >
-                    {item.description}
-                  </div>
-                </div>
-
-                <div
+        {/* Header inside Container: Clean Text Tabs on Left & Duration Dropdown Button on Right */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '12px',
+            marginBottom: '26px',
+          }}
+        >
+          {/* Sub-tabs: clean text tabs, active turns yellow, cleanly spaced with NO border line */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '22px', overflowX: 'auto' }}>
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab;
+              return (
+                <button
+                  key={tab}
+                  type="button"
+                  onClick={() => setActiveTab(tab)}
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    gap: '4px',
+                    background: 'none',
+                    border: 'none',
+                    color: isActive ? yellowColor : subtextColor,
+                    fontSize: '13.5px',
+                    fontWeight: isActive ? 600 : 400,
+                    cursor: 'pointer',
+                    padding: '4px 0',
+                    whiteSpace: 'nowrap',
+                    transition: 'color 0.15s ease',
                   }}
                 >
-                  <span style={{ fontSize: '12px', color: '#71717A' }}>{item.time}</span>
-                  {item.status && (
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        color: getStatusColor(item.statusType),
-                      }}
-                    >
-                      {item.status}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+                  {tab}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Duration Button matching Figma Image 4 */}
+          <div style={{ position: 'relative' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedDurations(duration === 'Duration' || duration === 'All' ? ['Last 7 days'] : [duration]);
+                setShowDurationModal(true);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 14px',
+                borderRadius: '8px',
+                backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+                border: `1px solid ${borderColor}`,
+                color: textColor,
+                fontSize: '12.5px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'background-color 0.15s',
+              }}
+            >
+              <span>{duration}</span>
+              <ChevronDown size={14} color={subtextColor} />
+            </button>
           </div>
         </div>
 
-        {/* Date Group 2: June 02, 2025 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          <div
-            style={{
-              fontSize: '14px',
-              fontWeight: 600,
-              color: textColor,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            June 02, 2025
-          </div>
+        {/* Activity Timeline List (Grouped by Date, cleanly spaced matching Figma Image 4) */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '28px',
+          }}
+        >
+          {/* Date Group 1: June 03, 2025 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div
+              style={{
+                fontSize: '13.5px',
+                fontWeight: 700,
+                color: textColor,
+              }}
+            >
+              June 03, 2025
+            </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0px' }}>
-            {filterList(activitiesDay2).map((item) => (
-              <div
-                key={item.id}
-                onClick={() => onSelectActivity?.(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between',
-                  padding: '14px 16px',
-                  backgroundColor: 'transparent',
-                  borderBottom: isLightMode ? '1px solid #E5E7EB' : '1px solid rgba(255, 255, 255, 0.08)',
-                  borderLeft: `3px solid ${item.borderAccent || '#F5C842'}`,
-                  cursor: 'pointer',
-                  transition: 'background-color 0.15s',
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = isLightMode ? 'rgba(0, 0, 0, 0.02)' : 'rgba(255, 255, 255, 0.025)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontSize: '14px',
-                      fontWeight: 600,
-                      color: textColor,
-                      lineHeight: '20px',
-                    }}
-                  >
-                    {item.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '13px',
-                      color: subtextColor,
-                      lineHeight: '20px',
-                      whiteSpace: 'pre-line',
-                      marginTop: '2px',
-                    }}
-                  >
-                    {item.description}
-                  </div>
-                </div>
-
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {filterList(activitiesDay1).map((item) => (
                 <div
+                  key={item.id}
+                  onClick={() => onSelectActivity?.(item.id)}
                   style={{
                     display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                    gap: '4px',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    padding: '2px 0',
+                    paddingLeft: item.hasLeftBorder ? '10px' : '0px',
+                    backgroundColor: 'transparent',
+                    borderLeft: item.hasLeftBorder ? `2.5px solid ${item.borderAccent || '#10B981'}` : 'none',
+                    cursor: 'pointer',
+                    transition: 'opacity 0.15s',
                   }}
                 >
-                  <span style={{ fontSize: '12px', color: '#71717A' }}>{item.time}</span>
-                  {item.status && (
-                    <span
+                  <div>
+                    <div
                       style={{
-                        fontSize: '11px',
+                        fontSize: '13px',
                         fontWeight: 600,
-                        color: getStatusColor(item.statusType),
+                        color: textColor,
+                        lineHeight: '18px',
                       }}
                     >
-                      {item.status}
-                    </span>
-                  )}
+                      {item.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '11.5px',
+                        color: subtextColor,
+                        lineHeight: '18px',
+                        whiteSpace: 'pre-line',
+                        marginTop: '2px',
+                      }}
+                    >
+                      {item.description}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      gap: '3px',
+                    }}
+                  >
+                    <span style={{ fontSize: '11px', color: '#71717A' }}>{item.time}</span>
+                    {item.status && (
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: getStatusColor(item.statusType),
+                        }}
+                      >
+                        {item.status}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Date Group 2: June 02, 2025 */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div
+              style={{
+                fontSize: '13.5px',
+                fontWeight: 700,
+                color: textColor,
+              }}
+            >
+              June 02, 2025
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {filterList(activitiesDay2).map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => onSelectActivity?.(item.id)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    padding: '2px 0',
+                    paddingLeft: item.hasLeftBorder ? '10px' : '0px',
+                    backgroundColor: 'transparent',
+                    borderLeft: item.hasLeftBorder ? `2.5px solid ${item.borderAccent || '#10B981'}` : 'none',
+                    cursor: 'pointer',
+                    transition: 'opacity 0.15s',
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: 600,
+                        color: textColor,
+                        lineHeight: '18px',
+                      }}
+                    >
+                      {item.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '11.5px',
+                        color: subtextColor,
+                        lineHeight: '18px',
+                        whiteSpace: 'pre-line',
+                        marginTop: '2px',
+                      }}
+                    >
+                      {item.description}
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      gap: '3px',
+                    }}
+                  >
+                    <span style={{ fontSize: '11px', color: '#71717A' }}>{item.time}</span>
+                    {item.status && (
+                      <span
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: getStatusColor(item.statusType),
+                        }}
+                      >
+                        {item.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Duration Radio Modal Popup (Figma Image 2) */}
+      {/* Standard Type 1 Duration Filter Modal (Filtered duration) */}
       {showDurationModal && (
         <div
           style={{
@@ -467,131 +502,177 @@ export const ActivityHistoryPageView: React.FC<ActivityHistoryPageViewProps> = (
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 100,
+            padding: '16px',
           }}
           onClick={() => setShowDurationModal(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '90%',
-              maxWidth: '380px',
-              backgroundColor: isLightMode ? '#FFFFFF' : '#18181B',
-              borderRadius: '14px',
+              width: '100%',
+              maxWidth: '360px',
+              backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
+              borderRadius: '16px',
               border: `1px solid ${borderColor}`,
-              padding: '20px',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+              fontFamily: 'var(--font-outfit), sans-serif',
             }}
           >
-            <div
-              style={{
-                fontSize: '16px',
-                fontWeight: 700,
-                color: textColor,
-                marginBottom: '16px',
-              }}
-            >
-              Select Duration
+            {/* Header: Title & Circular (X) close button */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 700, color: textColor, margin: 0 }}>
+                Filtered duration
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowDurationModal(false)}
+                aria-label="Close"
+                style={{
+                  background: 'none',
+                  border: `1px solid ${subtextColor}`,
+                  borderRadius: '50%',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: subtextColor,
+                  cursor: 'pointer',
+                  padding: 0,
+                }}
+              >
+                <X size={14} />
+              </button>
             </div>
 
-            {/* Radio Options */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '22px' }}>
+            {/* Subtle 1px horizontal hairline divider under header */}
+            <div style={{ width: '100%', height: '1px', backgroundColor: borderColor }} />
+
+            {/* Checkboxes list: All toggle + options (Right-aligned indicators) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {/* 'All' option */}
+              <div
+                onClick={toggleAll}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '4px 0',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                }}
+              >
+                <span style={{ fontSize: '13.5px', color: textColor, fontWeight: 500 }}>
+                  All
+                </span>
+                <div
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    borderRadius: '4px',
+                    border: isAllSelected
+                      ? `1px solid ${yellowColor}`
+                      : `1.5px solid ${isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.25)'}`,
+                    backgroundColor: isAllSelected ? yellowColor : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  {isAllSelected && <Check size={13} color="#000000" strokeWidth={3} />}
+                </div>
+              </div>
+
+              {/* Individual Duration options */}
               {durationOptions.map((opt) => {
-                const isSelected = tempDuration === opt;
+                const isChecked = selectedDurations.includes(opt);
                 return (
-                  <label
+                  <div
                     key={opt}
-                    onClick={() => setTempDuration(opt)}
+                    onClick={() => toggleDuration(opt)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '12px',
+                      justifyContent: 'space-between',
+                      padding: '4px 0',
                       cursor: 'pointer',
-                      padding: '8px 10px',
-                      borderRadius: '8px',
-                      backgroundColor: isSelected
-                        ? isLightMode
-                          ? 'rgba(245, 200, 66, 0.12)'
-                          : 'rgba(245, 200, 66, 0.08)'
-                        : 'transparent',
+                      userSelect: 'none',
                     }}
                   >
-                    {/* Custom Radio Circle */}
+                    <span style={{ fontSize: '13.5px', color: textColor, fontWeight: 500 }}>
+                      {opt}
+                    </span>
                     <div
                       style={{
                         width: '18px',
                         height: '18px',
-                        borderRadius: '50%',
-                        border: isSelected ? '2px solid #F5C842' : `2px solid ${subtextColor}`,
+                        borderRadius: '4px',
+                        border: isChecked
+                          ? `1px solid ${yellowColor}`
+                          : `1.5px solid ${isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.25)'}`,
+                        backgroundColor: isChecked ? yellowColor : 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         transition: 'all 0.15s ease',
                       }}
                     >
-                      {isSelected && (
-                        <div
-                          style={{
-                            width: '9px',
-                            height: '9px',
-                            borderRadius: '50%',
-                            backgroundColor: '#F5C842',
-                          }}
-                        />
-                      )}
+                      {isChecked && <Check size={13} color="#000000" strokeWidth={3} />}
                     </div>
-                    <span
-                      style={{
-                        fontSize: '14px',
-                        fontWeight: isSelected ? 600 : 400,
-                        color: textColor,
-                      }}
-                    >
-                      {opt}
-                    </span>
-                  </label>
+                  </div>
                 );
               })}
             </div>
 
-            {/* Action Buttons: Discard & Save */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '10px' }}>
+            {/* Action buttons: Full-width bottom row with neutral dark Discard button and vibrant yellow Save button with Box2BoxPulsingBadge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
               <button
+                type="button"
                 onClick={() => setShowDurationModal(false)}
                 style={{
-                  padding: '8px 16px',
+                  flex: 1,
+                  padding: '10px 16px',
                   borderRadius: '8px',
-                  backgroundColor: isLightMode ? '#F3F4F6' : '#27272A',
+                  backgroundColor: isLightMode ? '#E5E7EB' : '#2C2C30',
                   border: 'none',
-                  color: textColor,
+                  color: isLightMode ? '#111827' : '#FFFFFF',
                   fontSize: '13px',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   cursor: 'pointer',
+                  transition: 'background-color 0.15s ease',
                 }}
               >
                 Discard
               </button>
+
               <button
-                onClick={() => {
-                  setDuration(tempDuration);
-                  setShowDurationModal(false);
-                }}
+                type="button"
+                onClick={handleSaveDuration}
                 style={{
-                  padding: '8px 18px',
+                  flex: 1,
+                  padding: '10px 16px',
                   borderRadius: '8px',
-                  backgroundColor: '#F5C842',
-                  border: 'none',
+                  backgroundColor: yellowColor,
                   color: '#000000',
                   fontSize: '13px',
                   fontWeight: 700,
+                  border: 'none',
                   cursor: 'pointer',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '8px',
+                  boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
+                  transition: 'opacity 0.15s ease',
                 }}
               >
                 <span>Save</span>
-                <Box2BoxPulsingBadge size={16} />
+                <Box2BoxPulsingBadge size={14} inverted={false} />
               </button>
             </div>
           </div>

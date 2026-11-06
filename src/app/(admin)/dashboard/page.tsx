@@ -20,6 +20,12 @@ export default function DashboardOverviewPage() {
       case 'boxes':
         router.push('/box-management');
         break;
+      case 'inventory':
+        router.push('/inventory');
+        break;
+      case 'transactions':
+        router.push('/transactions');
+        break;
       case 'box_regt':
         router.push('/box-registration');
         break;

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ChevronDown, Plus, X } from 'lucide-react';
 import { useAdmin } from '@/components/layout/AdminContext';
 import { ToastNotification } from '@/components/common/ToastNotification';
+import { PartsSearchDropdown } from './PartsSearchDropdown';
 
 export const NewPartView: React.FC = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ export const NewPartView: React.FC = () => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
-  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : '#141416';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
@@ -187,7 +188,7 @@ export const NewPartView: React.FC = () => {
             </div>
           </div>
 
-          {/* Row 2: Category (Half-width) */}
+          {/* Row 2: Category (Half-width) with Opaque Search Dropdown */}
           <div
             style={{
               display: 'grid',
@@ -195,83 +196,17 @@ export const NewPartView: React.FC = () => {
               gap: '20px',
             }}
           >
-            <div style={{ position: 'relative' }}>
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowCategoryDropdown(!showCategoryDropdown);
-                }}
-                style={{
-                  backgroundColor: inputBg,
-                  borderRadius: '8px',
-                  border: `1px solid ${borderColor}`,
-                  padding: '10px 14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  minHeight: '54px',
-                  boxSizing: 'border-box',
-                  cursor: 'pointer',
-                }}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '10px', color: subtextColor, fontWeight: 500 }}>
-                    Category
-                  </span>
-                  <span style={{ fontSize: '13px', color: textColor, fontWeight: 600, marginTop: '2px' }}>
-                    {category}
-                  </span>
-                </div>
-                <ChevronDown size={16} color={subtextColor} />
-              </div>
-
-              {showCategoryDropdown && (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    right: 0,
-                    marginTop: '6px',
-                    backgroundColor: cardBg,
-                    border: `1px solid ${borderColor}`,
-                    borderRadius: '10px',
-                    padding: '6px',
-                    zIndex: 40,
-                    boxShadow: '0 10px 25px rgba(0, 0, 0, 0.5)',
-                  }}
-                >
-                  {categoryOptions.map((cat) => (
-                    <div
-                      key={cat}
-                      onClick={() => {
-                        setCategory(cat);
-                        setShowCategoryDropdown(false);
-                      }}
-                      style={{
-                        padding: '8px 10px',
-                        fontSize: '13px',
-                        color: category === cat ? yellowColor : textColor,
-                        fontWeight: category === cat ? 600 : 500,
-                        cursor: 'pointer',
-                        borderRadius: '6px',
-                      }}
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.backgroundColor = isLightMode
-                          ? '#F3F4F6'
-                          : '#222226')
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.backgroundColor = 'transparent')
-                      }
-                    >
-                      {cat}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <PartsSearchDropdown
+              label="Category"
+              value={category}
+              options={categoryOptions}
+              isOpen={showCategoryDropdown}
+              onToggle={() => setShowCategoryDropdown(!showCategoryDropdown)}
+              onClose={() => setShowCategoryDropdown(false)}
+              onSelect={(cat) => setCategory(cat)}
+              isLightMode={isLightMode}
+              searchPlaceholder="Search category..."
+            />
           </div>
 
           {/* Row 3: Square media upload button (+) */}

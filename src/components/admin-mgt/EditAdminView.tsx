@@ -41,6 +41,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
 
   // Color tokens adhering to Zero Extra Contrast Rule
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const inputBg = isLightMode ? '#FFFFFF' : '#141416';
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const yellowColor = '#F5C842';
@@ -101,7 +102,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
                 padding: '10px 14px',
                 borderRadius: '10px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '2px',
@@ -131,7 +132,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
                 padding: '10px 14px',
                 borderRadius: '10px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '2px',
@@ -161,7 +162,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
                 padding: '10px 14px',
                 borderRadius: '10px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '2px',
@@ -192,7 +193,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
                 padding: '10px 14px',
                 borderRadius: '10px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -224,7 +225,7 @@ export const EditAdminView: React.FC<EditAdminViewProps> = ({ adminId }) => {
                 padding: '10px 14px',
                 borderRadius: '10px',
                 border: `1px solid ${borderColor}`,
-                backgroundColor: 'transparent',
+                backgroundColor: inputBg,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',

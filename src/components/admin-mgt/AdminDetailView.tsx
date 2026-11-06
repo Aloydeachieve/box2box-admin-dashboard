@@ -210,8 +210,18 @@ export const AdminDetailView: React.FC<AdminDetailViewProps> = ({ adminId = 'adm
             </div>
           </div>
 
-          {/* 2. Summary Stats Section (Figma Image 4) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* 2. Summary Stats Section (Wrapped in container card matching profile section) */}
+          <div
+            style={{
+              borderRadius: '16px',
+              border: `1px solid ${borderColor}`,
+              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+            }}
+          >
             {/* Header + Dropdown */}
             <div
               style={{
@@ -345,8 +355,18 @@ export const AdminDetailView: React.FC<AdminDetailViewProps> = ({ adminId = 'adm
             </div>
           </div>
 
-          {/* 3. Activity History Section (Figma Image 4: No cards separating each message, clean natural layout) */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
+          {/* 3. Activity History Section (Wrapped in container card matching profile section) */}
+          <div
+            style={{
+              borderRadius: '16px',
+              border: `1px solid ${borderColor}`,
+              backgroundColor: isLightMode ? '#FFFFFF' : 'transparent',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+            }}
+          >
             {/* Header + Duration Dropdown */}
             <div
               style={{

@@ -424,7 +424,7 @@ export const InventoryAccessoriesView: React.FC = () => {
                   top: '100%',
                   right: 0,
                   marginTop: '6px',
-                  backgroundColor: cardBg,
+                  backgroundColor: isLightMode ? '#FFFFFF' : '#1C1C20',
                   border: `1px solid ${borderColor}`,
                   borderRadius: '10px',
                   padding: '6px',

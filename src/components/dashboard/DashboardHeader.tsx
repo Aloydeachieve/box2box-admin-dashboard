@@ -189,9 +189,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({
                         key={act.label}
                         onClick={() => {
                           if (act.disabled) return;
-                          if (!act.hasToggle) {
-                            setActionMenuOpen(false);
-                          }
+                          setActionMenuOpen(false);
                           act.onClick();
                         }}
                         style={{

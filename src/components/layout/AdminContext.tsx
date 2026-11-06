@@ -18,6 +18,8 @@ interface AdminContextType {
   setIsLightMode: (val: boolean | ((prev: boolean) => boolean)) => void;
   customBack: (() => void) | null;
   setCustomBack: (fn: (() => void) | null) => void;
+  onFundWalletClick: (() => void) | null;
+  setOnFundWalletClick: (fn: (() => void) | null) => void;
 }
 
 const AdminContext = createContext<AdminContextType>({
@@ -27,12 +29,15 @@ const AdminContext = createContext<AdminContextType>({
   setIsLightMode: () => {},
   customBack: null,
   setCustomBack: () => {},
+  onFundWalletClick: null,
+  setOnFundWalletClick: () => {},
 });
 
 export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [headerActions, setHeaderActions] = useState<HeaderActionItem[]>([]);
   const [isLightMode, setIsLightMode] = useState<boolean>(false);
   const [customBack, setCustomBack] = useState<(() => void) | null>(null);
+  const [onFundWalletClick, setOnFundWalletClick] = useState<(() => void) | null>(null);
 
   return (
     <AdminContext.Provider
@@ -43,6 +48,8 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setIsLightMode,
         customBack,
         setCustomBack,
+        onFundWalletClick,
+        setOnFundWalletClick,
       }}
     >
       {children}

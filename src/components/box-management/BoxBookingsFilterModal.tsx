@@ -25,6 +25,11 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
   const [activeModalTab, setActiveModalTab] = useState<'Cabinet' | 'Usage' | 'Type' | 'Duration'>('Cabinet');
 
   // Filter state
+  const cabinetOptions = ['All', 'A3', 'A4', 'A5'];
+  const usageOptions = ['All', 'Pick up', 'Drop off'];
+  const typeOptions = ['All', 'Storage', 'Delivery'];
+  const durationOptions = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Custom'];
+
   const [selectedCabinets, setSelectedCabinets] = useState<string[]>(['All', 'A3', 'A4', 'A5']);
   const [selectedUsage, setSelectedUsage] = useState<string[]>(['All', 'Pick up', 'Drop off']);
   const [selectedType, setSelectedType] = useState<string[]>(['All', 'Storage', 'Delivery']);
@@ -33,14 +38,10 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
   if (!isOpen) return null;
 
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
-  const subtextColor = isLightMode ? '#6B7280' : '#DFE5E8';
-  const modalBg = isLightMode ? '#FFFFFF' : '#18181B';
-  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.1)';
-
-  const cabinetOptions = ['All', 'A3', 'A4', 'A5'];
-  const usageOptions = ['All', 'Pick up', 'Drop off'];
-  const typeOptions = ['All', 'Storage', 'Delivery'];
-  const durationOptions = ['Today', 'Last 7 days', 'Last 30 days', 'Last 60 days', 'Custom'];
+  const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
+  const modalBg = isLightMode ? '#FFFFFF' : '#1C1C20';
+  const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
+  const yellowColor = '#F5C842';
 
   const toggleArrayOption = (
     currentList: string[],
@@ -80,68 +81,97 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
     onClose();
   };
 
+  const handleDiscard = () => {
+    setSelectedCabinets(['All', 'A3', 'A4', 'A5']);
+    setSelectedUsage(['All', 'Pick up', 'Drop off']);
+    setSelectedType(['All', 'Storage', 'Delivery']);
+    setSelectedDuration('Last 7 days');
+    onClose();
+  };
+
   return (
     <div
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        backdropFilter: 'blur(4px)',
+        backgroundColor: 'rgba(0, 0, 0, 0.65)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 100,
+        padding: '16px',
       }}
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: '90%',
-          maxWidth: '460px',
+          width: '100%',
+          maxWidth: '430px',
+          height: '440px',
           backgroundColor: modalBg,
           borderRadius: '16px',
           border: `1px solid ${borderColor}`,
           padding: '24px',
-          boxShadow: '0 24px 48px rgba(0, 0, 0, 0.5)',
           display: 'flex',
           flexDirection: 'column',
-          gap: '18px',
-          fontFamily: 'Rubik, var(--font-outfit), sans-serif',
+          boxShadow: '0 20px 40px rgba(0, 0, 0, 0.45)',
+          fontFamily: 'var(--font-outfit), sans-serif',
+          boxSizing: 'border-box',
         }}
       >
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <h3 style={{ fontSize: '18px', fontWeight: 700, color: textColor, margin: 0 }}>
-              Filter Bookings
-            </h3>
-            <p style={{ fontSize: '12px', color: subtextColor, margin: '4px 0 0 0' }}>
-              Refine bookings by cabinet, usage, type, and date range
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: subtextColor,
-              cursor: 'pointer',
-              padding: '4px',
-            }}
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        {/* 4 Tabs: Cabinet, Usage, Type, Duration */}
+        {/* Standardized Header matching Type 1 & 4 Rules */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
+            justifyContent: 'space-between',
+            marginBottom: '14px',
+          }}
+        >
+          <h3
+            style={{
+              fontSize: '16px',
+              fontWeight: 700,
+              color: textColor,
+              margin: 0,
+            }}
+          >
+            Filter
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              background: 'none',
+              border: `1px solid ${subtextColor}`,
+              borderRadius: '50%',
+              width: '26px',
+              height: '26px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: subtextColor,
+              cursor: 'pointer',
+              padding: 0,
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        {/* 1px Horizontal Hairline Divider */}
+        <div style={{ height: '1px', backgroundColor: borderColor, marginBottom: '14px' }} />
+
+        {/* Clean Underline Text Tabs */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
             borderBottom: `1px solid ${borderColor}`,
             paddingBottom: '8px',
+            marginBottom: '16px',
           }}
         >
           {(['Cabinet', 'Usage', 'Type', 'Duration'] as const).map((tab) => {
@@ -149,11 +179,12 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
             return (
               <button
                 key={tab}
+                type="button"
                 onClick={() => setActiveModalTab(tab)}
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: isActive ? '#F5C842' : subtextColor,
+                  color: isActive ? yellowColor : subtextColor,
                   fontSize: '13px',
                   fontWeight: isActive ? 600 : 400,
                   cursor: 'pointer',
@@ -171,7 +202,7 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                       left: 0,
                       right: 0,
                       height: '2px',
-                      backgroundColor: '#F5C842',
+                      backgroundColor: yellowColor,
                     }}
                   />
                 )}
@@ -180,13 +211,20 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
           })}
         </div>
 
-        {/* Tab 1: Cabinet (All, A3, A4, A5) */}
-        {activeModalTab === 'Cabinet' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '180px' }}>
-            <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>
-              Select cabinet units:
-            </div>
-            {cabinetOptions.map((opt) => {
+        {/* Scrollable Filter Body (Rule 8 Fixed Container & Scrollable Inner) */}
+        <div
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            paddingRight: '4px',
+          }}
+        >
+          {/* Tab 1: Cabinet Checkboxes */}
+          {activeModalTab === 'Cabinet' &&
+            cabinetOptions.map((opt) => {
               const isChecked = selectedCabinets.includes(opt);
               return (
                 <div
@@ -198,24 +236,34 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px',
+                    padding: '10px 8px',
                     borderRadius: '8px',
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#222226',
                     cursor: 'pointer',
-                    border: isChecked ? '1px solid rgba(245, 200, 66, 0.3)' : `1px solid ${borderColor}`,
+                    transition: 'background-color 0.15s ease',
                   }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = isLightMode
+                      ? '#F9FAFB'
+                      : 'rgba(255, 255, 255, 0.04)')
+                  }
+                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>{opt}</span>
+                  <span style={{ fontSize: '13px', color: textColor, fontWeight: 500 }}>
+                    {opt}
+                  </span>
+
+                  {/* Right-Aligned Square Checkbox (Rule 8) */}
                   <div
                     style={{
                       width: '18px',
                       height: '18px',
                       borderRadius: '4px',
-                      backgroundColor: isChecked ? '#F5C842' : 'transparent',
-                      border: isChecked ? 'none' : `1.5px solid ${subtextColor}`,
+                      backgroundColor: isChecked ? yellowColor : 'transparent',
+                      border: isChecked ? 'none' : `1.5px solid ${isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.3)'}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      boxSizing: 'border-box',
                     }}
                   >
                     {isChecked && <Check size={12} color="#000000" strokeWidth={3} />}
@@ -223,16 +271,10 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                 </div>
               );
             })}
-          </div>
-        )}
 
-        {/* Tab 2: Usage (All, Pick up, Drop off) */}
-        {activeModalTab === 'Usage' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '180px' }}>
-            <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>
-              Select usage flow:
-            </div>
-            {usageOptions.map((opt) => {
+          {/* Tab 2: Usage Checkboxes */}
+          {activeModalTab === 'Usage' &&
+            usageOptions.map((opt) => {
               const isChecked = selectedUsage.includes(opt);
               return (
                 <div
@@ -244,24 +286,33 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px',
+                    padding: '10px 8px',
                     borderRadius: '8px',
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#222226',
                     cursor: 'pointer',
-                    border: isChecked ? '1px solid rgba(245, 200, 66, 0.3)' : `1px solid ${borderColor}`,
+                    transition: 'background-color 0.15s ease',
                   }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = isLightMode
+                      ? '#F9FAFB'
+                      : 'rgba(255, 255, 255, 0.04)')
+                  }
+                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>{opt}</span>
+                  <span style={{ fontSize: '13px', color: textColor, fontWeight: 500 }}>
+                    {opt}
+                  </span>
+
                   <div
                     style={{
                       width: '18px',
                       height: '18px',
                       borderRadius: '4px',
-                      backgroundColor: isChecked ? '#F5C842' : 'transparent',
-                      border: isChecked ? 'none' : `1.5px solid ${subtextColor}`,
+                      backgroundColor: isChecked ? yellowColor : 'transparent',
+                      border: isChecked ? 'none' : `1.5px solid ${isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.3)'}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      boxSizing: 'border-box',
                     }}
                   >
                     {isChecked && <Check size={12} color="#000000" strokeWidth={3} />}
@@ -269,16 +320,10 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                 </div>
               );
             })}
-          </div>
-        )}
 
-        {/* Tab 3: Type (All, Storage, Delivery) */}
-        {activeModalTab === 'Type' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '180px' }}>
-            <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>
-              Select booking type:
-            </div>
-            {typeOptions.map((opt) => {
+          {/* Tab 3: Type Checkboxes */}
+          {activeModalTab === 'Type' &&
+            typeOptions.map((opt) => {
               const isChecked = selectedType.includes(opt);
               return (
                 <div
@@ -290,24 +335,33 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px',
+                    padding: '10px 8px',
                     borderRadius: '8px',
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#222226',
                     cursor: 'pointer',
-                    border: isChecked ? '1px solid rgba(245, 200, 66, 0.3)' : `1px solid ${borderColor}`,
+                    transition: 'background-color 0.15s ease',
                   }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = isLightMode
+                      ? '#F9FAFB'
+                      : 'rgba(255, 255, 255, 0.04)')
+                  }
+                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>{opt}</span>
+                  <span style={{ fontSize: '13px', color: textColor, fontWeight: 500 }}>
+                    {opt}
+                  </span>
+
                   <div
                     style={{
                       width: '18px',
                       height: '18px',
                       borderRadius: '4px',
-                      backgroundColor: isChecked ? '#F5C842' : 'transparent',
-                      border: isChecked ? 'none' : `1.5px solid ${subtextColor}`,
+                      backgroundColor: isChecked ? yellowColor : 'transparent',
+                      border: isChecked ? 'none' : `1.5px solid ${isLightMode ? '#D1D5DB' : 'rgba(255, 255, 255, 0.3)'}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      boxSizing: 'border-box',
                     }}
                   >
                     {isChecked && <Check size={12} color="#000000" strokeWidth={3} />}
@@ -315,16 +369,10 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                 </div>
               );
             })}
-          </div>
-        )}
 
-        {/* Tab 4: Duration (Today, Last 7 days, Last 30 days, Last 60 days, Custom) */}
-        {activeModalTab === 'Duration' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', minHeight: '180px' }}>
-            <div style={{ fontSize: '12px', color: subtextColor, marginBottom: '4px' }}>
-              Select time duration:
-            </div>
-            {durationOptions.map((opt) => {
+          {/* Tab 4: Duration Radios */}
+          {activeModalTab === 'Duration' &&
+            durationOptions.map((opt) => {
               const isSelected = selectedDuration === opt;
               return (
                 <div
@@ -334,38 +382,69 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px',
+                    padding: '10px 8px',
                     borderRadius: '8px',
-                    backgroundColor: isLightMode ? '#F9FAFB' : '#222226',
                     cursor: 'pointer',
-                    border: isSelected ? '1px solid rgba(245, 200, 66, 0.3)' : `1px solid ${borderColor}`,
+                    transition: 'background-color 0.15s ease',
                   }}
+                  onMouseOver={(e) =>
+                    (e.currentTarget.style.backgroundColor = isLightMode
+                      ? '#F9FAFB'
+                      : 'rgba(255, 255, 255, 0.04)')
+                  }
+                  onMouseOut={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: textColor }}>{opt}</span>
+                  <span style={{ fontSize: '13px', color: textColor, fontWeight: 500 }}>
+                    {opt}
+                  </span>
+
+                  {/* Right-Aligned Circular Radio Indicator */}
                   <div
                     style={{
                       width: '18px',
                       height: '18px',
                       borderRadius: '50%',
-                      backgroundColor: isSelected ? '#F5C842' : 'transparent',
-                      border: isSelected ? 'none' : `1.5px solid ${subtextColor}`,
+                      border: isSelected
+                        ? `2px solid ${yellowColor}`
+                        : isLightMode
+                        ? '1.5px solid #D1D5DB'
+                        : '1.5px solid rgba(255, 255, 255, 0.3)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      boxSizing: 'border-box',
                     }}
                   >
-                    {isSelected && <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000' }} />}
+                    {isSelected && (
+                      <div
+                        style={{
+                          width: '9px',
+                          height: '9px',
+                          borderRadius: '50%',
+                          backgroundColor: yellowColor,
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               );
             })}
-          </div>
-        )}
+        </div>
 
-        {/* Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '6px' }}>
+        {/* Standard Action Buttons Row (Rule 3 Type 1/4) */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            marginTop: '16px',
+            paddingTop: '12px',
+            borderTop: `1px solid ${borderColor}`,
+          }}
+        >
           <button
-            onClick={onClose}
+            type="button"
+            onClick={handleDiscard}
             style={{
               flex: 1,
               padding: '11px 0',
@@ -377,17 +456,25 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
               fontWeight: 600,
               cursor: 'pointer',
               textAlign: 'center',
+              transition: 'background-color 0.15s ease',
             }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = isLightMode ? '#E5E7EB' : '#333338')
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = isLightMode ? '#F3F4F6' : '#2A2A30')
+            }
           >
-            Cancel
+            Discard
           </button>
           <button
+            type="button"
             onClick={handleApply}
             style={{
               flex: 1,
               padding: '11px 0',
               borderRadius: '8px',
-              backgroundColor: '#F5C842',
+              backgroundColor: yellowColor,
               border: 'none',
               color: '#000000',
               fontSize: '13px',
@@ -397,10 +484,14 @@ export const BoxBookingsFilterModal: React.FC<BoxBookingsFilterModalProps> = ({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
+              boxShadow: '0 2px 8px rgba(245, 200, 66, 0.25)',
+              transition: 'opacity 0.15s ease',
             }}
+            onMouseOver={(e) => (e.currentTarget.style.opacity = '0.9')}
+            onMouseOut={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            <span>Apply filter</span>
-            <Box2BoxPulsingBadge size={16} />
+            <span>Save</span>
+            <Box2BoxPulsingBadge size={14} inverted={false} />
           </button>
         </div>
       </div>

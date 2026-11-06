@@ -46,7 +46,7 @@ export const NewAccessoryView: React.FC = () => {
   const textColor = isLightMode ? '#111827' : '#FFFFFF';
   const subtextColor = isLightMode ? '#6B7280' : '#8E8E93';
   const cardBg = isLightMode ? '#FFFFFF' : 'transparent';
-  const inputBg = isLightMode ? '#F9FAFB' : 'transparent';
+  const inputBg = isLightMode ? '#F9FAFB' : '#141416';
   const borderColor = isLightMode ? '#E5E7EB' : 'rgba(255, 255, 255, 0.08)';
   const yellowColor = '#F5C842';
 
